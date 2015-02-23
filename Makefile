@@ -15,6 +15,7 @@ prepare: check-env
 	@echo "GOROOT is: ${GOROOT}"
 	go get github.com/tools/godep
 	godep restore
+	cd $(GOPATH)/src/github.com/metaleap/go-xsd/xsd-makepkg && go install
 
 check-env:
 ifndef GOROOT
