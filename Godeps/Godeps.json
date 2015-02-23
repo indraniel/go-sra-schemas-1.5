@@ -1,0 +1,35 @@
+{
+	"ImportPath": "github.com/indraniel/go-sra-schemas",
+	"GoVersion": "go1.3.3",
+	"Deps": [
+		{
+			"ImportPath": "github.com/go-forks/fsnotify",
+			"Comment": "v0.9.0-11-g6b1ef89",
+			"Rev": "6b1ef893dc11e0447abda6da20a5203481878dda"
+		},
+		{
+			"ImportPath": "github.com/go-utils/ufs",
+			"Rev": "3f2140988c4e1ab09dc4637142bd9077cea577fb"
+		},
+		{
+			"ImportPath": "github.com/go-utils/ugo",
+			"Rev": "ffc2267bb34560e62bfdbc5f56f775fc509e177f"
+		},
+		{
+			"ImportPath": "github.com/go-utils/unet",
+			"Rev": "afb173784f735724d8a54f455a5b23b092b8bd21"
+		},
+		{
+			"ImportPath": "github.com/go-utils/uslice",
+			"Rev": "7f8c3df848991b2e38824a7bda55bda1339b651e"
+		},
+		{
+			"ImportPath": "github.com/go-utils/ustr",
+			"Rev": "18ce5cfd3a95bbf3f197eb5ff21f0fd0b39b0046"
+		},
+		{
+			"ImportPath": "github.com/metaleap/go-xsd",
+			"Rev": "9f0dd6c4fa485ec47b03e47d3d1b30f015b4ad17"
+		}
+	]
+}
