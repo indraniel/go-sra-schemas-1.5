@@ -10,9 +10,6 @@ gofiles: $(SOURCES) check-env
 test:
 	@go test ./keys ./block ./transaction ./db ./git
 
-download: get-sra-schemas.sh
-	bash -x get-sra-schemas.sh
-
 prepare: check-env
 	@echo "GOPATH is: ${GOPATH}"
 	@echo "GOROOT is: ${GOROOT}"
