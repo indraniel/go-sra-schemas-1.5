@@ -12,9 +12,6 @@ gofiles: export PATH := $(GOPATH)/bin:$(PATH)
 gofiles: $(SOURCES) check-env
 	bash -x $(TOOLS_DIR)/get-sra-schemas.sh
 
-test:
-	@go test ./keys ./block ./transaction ./db ./git
-
 prepare: check-env
 	@echo "GOPATH is: ${GOPATH}"
 	@echo "GOROOT is: ${GOROOT}"
