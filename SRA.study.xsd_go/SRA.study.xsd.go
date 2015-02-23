@@ -8,8 +8,18 @@ import (
 	xsdt "github.com/metaleap/go-xsd/types"
 )
 
-type XsdtString struct{ string }
+type XsdtString struct{ SubmitterId string `xml:",innerxml"` }
 
+//	submission of this document type. If center_name is specified, the name should be unique in all submissions from that center of
+//	this document type.
+type XsdGoPkgHasAttr_Alias_XsdtString_ struct {
+	//	Submitter designated name of the SRA document of this type. At minimum alias should be unique throughout the
+	//	submission of this document type. If center_name is specified, the name should be unique in all submissions from that center of
+	//	this document type.
+	Alias xsdt.String `xml:"alias,attr"`
+}
+
+//	Owner authority of this document and namespace for submitter's name of this document. If not provided, then the
 //	submitter is regarded as "Individual" and document resolution can only happen within the submission.
 type XsdGoPkgHasAttr_CenterName_XsdtString_ struct {
 	//	Owner authority of this document and namespace for submitter's name of this document. If not provided, then the
@@ -29,17 +39,12 @@ type XsdGoPkgHasAttr_Accession_XsdtString_ struct {
 	Accession xsdt.String `xml:"accession,attr"`
 }
 
-//	Submitter designated name of the SRA document of this type. At minimum alias should be unique throughout the
-//	submission of this document type. If center_name is specified, the name should be unique in all submissions from that center of
-//	this document type.
-type XsdGoPkgHasAttr_Alias_XsdtString_ struct {
+type XsdGoPkgHasAtts_NameGroup struct {
 	//	Submitter designated name of the SRA document of this type. At minimum alias should be unique throughout the
 	//	submission of this document type. If center_name is specified, the name should be unique in all submissions from that center of
 	//	this document type.
-	Alias xsdt.String `xml:"alias,attr"`
-}
+	XsdGoPkgHasAttr_Alias_XsdtString_
 
-type XsdGoPkgHasAtts_NameGroup struct {
 	//	Owner authority of this document and namespace for submitter's name of this document. If not provided, then the
 	//	submitter is regarded as "Individual" and document resolution can only happen within the submission.
 	XsdGoPkgHasAttr_CenterName_XsdtString_
@@ -49,19 +54,6 @@ type XsdGoPkgHasAtts_NameGroup struct {
 
 	//	The document's accession as assigned by the Home Archive.
 	XsdGoPkgHasAttr_Accession_XsdtString_
-
-	//	Submitter designated name of the SRA document of this type. At minimum alias should be unique throughout the
-	//	submission of this document type. If center_name is specified, the name should be unique in all submissions from that center of
-	//	this document type.
-	XsdGoPkgHasAttr_Alias_XsdtString_
-}
-
-//	Identifies a record by name that is known within the namespace defined by attribute "refcenter" Use this field
-//	when referencing an object for which an accession has not yet been issued.
-type XsdGoPkgHasAttr_Refname_XsdtString_ struct {
-	//	Identifies a record by name that is known within the namespace defined by attribute "refcenter" Use this field
-	//	when referencing an object for which an accession has not yet been issued.
-	Refname xsdt.String `xml:"refname,attr"`
 }
 
 //	The center namespace of the attribute "refname". When absent, the namespace is assumed to be the current
@@ -70,6 +62,14 @@ type XsdGoPkgHasAttr_Refcenter_XsdtString_ struct {
 	//	The center namespace of the attribute "refname". When absent, the namespace is assumed to be the current
 	//	submission.
 	Refcenter xsdt.String `xml:"refcenter,attr"`
+}
+
+//	Identifies a record by name that is known within the namespace defined by attribute "refcenter" Use this field
+//	when referencing an object for which an accession has not yet been issued.
+type XsdGoPkgHasAttr_Refname_XsdtString_ struct {
+	//	Identifies a record by name that is known within the namespace defined by attribute "refcenter" Use this field
+	//	when referencing an object for which an accession has not yet been issued.
+	Refname xsdt.String `xml:"refname,attr"`
 }
 
 type XsdGoPkgHasAtts_RefNameGroup struct {
@@ -91,9 +91,7 @@ type XsdGoPkgHasAtts_RefNameGroup struct {
 //	or more analyses. The submitter may decorate the Study with web links and properties.
 //	List of primary and alternate identifiers including those records replacing or replaced by this record.
 //	Set of record identifiers.
-//	A submitter provided identifier of the (new) record. used in submisison process and replaced by primary archive
-//	id on successfull load. @namespace is optional and may refer to submitter private database or LIMS
-//	identifier.
+//	primary accession of the record in one of INSDC SRA archives.
 //	Alternative/explanatory description of the same object/identifier.
 type XsdGoPkgHasAttr_Label_XsdtString_ struct {
 	//	Alternative/explanatory description of the same object/identifier.
@@ -124,6 +122,61 @@ func (me *TNameAndLabelType) Walk() (err error) {
 	return
 }
 
+type XsdGoPkgHasElem_PrimaryIDsequenceIdentifierTypeschema_PrimaryId_TNameAndLabelType_ struct {
+	//	primary accession of the record in one of INSDC SRA archives.
+	PrimaryId *TNameAndLabelType `xml:"PRIMARY_ID"`
+}
+
+//	If the WalkHandlers.XsdGoPkgHasElem_PrimaryIDsequenceIdentifierTypeschema_PrimaryId_TNameAndLabelType_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElem_PrimaryIDsequenceIdentifierTypeschema_PrimaryId_TNameAndLabelType_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 1/1 field(s) belonging to this XsdGoPkgHasElem_PrimaryIDsequenceIdentifierTypeschema_PrimaryId_TNameAndLabelType_ instance.
+func (me *XsdGoPkgHasElem_PrimaryIDsequenceIdentifierTypeschema_PrimaryId_TNameAndLabelType_) Walk() (err error) {
+	if fn := WalkHandlers.XsdGoPkgHasElem_PrimaryIDsequenceIdentifierTypeschema_PrimaryId_TNameAndLabelType_; me != nil {
+		if fn != nil {
+			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+		if err = me.PrimaryId.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+			return
+		}
+		if fn != nil {
+			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+	}
+	return
+}
+
+//	A secondary or defunct primary key in an INSDC primary data database.
+type XsdGoPkgHasElems_SecondaryIDsequenceIdentifierTypeschema_SecondaryId_TNameAndLabelType_ struct {
+	//	A secondary or defunct primary key in an INSDC primary data database.
+	SecondaryIds []*TNameAndLabelType `xml:"SECONDARY_ID"`
+}
+
+//	If the WalkHandlers.XsdGoPkgHasElems_SecondaryIDsequenceIdentifierTypeschema_SecondaryId_TNameAndLabelType_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElems_SecondaryIDsequenceIdentifierTypeschema_SecondaryId_TNameAndLabelType_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElems_SecondaryIDsequenceIdentifierTypeschema_SecondaryId_TNameAndLabelType_ instance.
+func (me *XsdGoPkgHasElems_SecondaryIDsequenceIdentifierTypeschema_SecondaryId_TNameAndLabelType_) Walk() (err error) {
+	if fn := WalkHandlers.XsdGoPkgHasElems_SecondaryIDsequenceIdentifierTypeschema_SecondaryId_TNameAndLabelType_; me != nil {
+		if fn != nil {
+			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+		for _, x := range me.SecondaryIds {
+			if err = x.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+		if fn != nil {
+			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+	}
+	return
+}
+
+//	An identifier from a public non-SRA resource. @namespace would be an official short name of that
+//	resource.
 //	A string value that constrains the domain of named identifiers (namespace).
 type XsdGoPkgHasAttr_Namespace_XsdtString_ struct {
 	//	A string value that constrains the domain of named identifiers (namespace).
@@ -131,10 +184,10 @@ type XsdGoPkgHasAttr_Namespace_XsdtString_ struct {
 }
 
 type TQualifiedNameType struct {
-	TNameAndLabelType
-
 	//	A string value that constrains the domain of named identifiers (namespace).
 	XsdGoPkgHasAttr_Namespace_XsdtString_
+
+	TNameAndLabelType
 }
 
 //	If the WalkHandlers.TQualifiedNameType function is not nil (ie. was set by outside code), calls it with this TQualifiedNameType instance as the single argument. Then calls the Walk() method on 1/2 embed(s) and 0/0 field(s) belonging to this TQualifiedNameType instance.
@@ -157,6 +210,37 @@ func (me *TQualifiedNameType) Walk() (err error) {
 	return
 }
 
+type XsdGoPkgHasElems_ExternalIDsequenceIdentifierTypeschema_ExternalId_TQualifiedNameType_ struct {
+	//	An identifier from a public non-SRA resource. @namespace would be an official short name of that
+	//	resource.
+	ExternalIds []*TQualifiedNameType `xml:"EXTERNAL_ID"`
+}
+
+//	If the WalkHandlers.XsdGoPkgHasElems_ExternalIDsequenceIdentifierTypeschema_ExternalId_TQualifiedNameType_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElems_ExternalIDsequenceIdentifierTypeschema_ExternalId_TQualifiedNameType_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElems_ExternalIDsequenceIdentifierTypeschema_ExternalId_TQualifiedNameType_ instance.
+func (me *XsdGoPkgHasElems_ExternalIDsequenceIdentifierTypeschema_ExternalId_TQualifiedNameType_) Walk() (err error) {
+	if fn := WalkHandlers.XsdGoPkgHasElems_ExternalIDsequenceIdentifierTypeschema_ExternalId_TQualifiedNameType_; me != nil {
+		if fn != nil {
+			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+		for _, x := range me.ExternalIds {
+			if err = x.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+		if fn != nil {
+			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+	}
+	return
+}
+
+//	A submitter provided identifier of the (new) record. used in submisison process and replaced by primary archive
+//	id on successfull load. @namespace is optional and may refer to submitter private database or LIMS
+//	identifier.
 type XsdGoPkgHasElems_SubmitterIDsequenceIdentifierTypeschema_SubmitterId_TQualifiedNameType_ struct {
 	//	A submitter provided identifier of the (new) record. used in submisison process and replaced by primary archive
 	//	id on successfull load. @namespace is optional and may refer to submitter private database or LIMS
@@ -214,91 +298,15 @@ func (me *XsdGoPkgHasElems_UUIDsequenceIdentifierTypeschema_Uuid_TNameAndLabelTy
 	return
 }
 
-//	primary accession of the record in one of INSDC SRA archives.
-type XsdGoPkgHasElem_PrimaryIDsequenceIdentifierTypeschema_PrimaryId_TNameAndLabelType_ struct {
-	//	primary accession of the record in one of INSDC SRA archives.
-	PrimaryId *TNameAndLabelType `xml:"PRIMARY_ID"`
-}
-
-//	If the WalkHandlers.XsdGoPkgHasElem_PrimaryIDsequenceIdentifierTypeschema_PrimaryId_TNameAndLabelType_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElem_PrimaryIDsequenceIdentifierTypeschema_PrimaryId_TNameAndLabelType_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 1/1 field(s) belonging to this XsdGoPkgHasElem_PrimaryIDsequenceIdentifierTypeschema_PrimaryId_TNameAndLabelType_ instance.
-func (me *XsdGoPkgHasElem_PrimaryIDsequenceIdentifierTypeschema_PrimaryId_TNameAndLabelType_) Walk() (err error) {
-	if fn := WalkHandlers.XsdGoPkgHasElem_PrimaryIDsequenceIdentifierTypeschema_PrimaryId_TNameAndLabelType_; me != nil {
-		if fn != nil {
-			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-		if err = me.PrimaryId.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-			return
-		}
-		if fn != nil {
-			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-	}
-	return
-}
-
-//	A secondary or defunct primary key in an INSDC primary data database.
-type XsdGoPkgHasElems_SecondaryIDsequenceIdentifierTypeschema_SecondaryId_TNameAndLabelType_ struct {
-	//	A secondary or defunct primary key in an INSDC primary data database.
-	SecondaryIds []*TNameAndLabelType `xml:"SECONDARY_ID"`
-}
-
-//	If the WalkHandlers.XsdGoPkgHasElems_SecondaryIDsequenceIdentifierTypeschema_SecondaryId_TNameAndLabelType_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElems_SecondaryIDsequenceIdentifierTypeschema_SecondaryId_TNameAndLabelType_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElems_SecondaryIDsequenceIdentifierTypeschema_SecondaryId_TNameAndLabelType_ instance.
-func (me *XsdGoPkgHasElems_SecondaryIDsequenceIdentifierTypeschema_SecondaryId_TNameAndLabelType_) Walk() (err error) {
-	if fn := WalkHandlers.XsdGoPkgHasElems_SecondaryIDsequenceIdentifierTypeschema_SecondaryId_TNameAndLabelType_; me != nil {
-		if fn != nil {
-			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-		for _, x := range me.SecondaryIds {
-			if err = x.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-		if fn != nil {
-			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-	}
-	return
-}
-
-//	An identifier from a public non-SRA resource. @namespace would be an official short name of that
-//	resource.
-type XsdGoPkgHasElems_ExternalIDsequenceIdentifierTypeschema_ExternalId_TQualifiedNameType_ struct {
-	//	An identifier from a public non-SRA resource. @namespace would be an official short name of that
-	//	resource.
-	ExternalIds []*TQualifiedNameType `xml:"EXTERNAL_ID"`
-}
-
-//	If the WalkHandlers.XsdGoPkgHasElems_ExternalIDsequenceIdentifierTypeschema_ExternalId_TQualifiedNameType_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElems_ExternalIDsequenceIdentifierTypeschema_ExternalId_TQualifiedNameType_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElems_ExternalIDsequenceIdentifierTypeschema_ExternalId_TQualifiedNameType_ instance.
-func (me *XsdGoPkgHasElems_ExternalIDsequenceIdentifierTypeschema_ExternalId_TQualifiedNameType_) Walk() (err error) {
-	if fn := WalkHandlers.XsdGoPkgHasElems_ExternalIDsequenceIdentifierTypeschema_ExternalId_TQualifiedNameType_; me != nil {
-		if fn != nil {
-			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-		for _, x := range me.ExternalIds {
-			if err = x.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-		if fn != nil {
-			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-	}
-	return
-}
-
 type TIdentifierType struct {
+	//	A submitter provided identifier of the (new) record. used in submisison process and replaced by primary archive
+	//	id on successfull load. @namespace is optional and may refer to submitter private database or LIMS
+	//	identifier.
+	XsdGoPkgHasElems_SubmitterIDsequenceIdentifierTypeschema_SubmitterId_TQualifiedNameType_
+
+	//	A universally unique identifier that requires no namespace.
+	XsdGoPkgHasElems_UUIDsequenceIdentifierTypeschema_Uuid_TNameAndLabelType_
+
 	//	primary accession of the record in one of INSDC SRA archives.
 	XsdGoPkgHasElem_PrimaryIDsequenceIdentifierTypeschema_PrimaryId_TNameAndLabelType_
 
@@ -308,14 +316,6 @@ type TIdentifierType struct {
 	//	An identifier from a public non-SRA resource. @namespace would be an official short name of that
 	//	resource.
 	XsdGoPkgHasElems_ExternalIDsequenceIdentifierTypeschema_ExternalId_TQualifiedNameType_
-
-	//	A submitter provided identifier of the (new) record. used in submisison process and replaced by primary archive
-	//	id on successfull load. @namespace is optional and may refer to submitter private database or LIMS
-	//	identifier.
-	XsdGoPkgHasElems_SubmitterIDsequenceIdentifierTypeschema_SubmitterId_TQualifiedNameType_
-
-	//	A universally unique identifier that requires no namespace.
-	XsdGoPkgHasElems_UUIDsequenceIdentifierTypeschema_Uuid_TNameAndLabelType_
 }
 
 //	If the WalkHandlers.TIdentifierType function is not nil (ie. was set by outside code), calls it with this TIdentifierType instance as the single argument. Then calls the Walk() method on 5/5 embed(s) and 0/0 field(s) belonging to this TIdentifierType instance.
@@ -326,6 +326,12 @@ func (me *TIdentifierType) Walk() (err error) {
 				return
 			}
 		}
+		if err = me.XsdGoPkgHasElem_PrimaryIDsequenceIdentifierTypeschema_PrimaryId_TNameAndLabelType_.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+			return
+		}
+		if err = me.XsdGoPkgHasElems_SecondaryIDsequenceIdentifierTypeschema_SecondaryId_TNameAndLabelType_.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+			return
+		}
 		if err = me.XsdGoPkgHasElems_ExternalIDsequenceIdentifierTypeschema_ExternalId_TQualifiedNameType_.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
 			return
 		}
@@ -333,12 +339,6 @@ func (me *TIdentifierType) Walk() (err error) {
 			return
 		}
 		if err = me.XsdGoPkgHasElems_UUIDsequenceIdentifierTypeschema_Uuid_TNameAndLabelType_.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-			return
-		}
-		if err = me.XsdGoPkgHasElem_PrimaryIDsequenceIdentifierTypeschema_PrimaryId_TNameAndLabelType_.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-			return
-		}
-		if err = me.XsdGoPkgHasElems_SecondaryIDsequenceIdentifierTypeschema_SecondaryId_TNameAndLabelType_.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
 			return
 		}
 		if fn != nil {
@@ -365,81 +365,6 @@ func (me *XsdGoPkgHasElem_IDENTIFIERSsequenceStudyTypeschema_Identifiers_TIdenti
 		}
 		if err = me.Identifiers.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
 			return
-		}
-		if fn != nil {
-			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-	}
-	return
-}
-
-//	DEPRECATED. Use STUDY@center_name instead. Controlled vocabulary identifying the sequencing center, core
-//	facility, consortium, or laboratory responsible for the study.
-type XsdGoPkgHasElem_CenterNAMEallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_CenterName_XsdtString_ struct {
-	//	DEPRECATED. Use STUDY@center_name instead. Controlled vocabulary identifying the sequencing center, core
-	//	facility, consortium, or laboratory responsible for the study.
-	CenterName xsdt.String `xml:"CENTER_NAME"`
-}
-
-//	If the WalkHandlers.XsdGoPkgHasElem_CenterNAMEallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_CenterName_XsdtString_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElem_CenterNAMEallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_CenterName_XsdtString_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElem_CenterNAMEallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_CenterName_XsdtString_ instance.
-func (me *XsdGoPkgHasElem_CenterNAMEallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_CenterName_XsdtString_) Walk() (err error) {
-	if fn := WalkHandlers.XsdGoPkgHasElem_CenterNAMEallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_CenterName_XsdtString_; me != nil {
-		if fn != nil {
-			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-		if fn != nil {
-			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-	}
-	return
-}
-
-//	Submitter defined project name. This field is intended for backward tracking of the study record to the
-//	submitter's LIMS.
-type XsdGoPkgHasElem_CenterProjectNAMEallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_CenterProjectName_XsdtString_ struct {
-	//	Submitter defined project name. This field is intended for backward tracking of the study record to the
-	//	submitter's LIMS.
-	CenterProjectName xsdt.String `xml:"CENTER_PROJECT_NAME"`
-}
-
-//	If the WalkHandlers.XsdGoPkgHasElem_CenterProjectNAMEallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_CenterProjectName_XsdtString_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElem_CenterProjectNAMEallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_CenterProjectName_XsdtString_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElem_CenterProjectNAMEallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_CenterProjectName_XsdtString_ instance.
-func (me *XsdGoPkgHasElem_CenterProjectNAMEallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_CenterProjectName_XsdtString_) Walk() (err error) {
-	if fn := WalkHandlers.XsdGoPkgHasElem_CenterProjectNAMEallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_CenterProjectName_XsdtString_; me != nil {
-		if fn != nil {
-			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-		if fn != nil {
-			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-	}
-	return
-}
-
-//	Whether this study object is designated as the primary source of the study or project
-//	information.
-type XsdGoPkgHasElem_IsPRIMARYsequenceTxsdStudyTypeSequenceDescriptorAllRelatedStudiesSequenceRelatedStudyRELATEDSTUDYsequenceTxsdStudyTypeSequenceDescriptorAllRelatedStudiesRELATEDSTUDIESallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_IsPrimary_XsdtBoolean_ struct {
-	//	Whether this study object is designated as the primary source of the study or project
-	//	information.
-	IsPrimary xsdt.Boolean `xml:"IS_PRIMARY"`
-}
-
-//	If the WalkHandlers.XsdGoPkgHasElem_IsPRIMARYsequenceTxsdStudyTypeSequenceDescriptorAllRelatedStudiesSequenceRelatedStudyRELATEDSTUDYsequenceTxsdStudyTypeSequenceDescriptorAllRelatedStudiesRELATEDSTUDIESallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_IsPrimary_XsdtBoolean_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElem_IsPRIMARYsequenceTxsdStudyTypeSequenceDescriptorAllRelatedStudiesSequenceRelatedStudyRELATEDSTUDYsequenceTxsdStudyTypeSequenceDescriptorAllRelatedStudiesRELATEDSTUDIESallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_IsPrimary_XsdtBoolean_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElem_IsPRIMARYsequenceTxsdStudyTypeSequenceDescriptorAllRelatedStudiesSequenceRelatedStudyRELATEDSTUDYsequenceTxsdStudyTypeSequenceDescriptorAllRelatedStudiesRELATEDSTUDIESallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_IsPrimary_XsdtBoolean_ instance.
-func (me *XsdGoPkgHasElem_IsPRIMARYsequenceTxsdStudyTypeSequenceDescriptorAllRelatedStudiesSequenceRelatedStudyRELATEDSTUDYsequenceTxsdStudyTypeSequenceDescriptorAllRelatedStudiesRELATEDSTUDIESallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_IsPrimary_XsdtBoolean_) Walk() (err error) {
-	if fn := WalkHandlers.XsdGoPkgHasElem_IsPRIMARYsequenceTxsdStudyTypeSequenceDescriptorAllRelatedStudiesSequenceRelatedStudyRELATEDSTUDYsequenceTxsdStudyTypeSequenceDescriptorAllRelatedStudiesRELATEDSTUDIESallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_IsPrimary_XsdtBoolean_; me != nil {
-		if fn != nil {
-			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
 		}
 		if fn != nil {
 			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
@@ -543,13 +468,13 @@ func (me *TXRefType) Walk() (err error) {
 				return
 			}
 		}
-		if err = me.XsdGoPkgHasElem_LABELallXRefTypeschema_Label_XsdtString_.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-			return
-		}
 		if err = me.XsdGoPkgHasElem_DBallXRefTypeschema_Db_XsdtString_.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
 			return
 		}
 		if err = me.XsdGoPkgHasElem_IDallXRefTypeschema_Id_XsdtString_.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+			return
+		}
+		if err = me.XsdGoPkgHasElem_LABELallXRefTypeschema_Label_XsdtString_.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
 			return
 		}
 		if fn != nil {
@@ -587,6 +512,31 @@ func (me *XsdGoPkgHasElem_RelatedLINKsequenceTxsdStudyTypeSequenceDescriptorAllR
 	return
 }
 
+//	Whether this study object is designated as the primary source of the study or project
+//	information.
+type XsdGoPkgHasElem_IsPRIMARYsequenceTxsdStudyTypeSequenceDescriptorAllRelatedStudiesSequenceRelatedStudyRELATEDSTUDYsequenceTxsdStudyTypeSequenceDescriptorAllRelatedStudiesRELATEDSTUDIESallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_IsPrimary_XsdtBoolean_ struct {
+	//	Whether this study object is designated as the primary source of the study or project
+	//	information.
+	IsPrimary xsdt.Boolean `xml:"IS_PRIMARY"`
+}
+
+//	If the WalkHandlers.XsdGoPkgHasElem_IsPRIMARYsequenceTxsdStudyTypeSequenceDescriptorAllRelatedStudiesSequenceRelatedStudyRELATEDSTUDYsequenceTxsdStudyTypeSequenceDescriptorAllRelatedStudiesRELATEDSTUDIESallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_IsPrimary_XsdtBoolean_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElem_IsPRIMARYsequenceTxsdStudyTypeSequenceDescriptorAllRelatedStudiesSequenceRelatedStudyRELATEDSTUDYsequenceTxsdStudyTypeSequenceDescriptorAllRelatedStudiesRELATEDSTUDIESallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_IsPrimary_XsdtBoolean_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElem_IsPRIMARYsequenceTxsdStudyTypeSequenceDescriptorAllRelatedStudiesSequenceRelatedStudyRELATEDSTUDYsequenceTxsdStudyTypeSequenceDescriptorAllRelatedStudiesRELATEDSTUDIESallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_IsPrimary_XsdtBoolean_ instance.
+func (me *XsdGoPkgHasElem_IsPRIMARYsequenceTxsdStudyTypeSequenceDescriptorAllRelatedStudiesSequenceRelatedStudyRELATEDSTUDYsequenceTxsdStudyTypeSequenceDescriptorAllRelatedStudiesRELATEDSTUDIESallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_IsPrimary_XsdtBoolean_) Walk() (err error) {
+	if fn := WalkHandlers.XsdGoPkgHasElem_IsPRIMARYsequenceTxsdStudyTypeSequenceDescriptorAllRelatedStudiesSequenceRelatedStudyRELATEDSTUDYsequenceTxsdStudyTypeSequenceDescriptorAllRelatedStudiesRELATEDSTUDIESallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_IsPrimary_XsdtBoolean_; me != nil {
+		if fn != nil {
+			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+		if fn != nil {
+			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+	}
+	return
+}
+
 type TxsdStudyTypeSequenceDescriptorAllRelatedStudiesSequenceRelatedStudy struct {
 	//	Related study or project record from a list of supported databases. The study's information
 	//	is derived from this project record rather than stored as first class information.
@@ -605,10 +555,10 @@ func (me *TxsdStudyTypeSequenceDescriptorAllRelatedStudiesSequenceRelatedStudy) 
 				return
 			}
 		}
-		if err = me.XsdGoPkgHasElem_RelatedLINKsequenceTxsdStudyTypeSequenceDescriptorAllRelatedStudiesSequenceRelatedStudyRELATEDSTUDYsequenceTxsdStudyTypeSequenceDescriptorAllRelatedStudiesRELATEDSTUDIESallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_RelatedLink_TXRefType_.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+		if err = me.XsdGoPkgHasElem_IsPRIMARYsequenceTxsdStudyTypeSequenceDescriptorAllRelatedStudiesSequenceRelatedStudyRELATEDSTUDYsequenceTxsdStudyTypeSequenceDescriptorAllRelatedStudiesRELATEDSTUDIESallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_IsPrimary_XsdtBoolean_.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
 			return
 		}
-		if err = me.XsdGoPkgHasElem_IsPRIMARYsequenceTxsdStudyTypeSequenceDescriptorAllRelatedStudiesSequenceRelatedStudyRELATEDSTUDYsequenceTxsdStudyTypeSequenceDescriptorAllRelatedStudiesRELATEDSTUDIESallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_IsPrimary_XsdtBoolean_.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+		if err = me.XsdGoPkgHasElem_RelatedLINKsequenceTxsdStudyTypeSequenceDescriptorAllRelatedStudiesSequenceRelatedStudyRELATEDSTUDYsequenceTxsdStudyTypeSequenceDescriptorAllRelatedStudiesRELATEDSTUDIESallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_RelatedLink_TXRefType_.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
 			return
 		}
 		if fn != nil {
@@ -744,64 +694,9 @@ func (me *XsdGoPkgHasElem_StudyTITLEallTxsdStudyTypeSequenceDescriptorDESCRIPTOR
 //	study.
 type TxsdStudyTypeSequenceDescriptorAllStudyTypeExistingStudyType xsdt.String
 
-//	Returns true if the value of this enumerated TxsdStudyTypeSequenceDescriptorAllStudyTypeExistingStudyType is "Exome Sequencing".
-func (me TxsdStudyTypeSequenceDescriptorAllStudyTypeExistingStudyType) IsExomeSequencing() bool {
-	return me.String() == "Exome Sequencing"
-}
-
-//	Returns true if the value of this enumerated TxsdStudyTypeSequenceDescriptorAllStudyTypeExistingStudyType is "Other".
-func (me TxsdStudyTypeSequenceDescriptorAllStudyTypeExistingStudyType) IsOther() bool {
-	return me.String() == "Other"
-}
-
-//	Returns true if the value of this enumerated TxsdStudyTypeSequenceDescriptorAllStudyTypeExistingStudyType is "Cancer Genomics".
-func (me TxsdStudyTypeSequenceDescriptorAllStudyTypeExistingStudyType) IsCancerGenomics() bool {
-	return me.String() == "Cancer Genomics"
-}
-
-//	Returns true if the value of this enumerated TxsdStudyTypeSequenceDescriptorAllStudyTypeExistingStudyType is "Whole Genome Sequencing".
-func (me TxsdStudyTypeSequenceDescriptorAllStudyTypeExistingStudyType) IsWholeGenomeSequencing() bool {
-	return me.String() == "Whole Genome Sequencing"
-}
-
-//	Returns true if the value of this enumerated TxsdStudyTypeSequenceDescriptorAllStudyTypeExistingStudyType is "Metagenomics".
-func (me TxsdStudyTypeSequenceDescriptorAllStudyTypeExistingStudyType) IsMetagenomics() bool {
-	return me.String() == "Metagenomics"
-}
-
-//	Returns true if the value of this enumerated TxsdStudyTypeSequenceDescriptorAllStudyTypeExistingStudyType is "Transcriptome Analysis".
-func (me TxsdStudyTypeSequenceDescriptorAllStudyTypeExistingStudyType) IsTranscriptomeAnalysis() bool {
-	return me.String() == "Transcriptome Analysis"
-}
-
-//	Returns true if the value of this enumerated TxsdStudyTypeSequenceDescriptorAllStudyTypeExistingStudyType is "Resequencing".
-func (me TxsdStudyTypeSequenceDescriptorAllStudyTypeExistingStudyType) IsResequencing() bool {
-	return me.String() == "Resequencing"
-}
-
 //	Returns true if the value of this enumerated TxsdStudyTypeSequenceDescriptorAllStudyTypeExistingStudyType is "Epigenetics".
 func (me TxsdStudyTypeSequenceDescriptorAllStudyTypeExistingStudyType) IsEpigenetics() bool {
 	return me.String() == "Epigenetics"
-}
-
-//	Since TxsdStudyTypeSequenceDescriptorAllStudyTypeExistingStudyType is just a simple String type, this merely sets the current value from the specified string.
-func (me *TxsdStudyTypeSequenceDescriptorAllStudyTypeExistingStudyType) Set(s string) {
-	(*xsdt.String)(me).Set(s)
-}
-
-//	Since TxsdStudyTypeSequenceDescriptorAllStudyTypeExistingStudyType is just a simple String type, this merely returns the current string value.
-func (me TxsdStudyTypeSequenceDescriptorAllStudyTypeExistingStudyType) String() string {
-	return xsdt.String(me).String()
-}
-
-//	This convenience method just performs a simple type conversion to TxsdStudyTypeSequenceDescriptorAllStudyTypeExistingStudyType's alias type xsdt.String.
-func (me TxsdStudyTypeSequenceDescriptorAllStudyTypeExistingStudyType) ToXsdtString() xsdt.String {
-	return xsdt.String(me)
-}
-
-//	Returns true if the value of this enumerated TxsdStudyTypeSequenceDescriptorAllStudyTypeExistingStudyType is "Synthetic Genomics".
-func (me TxsdStudyTypeSequenceDescriptorAllStudyTypeExistingStudyType) IsSyntheticGenomics() bool {
-	return me.String() == "Synthetic Genomics"
 }
 
 //	Returns true if the value of this enumerated TxsdStudyTypeSequenceDescriptorAllStudyTypeExistingStudyType is "Population Genomics".
@@ -809,9 +704,59 @@ func (me TxsdStudyTypeSequenceDescriptorAllStudyTypeExistingStudyType) IsPopulat
 	return me.String() == "Population Genomics"
 }
 
+//	This convenience method just performs a simple type conversion to TxsdStudyTypeSequenceDescriptorAllStudyTypeExistingStudyType's alias type xsdt.String.
+func (me TxsdStudyTypeSequenceDescriptorAllStudyTypeExistingStudyType) ToXsdtString() xsdt.String {
+	return xsdt.String(me)
+}
+
+//	Returns true if the value of this enumerated TxsdStudyTypeSequenceDescriptorAllStudyTypeExistingStudyType is "Metagenomics".
+func (me TxsdStudyTypeSequenceDescriptorAllStudyTypeExistingStudyType) IsMetagenomics() bool {
+	return me.String() == "Metagenomics"
+}
+
+//	Returns true if the value of this enumerated TxsdStudyTypeSequenceDescriptorAllStudyTypeExistingStudyType is "Synthetic Genomics".
+func (me TxsdStudyTypeSequenceDescriptorAllStudyTypeExistingStudyType) IsSyntheticGenomics() bool {
+	return me.String() == "Synthetic Genomics"
+}
+
+//	Returns true if the value of this enumerated TxsdStudyTypeSequenceDescriptorAllStudyTypeExistingStudyType is "Cancer Genomics".
+func (me TxsdStudyTypeSequenceDescriptorAllStudyTypeExistingStudyType) IsCancerGenomics() bool {
+	return me.String() == "Cancer Genomics"
+}
+
+//	Returns true if the value of this enumerated TxsdStudyTypeSequenceDescriptorAllStudyTypeExistingStudyType is "RNASeq".
+func (me TxsdStudyTypeSequenceDescriptorAllStudyTypeExistingStudyType) IsRNASeq() bool {
+	return me.String() == "RNASeq"
+}
+
+//	Returns true if the value of this enumerated TxsdStudyTypeSequenceDescriptorAllStudyTypeExistingStudyType is "Exome Sequencing".
+func (me TxsdStudyTypeSequenceDescriptorAllStudyTypeExistingStudyType) IsExomeSequencing() bool {
+	return me.String() == "Exome Sequencing"
+}
+
+//	Since TxsdStudyTypeSequenceDescriptorAllStudyTypeExistingStudyType is just a simple String type, this merely returns the current string value.
+func (me TxsdStudyTypeSequenceDescriptorAllStudyTypeExistingStudyType) String() string {
+	return xsdt.String(me).String()
+}
+
+//	Returns true if the value of this enumerated TxsdStudyTypeSequenceDescriptorAllStudyTypeExistingStudyType is "Transcriptome Analysis".
+func (me TxsdStudyTypeSequenceDescriptorAllStudyTypeExistingStudyType) IsTranscriptomeAnalysis() bool {
+	return me.String() == "Transcriptome Analysis"
+}
+
 //	Returns true if the value of this enumerated TxsdStudyTypeSequenceDescriptorAllStudyTypeExistingStudyType is "Pooled Clone Sequencing".
 func (me TxsdStudyTypeSequenceDescriptorAllStudyTypeExistingStudyType) IsPooledCloneSequencing() bool {
 	return me.String() == "Pooled Clone Sequencing"
+}
+
+//	Returns true if the value of this enumerated TxsdStudyTypeSequenceDescriptorAllStudyTypeExistingStudyType is "Other".
+func (me TxsdStudyTypeSequenceDescriptorAllStudyTypeExistingStudyType) IsOther() bool {
+	return me.String() == "Other"
+}
+
+//	Returns true if the value of this enumerated TxsdStudyTypeSequenceDescriptorAllStudyTypeExistingStudyType is "Whole Genome Sequencing".
+func (me TxsdStudyTypeSequenceDescriptorAllStudyTypeExistingStudyType) IsWholeGenomeSequencing() bool {
+	return me.String() == "Whole Genome Sequencing"
 }
 
 //	Returns true if the value of this enumerated TxsdStudyTypeSequenceDescriptorAllStudyTypeExistingStudyType is "Forensic or Paleo-genomics".
@@ -824,9 +769,14 @@ func (me TxsdStudyTypeSequenceDescriptorAllStudyTypeExistingStudyType) IsGeneReg
 	return me.String() == "Gene Regulation Study"
 }
 
-//	Returns true if the value of this enumerated TxsdStudyTypeSequenceDescriptorAllStudyTypeExistingStudyType is "RNASeq".
-func (me TxsdStudyTypeSequenceDescriptorAllStudyTypeExistingStudyType) IsRNASeq() bool {
-	return me.String() == "RNASeq"
+//	Since TxsdStudyTypeSequenceDescriptorAllStudyTypeExistingStudyType is just a simple String type, this merely sets the current value from the specified string.
+func (me *TxsdStudyTypeSequenceDescriptorAllStudyTypeExistingStudyType) Set(s string) {
+	(*xsdt.String)(me).Set(s)
+}
+
+//	Returns true if the value of this enumerated TxsdStudyTypeSequenceDescriptorAllStudyTypeExistingStudyType is "Resequencing".
+func (me TxsdStudyTypeSequenceDescriptorAllStudyTypeExistingStudyType) IsResequencing() bool {
+	return me.String() == "Resequencing"
 }
 
 type XsdGoPkgHasAttr_ExistingStudyType_TxsdStudyTypeSequenceDescriptorAllStudyTypeExistingStudyType_ struct {
@@ -914,7 +864,61 @@ func (me *XsdGoPkgHasElem_StudyABSTRACTallTxsdStudyTypeSequenceDescriptorDESCRIP
 	return
 }
 
+//	DEPRECATED. Use STUDY@center_name instead. Controlled vocabulary identifying the sequencing center, core
+//	facility, consortium, or laboratory responsible for the study.
+type XsdGoPkgHasElem_CenterNAMEallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_CenterName_XsdtString_ struct {
+	//	DEPRECATED. Use STUDY@center_name instead. Controlled vocabulary identifying the sequencing center, core
+	//	facility, consortium, or laboratory responsible for the study.
+	CenterName xsdt.String `xml:"CENTER_NAME"`
+}
+
+//	If the WalkHandlers.XsdGoPkgHasElem_CenterNAMEallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_CenterName_XsdtString_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElem_CenterNAMEallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_CenterName_XsdtString_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElem_CenterNAMEallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_CenterName_XsdtString_ instance.
+func (me *XsdGoPkgHasElem_CenterNAMEallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_CenterName_XsdtString_) Walk() (err error) {
+	if fn := WalkHandlers.XsdGoPkgHasElem_CenterNAMEallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_CenterName_XsdtString_; me != nil {
+		if fn != nil {
+			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+		if fn != nil {
+			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+	}
+	return
+}
+
+//	Submitter defined project name. This field is intended for backward tracking of the study record to the
+//	submitter's LIMS.
+type XsdGoPkgHasElem_CenterProjectNAMEallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_CenterProjectName_XsdtString_ struct {
+	//	Submitter defined project name. This field is intended for backward tracking of the study record to the
+	//	submitter's LIMS.
+	CenterProjectName xsdt.String `xml:"CENTER_PROJECT_NAME"`
+}
+
+//	If the WalkHandlers.XsdGoPkgHasElem_CenterProjectNAMEallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_CenterProjectName_XsdtString_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElem_CenterProjectNAMEallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_CenterProjectName_XsdtString_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElem_CenterProjectNAMEallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_CenterProjectName_XsdtString_ instance.
+func (me *XsdGoPkgHasElem_CenterProjectNAMEallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_CenterProjectName_XsdtString_) Walk() (err error) {
+	if fn := WalkHandlers.XsdGoPkgHasElem_CenterProjectNAMEallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_CenterProjectName_XsdtString_; me != nil {
+		if fn != nil {
+			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+		if fn != nil {
+			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+	}
+	return
+}
+
 type TxsdStudyTypeSequenceDescriptor struct {
+	//	Submitter defined project name. This field is intended for backward tracking of the study record to the
+	//	submitter's LIMS.
+	XsdGoPkgHasElem_CenterProjectNAMEallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_CenterProjectName_XsdtString_
+
 	XsdGoPkgHasElem_RelatedSTUDIESallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_RelatedStudies_TxsdStudyTypeSequenceDescriptorAllRelatedStudies_
 
 	//	More extensive free-form description of the study.
@@ -934,10 +938,6 @@ type TxsdStudyTypeSequenceDescriptor struct {
 	//	DEPRECATED. Use STUDY@center_name instead. Controlled vocabulary identifying the sequencing center, core
 	//	facility, consortium, or laboratory responsible for the study.
 	XsdGoPkgHasElem_CenterNAMEallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_CenterName_XsdtString_
-
-	//	Submitter defined project name. This field is intended for backward tracking of the study record to the
-	//	submitter's LIMS.
-	XsdGoPkgHasElem_CenterProjectNAMEallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_CenterProjectName_XsdtString_
 }
 
 //	If the WalkHandlers.TxsdStudyTypeSequenceDescriptor function is not nil (ie. was set by outside code), calls it with this TxsdStudyTypeSequenceDescriptor instance as the single argument. Then calls the Walk() method on 7/7 embed(s) and 0/0 field(s) belonging to this TxsdStudyTypeSequenceDescriptor instance.
@@ -947,12 +947,6 @@ func (me *TxsdStudyTypeSequenceDescriptor) Walk() (err error) {
 			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
 				return
 			}
-		}
-		if err = me.XsdGoPkgHasElem_StudyTYPEallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_StudyType_TxsdStudyTypeSequenceDescriptorAllStudyType_.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-			return
-		}
-		if err = me.XsdGoPkgHasElem_StudyABSTRACTallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_StudyAbstract_XsdtString_.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-			return
 		}
 		if err = me.XsdGoPkgHasElem_CenterNAMEallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_CenterName_XsdtString_.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
 			return
@@ -967,6 +961,12 @@ func (me *TxsdStudyTypeSequenceDescriptor) Walk() (err error) {
 			return
 		}
 		if err = me.XsdGoPkgHasElem_StudyTITLEallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_StudyTitle_XsdtString_.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+			return
+		}
+		if err = me.XsdGoPkgHasElem_StudyTYPEallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_StudyType_TxsdStudyTypeSequenceDescriptorAllStudyType_.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+			return
+		}
+		if err = me.XsdGoPkgHasElem_StudyABSTRACTallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_StudyAbstract_XsdtString_.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
 			return
 		}
 		if fn != nil {
@@ -1175,16 +1175,16 @@ func (me *TxsdLinkTypeChoiceEntrezLink) Walk() (err error) {
 				return
 			}
 		}
-		if err = me.XsdGoPkgHasElem_IDchoicesequenceENTREZLINKchoiceLinkTypeschema_Id_XsdtNonNegativeInteger_.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-			return
-		}
-		if err = me.XsdGoPkgHasElem_QUERYchoicesequenceENTREZLINKchoiceLinkTypeschema_Query_XsdtString_.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-			return
-		}
 		if err = me.XsdGoPkgHasElem_DBallXRefTypeschema_Db_XsdtString_.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
 			return
 		}
 		if err = me.XsdGoPkgHasElem_LABELallXRefTypeschema_Label_XsdtString_.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+			return
+		}
+		if err = me.XsdGoPkgHasElem_IDchoicesequenceENTREZLINKchoiceLinkTypeschema_Id_XsdtNonNegativeInteger_.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+			return
+		}
+		if err = me.XsdGoPkgHasElem_QUERYchoicesequenceENTREZLINKchoiceLinkTypeschema_Query_XsdtString_.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
 			return
 		}
 		if fn != nil {
@@ -1515,8 +1515,6 @@ func (me *XsdGoPkgHasElem_StudyATTRIBUTESsequenceStudyTypeschema_StudyAttributes
 }
 
 type TStudyType struct {
-	XsdGoPkgHasElem_DESCRIPTORsequenceStudyTypeschema_Descriptor_TxsdStudyTypeSequenceDescriptor_
-
 	//	Links to resources related to this study (publication, datasets, online databases).
 	XsdGoPkgHasElem_StudyLINKSsequenceStudyTypeschema_StudyLinks_TxsdStudyTypeSequenceStudyLinks_
 
@@ -1528,6 +1526,8 @@ type TStudyType struct {
 
 	//	List of primary and alternate identifiers including those records replacing or replaced by this record.
 	XsdGoPkgHasElem_IDENTIFIERSsequenceStudyTypeschema_Identifiers_TIdentifierType_
+
+	XsdGoPkgHasElem_DESCRIPTORsequenceStudyTypeschema_Descriptor_TxsdStudyTypeSequenceDescriptor_
 }
 
 //	If the WalkHandlers.TStudyType function is not nil (ie. was set by outside code), calls it with this TStudyType instance as the single argument. Then calls the Walk() method on 4/5 embed(s) and 0/0 field(s) belonging to this TStudyType instance.
@@ -1609,32 +1609,6 @@ func (me *TStudySetType) Walk() (err error) {
 	return
 }
 
-type XsdGoPkgHasElem_StudySet struct {
-	//	An STUDY_SET is a container for a set of studies and a common namespace.
-	StudySet *TStudySetType `xml:"STUDY_SET"`
-}
-
-//	If the WalkHandlers.XsdGoPkgHasElem_StudySet function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElem_StudySet instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 1/1 field(s) belonging to this XsdGoPkgHasElem_StudySet instance.
-func (me *XsdGoPkgHasElem_StudySet) Walk() (err error) {
-	if fn := WalkHandlers.XsdGoPkgHasElem_StudySet; me != nil {
-		if fn != nil {
-			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-		if err = me.StudySet.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-			return
-		}
-		if fn != nil {
-			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-	}
-	return
-}
-
-//	An STUDY_SET is a container for a set of studies and a common namespace.
 type XsdGoPkgHasElems_StudySet struct {
 	//	An STUDY_SET is a container for a set of studies and a common namespace.
 	StudySets []*TStudySetType `xml:"STUDY_SET"`
@@ -1652,6 +1626,32 @@ func (me *XsdGoPkgHasElems_StudySet) Walk() (err error) {
 			if err = x.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
 				return
 			}
+		}
+		if fn != nil {
+			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+	}
+	return
+}
+
+//	An STUDY_SET is a container for a set of studies and a common namespace.
+type XsdGoPkgHasElem_StudySet struct {
+	//	An STUDY_SET is a container for a set of studies and a common namespace.
+	StudySet *TStudySetType `xml:"STUDY_SET"`
+}
+
+//	If the WalkHandlers.XsdGoPkgHasElem_StudySet function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElem_StudySet instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 1/1 field(s) belonging to this XsdGoPkgHasElem_StudySet instance.
+func (me *XsdGoPkgHasElem_StudySet) Walk() (err error) {
+	if fn := WalkHandlers.XsdGoPkgHasElem_StudySet; me != nil {
+		if fn != nil {
+			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+		if err = me.StudySet.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+			return
 		}
 		if fn != nil {
 			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
@@ -1686,26 +1686,105 @@ func (me *XsdGoPkgHasElem_Study) Walk() (err error) {
 	return
 }
 
+type TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTableSequenceBasecallSimpleContentExtensionMatchEdge xsdt.String
+
+//	Since TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTableSequenceBasecallSimpleContentExtensionMatchEdge is just a simple String type, this merely sets the current value from the specified string.
+func (me *TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTableSequenceBasecallSimpleContentExtensionMatchEdge) Set(s string) {
+	(*xsdt.String)(me).Set(s)
+}
+
+//	Since TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTableSequenceBasecallSimpleContentExtensionMatchEdge is just a simple String type, this merely returns the current string value.
+func (me TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTableSequenceBasecallSimpleContentExtensionMatchEdge) String() string {
+	return xsdt.String(me).String()
+}
+
+//	This convenience method just performs a simple type conversion to TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTableSequenceBasecallSimpleContentExtensionMatchEdge's alias type xsdt.String.
+func (me TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTableSequenceBasecallSimpleContentExtensionMatchEdge) ToXsdtString() xsdt.String {
+	return xsdt.String(me)
+}
+
+//	Returns true if the value of this enumerated TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTableSequenceBasecallSimpleContentExtensionMatchEdge is "full".
+func (me TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTableSequenceBasecallSimpleContentExtensionMatchEdge) IsFull() bool {
+	return me.String() == "full"
+}
+
+//	Returns true if the value of this enumerated TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTableSequenceBasecallSimpleContentExtensionMatchEdge is "start".
+func (me TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTableSequenceBasecallSimpleContentExtensionMatchEdge) IsStart() bool {
+	return me.String() == "start"
+}
+
+//	Returns true if the value of this enumerated TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTableSequenceBasecallSimpleContentExtensionMatchEdge is "end".
+func (me TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTableSequenceBasecallSimpleContentExtensionMatchEdge) IsEnd() bool {
+	return me.String() == "end"
+}
+
+//	More extensive free-form description of the study.
+type XsdGoPkgHasElems_StudyDESCRIPTIONallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_StudyDescription_XsdtString_ struct {
+	//	More extensive free-form description of the study.
+	StudyDescriptions []xsdt.String `xml:"STUDY_DESCRIPTION"`
+}
+
+//	If the WalkHandlers.XsdGoPkgHasElems_StudyDESCRIPTIONallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_StudyDescription_XsdtString_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElems_StudyDESCRIPTIONallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_StudyDescription_XsdtString_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElems_StudyDESCRIPTIONallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_StudyDescription_XsdtString_ instance.
+func (me *XsdGoPkgHasElems_StudyDESCRIPTIONallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_StudyDescription_XsdtString_) Walk() (err error) {
+	if fn := WalkHandlers.XsdGoPkgHasElems_StudyDESCRIPTIONallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_StudyDescription_XsdtString_; me != nil {
+		if fn != nil {
+			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+		if fn != nil {
+			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+	}
+	return
+}
+
+//	A submitter provided identifier of the (new) record. used in submisison process and replaced by primary archive
+//	id on successfull load. @namespace is optional and may refer to submitter private database or LIMS
+//	identifier.
+type XsdGoPkgHasElem_SubmitterIDsequenceIdentifierTypeschema_SubmitterId_TQualifiedNameType_ struct {
+	//	A submitter provided identifier of the (new) record. used in submisison process and replaced by primary archive
+	//	id on successfull load. @namespace is optional and may refer to submitter private database or LIMS
+	//	identifier.
+	SubmitterId *TQualifiedNameType `xml:"SUBMITTER_ID"`
+}
+
+//	If the WalkHandlers.XsdGoPkgHasElem_SubmitterIDsequenceIdentifierTypeschema_SubmitterId_TQualifiedNameType_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElem_SubmitterIDsequenceIdentifierTypeschema_SubmitterId_TQualifiedNameType_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 1/1 field(s) belonging to this XsdGoPkgHasElem_SubmitterIDsequenceIdentifierTypeschema_SubmitterId_TQualifiedNameType_ instance.
+func (me *XsdGoPkgHasElem_SubmitterIDsequenceIdentifierTypeschema_SubmitterId_TQualifiedNameType_) Walk() (err error) {
+	if fn := WalkHandlers.XsdGoPkgHasElem_SubmitterIDsequenceIdentifierTypeschema_SubmitterId_TQualifiedNameType_; me != nil {
+		if fn != nil {
+			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+		if err = me.SubmitterId.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+			return
+		}
+		if fn != nil {
+			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+	}
+	return
+}
+
 //	Maximum number of mismatches
 type XsdGoPkgHasAttr_MaxMismatch_XsdtNonNegativeInteger_ struct {
 	//	Maximum number of mismatches
 	MaxMismatch xsdt.NonNegativeInteger `xml:"max_mismatch,attr"`
 }
 
+//	The read is located beginning at the offset or cycle relative to another read. This choice is
+//	appropriate for example when specifying a read that follows a variable length expected sequence(s).
 //	Specify the read index that precedes this read.
 type XsdGoPkgHasAttr_FollowsReadIndex_XsdtNonNegativeInteger_ struct {
 	//	Specify the read index that precedes this read.
 	FollowsReadIndex xsdt.NonNegativeInteger `xml:"follows_read_index,attr"`
 }
 
-//	Minimum number of matches to trigger identification.
-type XsdGoPkgHasAttr_MinMatch_XsdtNonNegativeInteger_ struct {
-	//	Minimum number of matches to trigger identification.
-	MinMatch xsdt.NonNegativeInteger `xml:"min_match,attr"`
-}
-
-//	The read is located beginning at the offset or cycle relative to another read. This choice is
-//	appropriate for example when specifying a read that follows a variable length expected sequence(s).
 //	Specify the read index that follows this read.
 type XsdGoPkgHasAttr_PrecedesReadIndex_XsdtNonNegativeInteger_ struct {
 	//	Specify the read index that follows this read.
@@ -1713,11 +1792,11 @@ type XsdGoPkgHasAttr_PrecedesReadIndex_XsdtNonNegativeInteger_ struct {
 }
 
 type TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceRelativeOrder struct {
-	//	Specify the read index that follows this read.
-	XsdGoPkgHasAttr_PrecedesReadIndex_XsdtNonNegativeInteger_
-
 	//	Specify the read index that precedes this read.
 	XsdGoPkgHasAttr_FollowsReadIndex_XsdtNonNegativeInteger_
+
+	//	Specify the read index that follows this read.
+	XsdGoPkgHasAttr_PrecedesReadIndex_XsdtNonNegativeInteger_
 }
 
 //	If the WalkHandlers.TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceRelativeOrder function is not nil (ie. was set by outside code), calls it with this TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceRelativeOrder instance as the single argument. Then calls the Walk() method on 0/2 embed(s) and 0/0 field(s) belonging to this TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceRelativeOrder instance.
@@ -1763,136 +1842,80 @@ func (me *XsdGoPkgHasElem_RelativeORDERchoicesequenceREADSPECsequenceSPOTDecodeS
 	return
 }
 
-//	The location of the read start in terms of base count (1 is beginning of spot).
-type XsdGoPkgHasElem_BaseCOORDchoicesequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_BaseCoord_XsdtInteger_ struct {
-	//	The location of the read start in terms of base count (1 is beginning of spot).
-	BaseCoord *xsdt.Integer `xml:"BASE_COORD"`
+type TxsdPlatformTypeChoiceCapillarySequenceInstrumentModel xsdt.String
+
+//	Returns true if the value of this enumerated TxsdPlatformTypeChoiceCapillarySequenceInstrumentModel is "AB 3500 Genetic Analyzer".
+func (me TxsdPlatformTypeChoiceCapillarySequenceInstrumentModel) IsAb3500GeneticAnalyzer() bool {
+	return me.String() == "AB 3500 Genetic Analyzer"
 }
 
-//	If the WalkHandlers.XsdGoPkgHasElem_BaseCOORDchoicesequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_BaseCoord_XsdtInteger_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElem_BaseCOORDchoicesequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_BaseCoord_XsdtInteger_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElem_BaseCOORDchoicesequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_BaseCoord_XsdtInteger_ instance.
-func (me *XsdGoPkgHasElem_BaseCOORDchoicesequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_BaseCoord_XsdtInteger_) Walk() (err error) {
-	if fn := WalkHandlers.XsdGoPkgHasElem_BaseCOORDchoicesequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_BaseCoord_XsdtInteger_; me != nil {
-		if fn != nil {
-			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-		if fn != nil {
-			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-	}
-	return
-}
-
-//	A set of choices of expected basecalls for a current read. Read will be zero-length if none is
-//	found.
-//	Specify whether the spot should have a default length for this tag if the expected base
-//	cannot be matched.
-type XsdGoPkgHasAttr_DefaultLength_XsdtNonNegativeInteger_ struct {
-	//	Specify whether the spot should have a default length for this tag if the expected base
-	//	cannot be matched.
-	DefaultLength xsdt.NonNegativeInteger `xml:"default_length,attr"`
-}
-
-//	Element's body contains a basecall, attribute provide description of this read meaning as
-//	well as matching rules.
-//	Where the match should occur. Changes the rules on how min_match and max_mismatch
-//	are counted.
-type TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTableSequenceBasecallSimpleContentExtensionMatchEdge xsdt.String
-
-//	Returns true if the value of this enumerated TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTableSequenceBasecallSimpleContentExtensionMatchEdge is "start".
-func (me TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTableSequenceBasecallSimpleContentExtensionMatchEdge) IsStart() bool {
-	return me.String() == "start"
-}
-
-//	Returns true if the value of this enumerated TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTableSequenceBasecallSimpleContentExtensionMatchEdge is "end".
-func (me TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTableSequenceBasecallSimpleContentExtensionMatchEdge) IsEnd() bool {
-	return me.String() == "end"
-}
-
-//	Since TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTableSequenceBasecallSimpleContentExtensionMatchEdge is just a simple String type, this merely sets the current value from the specified string.
-func (me *TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTableSequenceBasecallSimpleContentExtensionMatchEdge) Set(s string) {
+//	Since TxsdPlatformTypeChoiceCapillarySequenceInstrumentModel is just a simple String type, this merely sets the current value from the specified string.
+func (me *TxsdPlatformTypeChoiceCapillarySequenceInstrumentModel) Set(s string) {
 	(*xsdt.String)(me).Set(s)
 }
 
-//	Since TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTableSequenceBasecallSimpleContentExtensionMatchEdge is just a simple String type, this merely returns the current string value.
-func (me TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTableSequenceBasecallSimpleContentExtensionMatchEdge) String() string {
+//	Since TxsdPlatformTypeChoiceCapillarySequenceInstrumentModel is just a simple String type, this merely returns the current string value.
+func (me TxsdPlatformTypeChoiceCapillarySequenceInstrumentModel) String() string {
 	return xsdt.String(me).String()
 }
 
-//	This convenience method just performs a simple type conversion to TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTableSequenceBasecallSimpleContentExtensionMatchEdge's alias type xsdt.String.
-func (me TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTableSequenceBasecallSimpleContentExtensionMatchEdge) ToXsdtString() xsdt.String {
+//	This convenience method just performs a simple type conversion to TxsdPlatformTypeChoiceCapillarySequenceInstrumentModel's alias type xsdt.String.
+func (me TxsdPlatformTypeChoiceCapillarySequenceInstrumentModel) ToXsdtString() xsdt.String {
 	return xsdt.String(me)
 }
 
-//	Returns true if the value of this enumerated TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTableSequenceBasecallSimpleContentExtensionMatchEdge is "full".
-func (me TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTableSequenceBasecallSimpleContentExtensionMatchEdge) IsFull() bool {
-	return me.String() == "full"
+//	Returns true if the value of this enumerated TxsdPlatformTypeChoiceCapillarySequenceInstrumentModel is "AB 3130xL Genetic Analyzer".
+func (me TxsdPlatformTypeChoiceCapillarySequenceInstrumentModel) IsAb3130XlGeneticAnalyzer() bool {
+	return me.String() == "AB 3130xL Genetic Analyzer"
 }
 
-type XsdGoPkgHasAttr_MatchEdge_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTableSequenceBasecallSimpleContentExtensionMatchEdge_ struct {
-	//	Where the match should occur. Changes the rules on how min_match and max_mismatch
-	//	are counted.
-	MatchEdge TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTableSequenceBasecallSimpleContentExtensionMatchEdge `xml:"match_edge,attr"`
+//	Returns true if the value of this enumerated TxsdPlatformTypeChoiceCapillarySequenceInstrumentModel is "AB 3130 Genetic Analyzer".
+func (me TxsdPlatformTypeChoiceCapillarySequenceInstrumentModel) IsAb3130GeneticAnalyzer() bool {
+	return me.String() == "AB 3130 Genetic Analyzer"
 }
 
-//	When match occurs, the read will be tagged with this group membership
-type XsdGoPkgHasAttr_ReadGroupTag_XsdtString_ struct {
-	//	When match occurs, the read will be tagged with this group membership
-	ReadGroupTag xsdt.String `xml:"read_group_tag,attr"`
+//	Returns true if the value of this enumerated TxsdPlatformTypeChoiceCapillarySequenceInstrumentModel is "AB 310 Genetic Analyzer".
+func (me TxsdPlatformTypeChoiceCapillarySequenceInstrumentModel) IsAb310GeneticAnalyzer() bool {
+	return me.String() == "AB 310 Genetic Analyzer"
 }
 
-type TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTableSequenceBasecall struct {
-	XsdtString
-
-	//	When match occurs, the read will be tagged with this group membership
-	XsdGoPkgHasAttr_ReadGroupTag_XsdtString_
-
-	//	Minimum number of matches to trigger identification.
-	XsdGoPkgHasAttr_MinMatch_XsdtNonNegativeInteger_
-
-	//	Maximum number of mismatches
-	XsdGoPkgHasAttr_MaxMismatch_XsdtNonNegativeInteger_
-
-	//	Where the match should occur. Changes the rules on how min_match and max_mismatch
-	//	are counted.
-	XsdGoPkgHasAttr_MatchEdge_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTableSequenceBasecallSimpleContentExtensionMatchEdge_
+//	Returns true if the value of this enumerated TxsdPlatformTypeChoiceCapillarySequenceInstrumentModel is "unspecified".
+func (me TxsdPlatformTypeChoiceCapillarySequenceInstrumentModel) IsUnspecified() bool {
+	return me.String() == "unspecified"
 }
 
-//	If the WalkHandlers.TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTableSequenceBasecall function is not nil (ie. was set by outside code), calls it with this TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTableSequenceBasecall instance as the single argument. Then calls the Walk() method on 0/5 embed(s) and 0/0 field(s) belonging to this TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTableSequenceBasecall instance.
-func (me *TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTableSequenceBasecall) Walk() (err error) {
-	if fn := WalkHandlers.TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTableSequenceBasecall; me != nil {
+//	Returns true if the value of this enumerated TxsdPlatformTypeChoiceCapillarySequenceInstrumentModel is "AB 3730xL Genetic Analyzer".
+func (me TxsdPlatformTypeChoiceCapillarySequenceInstrumentModel) IsAb3730XlGeneticAnalyzer() bool {
+	return me.String() == "AB 3730xL Genetic Analyzer"
+}
+
+//	Returns true if the value of this enumerated TxsdPlatformTypeChoiceCapillarySequenceInstrumentModel is "AB 3730 Genetic Analyzer".
+func (me TxsdPlatformTypeChoiceCapillarySequenceInstrumentModel) IsAb3730GeneticAnalyzer() bool {
+	return me.String() == "AB 3730 Genetic Analyzer"
+}
+
+//	Returns true if the value of this enumerated TxsdPlatformTypeChoiceCapillarySequenceInstrumentModel is "AB 3500xL Genetic Analyzer".
+func (me TxsdPlatformTypeChoiceCapillarySequenceInstrumentModel) IsAb3500XlGeneticAnalyzer() bool {
+	return me.String() == "AB 3500xL Genetic Analyzer"
+}
+
+//	Related study or project record from a list of supported databases. The study's information
+//	is derived from this project record rather than stored as first class information.
+type XsdGoPkgHasElems_RelatedLINKsequenceTxsdStudyTypeSequenceDescriptorAllRelatedStudiesSequenceRelatedStudyRELATEDSTUDYsequenceTxsdStudyTypeSequenceDescriptorAllRelatedStudiesRELATEDSTUDIESallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_RelatedLink_TXRefType_ struct {
+	//	Related study or project record from a list of supported databases. The study's information
+	//	is derived from this project record rather than stored as first class information.
+	RelatedLinks []*TXRefType `xml:"RELATED_LINK"`
+}
+
+//	If the WalkHandlers.XsdGoPkgHasElems_RelatedLINKsequenceTxsdStudyTypeSequenceDescriptorAllRelatedStudiesSequenceRelatedStudyRELATEDSTUDYsequenceTxsdStudyTypeSequenceDescriptorAllRelatedStudiesRELATEDSTUDIESallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_RelatedLink_TXRefType_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElems_RelatedLINKsequenceTxsdStudyTypeSequenceDescriptorAllRelatedStudiesSequenceRelatedStudyRELATEDSTUDYsequenceTxsdStudyTypeSequenceDescriptorAllRelatedStudiesRELATEDSTUDIESallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_RelatedLink_TXRefType_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElems_RelatedLINKsequenceTxsdStudyTypeSequenceDescriptorAllRelatedStudiesSequenceRelatedStudyRELATEDSTUDYsequenceTxsdStudyTypeSequenceDescriptorAllRelatedStudiesRELATEDSTUDIESallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_RelatedLink_TXRefType_ instance.
+func (me *XsdGoPkgHasElems_RelatedLINKsequenceTxsdStudyTypeSequenceDescriptorAllRelatedStudiesSequenceRelatedStudyRELATEDSTUDYsequenceTxsdStudyTypeSequenceDescriptorAllRelatedStudiesRELATEDSTUDIESallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_RelatedLink_TXRefType_) Walk() (err error) {
+	if fn := WalkHandlers.XsdGoPkgHasElems_RelatedLINKsequenceTxsdStudyTypeSequenceDescriptorAllRelatedStudiesSequenceRelatedStudyRELATEDSTUDYsequenceTxsdStudyTypeSequenceDescriptorAllRelatedStudiesRELATEDSTUDIESallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_RelatedLink_TXRefType_; me != nil {
 		if fn != nil {
 			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
 				return
 			}
 		}
-		if fn != nil {
-			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-	}
-	return
-}
-
-type XsdGoPkgHasElems_BASECALLsequenceEXPECTEDBasecallTABLEchoicesequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_Basecall_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTableSequenceBasecall_ struct {
-	//	Element's body contains a basecall, attribute provide description of this read meaning as
-	//	well as matching rules.
-	Basecalls []*TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTableSequenceBasecall `xml:"BASECALL"`
-}
-
-//	If the WalkHandlers.XsdGoPkgHasElems_BASECALLsequenceEXPECTEDBasecallTABLEchoicesequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_Basecall_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTableSequenceBasecall_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElems_BASECALLsequenceEXPECTEDBasecallTABLEchoicesequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_Basecall_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTableSequenceBasecall_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElems_BASECALLsequenceEXPECTEDBasecallTABLEchoicesequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_Basecall_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTableSequenceBasecall_ instance.
-func (me *XsdGoPkgHasElems_BASECALLsequenceEXPECTEDBasecallTABLEchoicesequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_Basecall_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTableSequenceBasecall_) Walk() (err error) {
-	if fn := WalkHandlers.XsdGoPkgHasElems_BASECALLsequenceEXPECTEDBasecallTABLEchoicesequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_Basecall_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTableSequenceBasecall_; me != nil {
-		if fn != nil {
-			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-		for _, x := range me.Basecalls {
+		for _, x := range me.RelatedLinks {
 			if err = x.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
 				return
 			}
@@ -1906,35 +1929,46 @@ func (me *XsdGoPkgHasElems_BASECALLsequenceEXPECTEDBasecallTABLEchoicesequenceRE
 	return
 }
 
-//	Specify an optional starting point for tag (base offset from 1).
-type XsdGoPkgHasAttr_BaseCoord_XsdtNonNegativeInteger_ struct {
-	//	Specify an optional starting point for tag (base offset from 1).
-	BaseCoord xsdt.NonNegativeInteger `xml:"base_coord,attr"`
+//	Tells the Archive who will execute the sample demultiplexing operation..
+type TxsdSequencingDirectivesTypeAllSampleDemuxDirective xsdt.String
+
+//	Returns true if the value of this enumerated TxsdSequencingDirectivesTypeAllSampleDemuxDirective is "leave_as_pool".
+func (me TxsdSequencingDirectivesTypeAllSampleDemuxDirective) IsLeaveAsPool() bool {
+	return me.String() == "leave_as_pool"
 }
 
-type TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTable struct {
-	//	Element's body contains a basecall, attribute provide description of this read meaning as
-	//	well as matching rules.
-	XsdGoPkgHasElems_BASECALLsequenceEXPECTEDBasecallTABLEchoicesequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_Basecall_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTableSequenceBasecall_
-
-	//	Specify an optional starting point for tag (base offset from 1).
-	XsdGoPkgHasAttr_BaseCoord_XsdtNonNegativeInteger_
-
-	//	Specify whether the spot should have a default length for this tag if the expected base
-	//	cannot be matched.
-	XsdGoPkgHasAttr_DefaultLength_XsdtNonNegativeInteger_
+//	Returns true if the value of this enumerated TxsdSequencingDirectivesTypeAllSampleDemuxDirective is "submitter_demultiplexed".
+func (me TxsdSequencingDirectivesTypeAllSampleDemuxDirective) IsSubmitterDemultiplexed() bool {
+	return me.String() == "submitter_demultiplexed"
 }
 
-//	If the WalkHandlers.TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTable function is not nil (ie. was set by outside code), calls it with this TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTable instance as the single argument. Then calls the Walk() method on 1/3 embed(s) and 0/0 field(s) belonging to this TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTable instance.
-func (me *TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTable) Walk() (err error) {
-	if fn := WalkHandlers.TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTable; me != nil {
+//	Since TxsdSequencingDirectivesTypeAllSampleDemuxDirective is just a simple String type, this merely sets the current value from the specified string.
+func (me *TxsdSequencingDirectivesTypeAllSampleDemuxDirective) Set(s string) {
+	(*xsdt.String)(me).Set(s)
+}
+
+//	Since TxsdSequencingDirectivesTypeAllSampleDemuxDirective is just a simple String type, this merely returns the current string value.
+func (me TxsdSequencingDirectivesTypeAllSampleDemuxDirective) String() string {
+	return xsdt.String(me).String()
+}
+
+//	This convenience method just performs a simple type conversion to TxsdSequencingDirectivesTypeAllSampleDemuxDirective's alias type xsdt.String.
+func (me TxsdSequencingDirectivesTypeAllSampleDemuxDirective) ToXsdtString() xsdt.String {
+	return xsdt.String(me)
+}
+
+type XsdGoPkgHasElem_SampleDemuxDIRECTIVEallSequencingDirectivesTypeschema_SampleDemuxDirective_TxsdSequencingDirectivesTypeAllSampleDemuxDirective_ struct {
+	//	Tells the Archive who will execute the sample demultiplexing operation..
+	SampleDemuxDirective TxsdSequencingDirectivesTypeAllSampleDemuxDirective `xml:"SAMPLE_DEMUX_DIRECTIVE"`
+}
+
+//	If the WalkHandlers.XsdGoPkgHasElem_SampleDemuxDIRECTIVEallSequencingDirectivesTypeschema_SampleDemuxDirective_TxsdSequencingDirectivesTypeAllSampleDemuxDirective_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElem_SampleDemuxDIRECTIVEallSequencingDirectivesTypeschema_SampleDemuxDirective_TxsdSequencingDirectivesTypeAllSampleDemuxDirective_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElem_SampleDemuxDIRECTIVEallSequencingDirectivesTypeschema_SampleDemuxDirective_TxsdSequencingDirectivesTypeAllSampleDemuxDirective_ instance.
+func (me *XsdGoPkgHasElem_SampleDemuxDIRECTIVEallSequencingDirectivesTypeschema_SampleDemuxDirective_TxsdSequencingDirectivesTypeAllSampleDemuxDirective_) Walk() (err error) {
+	if fn := WalkHandlers.XsdGoPkgHasElem_SampleDemuxDIRECTIVEallSequencingDirectivesTypeschema_SampleDemuxDirective_TxsdSequencingDirectivesTypeAllSampleDemuxDirective_; me != nil {
 		if fn != nil {
 			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
 				return
 			}
-		}
-		if err = me.XsdGoPkgHasElems_BASECALLsequenceEXPECTEDBasecallTABLEchoicesequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_Basecall_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTableSequenceBasecall_.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-			return
 		}
 		if fn != nil {
 			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
@@ -1945,22 +1979,28 @@ func (me *TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoi
 	return
 }
 
-type XsdGoPkgHasElem_ExpectedBasecallTABLEchoicesequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ExpectedBasecallTable_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTable_ struct {
-	//	A set of choices of expected basecalls for a current read. Read will be zero-length if none is
-	//	found.
-	ExpectedBasecallTable *TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTable `xml:"EXPECTED_BASECALL_TABLE"`
+//	Name of the processing pipeline section.
+type XsdGoPkgHasAttr_SectionName_XsdtString_ struct {
+	//	Name of the processing pipeline section.
+	SectionName xsdt.String `xml:"section_name,attr"`
 }
 
-//	If the WalkHandlers.XsdGoPkgHasElem_ExpectedBasecallTABLEchoicesequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ExpectedBasecallTable_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTable_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElem_ExpectedBasecallTABLEchoicesequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ExpectedBasecallTable_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTable_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 1/1 field(s) belonging to this XsdGoPkgHasElem_ExpectedBasecallTABLEchoicesequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ExpectedBasecallTable_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTable_ instance.
-func (me *XsdGoPkgHasElem_ExpectedBasecallTABLEchoicesequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ExpectedBasecallTable_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTable_) Walk() (err error) {
-	if fn := WalkHandlers.XsdGoPkgHasElem_ExpectedBasecallTABLEchoicesequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ExpectedBasecallTable_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTable_; me != nil {
+type XsdGoPkgHasElems_RelatedSTUDIESallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_RelatedStudies_TxsdStudyTypeSequenceDescriptorAllRelatedStudies_ struct {
+	RelatedStudieses []*TxsdStudyTypeSequenceDescriptorAllRelatedStudies `xml:"RELATED_STUDIES"`
+}
+
+//	If the WalkHandlers.XsdGoPkgHasElems_RelatedSTUDIESallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_RelatedStudies_TxsdStudyTypeSequenceDescriptorAllRelatedStudies_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElems_RelatedSTUDIESallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_RelatedStudies_TxsdStudyTypeSequenceDescriptorAllRelatedStudies_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElems_RelatedSTUDIESallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_RelatedStudies_TxsdStudyTypeSequenceDescriptorAllRelatedStudies_ instance.
+func (me *XsdGoPkgHasElems_RelatedSTUDIESallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_RelatedStudies_TxsdStudyTypeSequenceDescriptorAllRelatedStudies_) Walk() (err error) {
+	if fn := WalkHandlers.XsdGoPkgHasElems_RelatedSTUDIESallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_RelatedStudies_TxsdStudyTypeSequenceDescriptorAllRelatedStudies_; me != nil {
 		if fn != nil {
 			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
 				return
 			}
 		}
-		if err = me.ExpectedBasecallTable.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-			return
+		for _, x := range me.RelatedStudieses {
+			if err = x.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
 		}
 		if fn != nil {
 			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
@@ -1973,15 +2013,15 @@ func (me *XsdGoPkgHasElem_ExpectedBasecallTABLEchoicesequenceREADSPECsequenceSPO
 
 //	READ_INDEX starts at 0 and is incrementally increased for each sequential READ_SPEC within a
 //	SPOT_DECODE_SPEC
-type XsdGoPkgHasElem_ReadINDEXsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadIndex_XsdtNonNegativeInteger_ struct {
+type XsdGoPkgHasElems_ReadINDEXsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadIndex_XsdtNonNegativeInteger_ struct {
 	//	READ_INDEX starts at 0 and is incrementally increased for each sequential READ_SPEC within a
 	//	SPOT_DECODE_SPEC
-	ReadIndex xsdt.NonNegativeInteger `xml:"READ_INDEX"`
+	ReadIndexs []xsdt.NonNegativeInteger `xml:"READ_INDEX"`
 }
 
-//	If the WalkHandlers.XsdGoPkgHasElem_ReadINDEXsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadIndex_XsdtNonNegativeInteger_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElem_ReadINDEXsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadIndex_XsdtNonNegativeInteger_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElem_ReadINDEXsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadIndex_XsdtNonNegativeInteger_ instance.
-func (me *XsdGoPkgHasElem_ReadINDEXsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadIndex_XsdtNonNegativeInteger_) Walk() (err error) {
-	if fn := WalkHandlers.XsdGoPkgHasElem_ReadINDEXsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadIndex_XsdtNonNegativeInteger_; me != nil {
+//	If the WalkHandlers.XsdGoPkgHasElems_ReadINDEXsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadIndex_XsdtNonNegativeInteger_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElems_ReadINDEXsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadIndex_XsdtNonNegativeInteger_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElems_ReadINDEXsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadIndex_XsdtNonNegativeInteger_ instance.
+func (me *XsdGoPkgHasElems_ReadINDEXsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadIndex_XsdtNonNegativeInteger_) Walk() (err error) {
+	if fn := WalkHandlers.XsdGoPkgHasElems_ReadINDEXsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadIndex_XsdtNonNegativeInteger_; me != nil {
 		if fn != nil {
 			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
 				return
@@ -1996,454 +2036,225 @@ func (me *XsdGoPkgHasElem_ReadINDEXsequenceREADSPECsequenceSPOTDecodeSPECchoiceS
 	return
 }
 
-//	READ_LABEL is a name for this tag, and can be used to on output to determine read name, for example
-//	F or R.
-type XsdGoPkgHasElem_ReadLABELsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadLabel_XsdtString_ struct {
-	//	READ_LABEL is a name for this tag, and can be used to on output to determine read name, for example
-	//	F or R.
-	ReadLabel xsdt.String `xml:"READ_LABEL"`
+type TxsdPlatformTypeChoiceAbiSolidSequenceInstrumentModel xsdt.String
+
+//	Returns true if the value of this enumerated TxsdPlatformTypeChoiceAbiSolidSequenceInstrumentModel is "AB SOLiD System".
+func (me TxsdPlatformTypeChoiceAbiSolidSequenceInstrumentModel) IsAbSOLiDSystem() bool {
+	return me.String() == "AB SOLiD System"
 }
 
-//	If the WalkHandlers.XsdGoPkgHasElem_ReadLABELsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadLabel_XsdtString_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElem_ReadLABELsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadLabel_XsdtString_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElem_ReadLABELsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadLabel_XsdtString_ instance.
-func (me *XsdGoPkgHasElem_ReadLABELsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadLabel_XsdtString_) Walk() (err error) {
-	if fn := WalkHandlers.XsdGoPkgHasElem_ReadLABELsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadLabel_XsdtString_; me != nil {
-		if fn != nil {
-			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-		if fn != nil {
-			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-	}
-	return
+//	Returns true if the value of this enumerated TxsdPlatformTypeChoiceAbiSolidSequenceInstrumentModel is "AB SOLiD System 3.0".
+func (me TxsdPlatformTypeChoiceAbiSolidSequenceInstrumentModel) IsAbSOLiDSystem30() bool {
+	return me.String() == "AB SOLiD System 3.0"
 }
 
-type TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadClass xsdt.String
+//	Returns true if the value of this enumerated TxsdPlatformTypeChoiceAbiSolidSequenceInstrumentModel is "AB SOLiD PI System".
+func (me TxsdPlatformTypeChoiceAbiSolidSequenceInstrumentModel) IsAbSOLiDPiSystem() bool {
+	return me.String() == "AB SOLiD PI System"
+}
 
-//	Since TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadClass is just a simple String type, this merely returns the current string value.
-func (me TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadClass) String() string {
+//	Returns true if the value of this enumerated TxsdPlatformTypeChoiceAbiSolidSequenceInstrumentModel is "AB 5500xl-W Genetic Analysis System".
+func (me TxsdPlatformTypeChoiceAbiSolidSequenceInstrumentModel) IsAb5500XlWGeneticAnalysisSystem() bool {
+	return me.String() == "AB 5500xl-W Genetic Analysis System"
+}
+
+//	Since TxsdPlatformTypeChoiceAbiSolidSequenceInstrumentModel is just a simple String type, this merely returns the current string value.
+func (me TxsdPlatformTypeChoiceAbiSolidSequenceInstrumentModel) String() string {
 	return xsdt.String(me).String()
 }
 
-//	This convenience method just performs a simple type conversion to TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadClass's alias type xsdt.String.
-func (me TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadClass) ToXsdtString() xsdt.String {
+//	This convenience method just performs a simple type conversion to TxsdPlatformTypeChoiceAbiSolidSequenceInstrumentModel's alias type xsdt.String.
+func (me TxsdPlatformTypeChoiceAbiSolidSequenceInstrumentModel) ToXsdtString() xsdt.String {
 	return xsdt.String(me)
 }
 
-//	Returns true if the value of this enumerated TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadClass is "Application Read".
-func (me TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadClass) IsApplicationRead() bool {
-	return me.String() == "Application Read"
+//	Returns true if the value of this enumerated TxsdPlatformTypeChoiceAbiSolidSequenceInstrumentModel is "AB SOLiD System 2.0".
+func (me TxsdPlatformTypeChoiceAbiSolidSequenceInstrumentModel) IsAbSOLiDSystem20() bool {
+	return me.String() == "AB SOLiD System 2.0"
 }
 
-//	Returns true if the value of this enumerated TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadClass is "Technical Read".
-func (me TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadClass) IsTechnicalRead() bool {
-	return me.String() == "Technical Read"
+//	Returns true if the value of this enumerated TxsdPlatformTypeChoiceAbiSolidSequenceInstrumentModel is "AB SOLiD 4 System".
+func (me TxsdPlatformTypeChoiceAbiSolidSequenceInstrumentModel) IsAbSOLiD4System() bool {
+	return me.String() == "AB SOLiD 4 System"
 }
 
-//	Since TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadClass is just a simple String type, this merely sets the current value from the specified string.
-func (me *TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadClass) Set(s string) {
-	(*xsdt.String)(me).Set(s)
+//	Returns true if the value of this enumerated TxsdPlatformTypeChoiceAbiSolidSequenceInstrumentModel is "AB 5500 Genetic Analyzer".
+func (me TxsdPlatformTypeChoiceAbiSolidSequenceInstrumentModel) IsAb5500GeneticAnalyzer() bool {
+	return me.String() == "AB 5500 Genetic Analyzer"
 }
 
-type XsdGoPkgHasElem_ReadCLASSsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadClass_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadClass_ struct {
-	ReadClass TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadClass `xml:"READ_CLASS"`
-}
-
-//	If the WalkHandlers.XsdGoPkgHasElem_ReadCLASSsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadClass_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadClass_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElem_ReadCLASSsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadClass_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadClass_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElem_ReadCLASSsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadClass_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadClass_ instance.
-func (me *XsdGoPkgHasElem_ReadCLASSsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadClass_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadClass_) Walk() (err error) {
-	if fn := WalkHandlers.XsdGoPkgHasElem_ReadCLASSsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadClass_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadClass_; me != nil {
-		if fn != nil {
-			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-		if fn != nil {
-			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-	}
-	return
-}
-
-type TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadType xsdt.String
-
-//	Since TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadType is just a simple String type, this merely returns the current string value.
-func (me TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadType) String() string {
-	return xsdt.String(me).String()
-}
-
-//	This convenience method just performs a simple type conversion to TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadType's alias type xsdt.String.
-func (me TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadType) ToXsdtString() xsdt.String {
-	return xsdt.String(me)
-}
-
-//	Returns true if the value of this enumerated TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadType is "Forward".
-func (me TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadType) IsForward() bool {
-	return me.String() == "Forward"
-}
-
-//	Returns true if the value of this enumerated TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadType is "Adapter".
-func (me TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadType) IsAdapter() bool {
-	return me.String() == "Adapter"
-}
-
-//	Returns true if the value of this enumerated TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadType is "BarCode".
-func (me TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadType) IsBarCode() bool {
-	return me.String() == "BarCode"
-}
-
-//	Returns true if the value of this enumerated TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadType is "Other".
-func (me TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadType) IsOther() bool {
-	return me.String() == "Other"
-}
-
-//	Since TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadType is just a simple String type, this merely sets the current value from the specified string.
-func (me *TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadType) Set(s string) {
-	(*xsdt.String)(me).Set(s)
-}
-
-//	Returns true if the value of this enumerated TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadType is "Primer".
-func (me TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadType) IsPrimer() bool {
-	return me.String() == "Primer"
-}
-
-//	Returns true if the value of this enumerated TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadType is "Linker".
-func (me TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadType) IsLinker() bool {
-	return me.String() == "Linker"
-}
-
-//	Returns true if the value of this enumerated TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadType is "Reverse".
-func (me TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadType) IsReverse() bool {
-	return me.String() == "Reverse"
-}
-
-type XsdGoPkgHasElem_ReadTYPEsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadType_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadType_Forward struct {
-	ReadType TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadType `xml:"READ_TYPE"`
-}
-
-//	If the WalkHandlers.XsdGoPkgHasElem_ReadTYPEsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadType_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadType_Forward function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElem_ReadTYPEsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadType_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadType_Forward instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElem_ReadTYPEsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadType_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadType_Forward instance.
-func (me *XsdGoPkgHasElem_ReadTYPEsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadType_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadType_Forward) Walk() (err error) {
-	if fn := WalkHandlers.XsdGoPkgHasElem_ReadTYPEsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadType_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadType_Forward; me != nil {
-		if fn != nil {
-			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-		if fn != nil {
-			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-	}
-	return
-}
-
-//	Returns the default value for ReadType -- "Forward"
-func (me XsdGoPkgHasElem_ReadTYPEsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadType_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadType_Forward) ReadTypeDefault() TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadType {
-	return TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadType("Forward")
-}
-
-type TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpec struct {
-	XsdGoPkgHasElem_ReadCLASSsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadClass_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadClass_
-
-	XsdGoPkgHasElem_ReadTYPEsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadType_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadType_Forward
-
-	//	There are various methods to ordering the reads on the spot.
-	//	The read is located beginning at the offset or cycle relative to another read. This choice is
-	//	appropriate for example when specifying a read that follows a variable length expected sequence(s).
-	XsdGoPkgHasElem_RelativeORDERchoicesequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_RelativeOrder_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceRelativeOrder_
-
-	//	There are various methods to ordering the reads on the spot.
-	//	The location of the read start in terms of base count (1 is beginning of spot).
-	XsdGoPkgHasElem_BaseCOORDchoicesequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_BaseCoord_XsdtInteger_
-
-	//	There are various methods to ordering the reads on the spot.
-	//	A set of choices of expected basecalls for a current read. Read will be zero-length if none is
-	//	found.
-	XsdGoPkgHasElem_ExpectedBasecallTABLEchoicesequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ExpectedBasecallTable_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTable_
-
-	//	READ_INDEX starts at 0 and is incrementally increased for each sequential READ_SPEC within a
-	//	SPOT_DECODE_SPEC
-	XsdGoPkgHasElem_ReadINDEXsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadIndex_XsdtNonNegativeInteger_
-
-	//	READ_LABEL is a name for this tag, and can be used to on output to determine read name, for example
-	//	F or R.
-	XsdGoPkgHasElem_ReadLABELsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadLabel_XsdtString_
-}
-
-//	If the WalkHandlers.TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpec function is not nil (ie. was set by outside code), calls it with this TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpec instance as the single argument. Then calls the Walk() method on 7/7 embed(s) and 0/0 field(s) belonging to this TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpec instance.
-func (me *TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpec) Walk() (err error) {
-	if fn := WalkHandlers.TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpec; me != nil {
-		if fn != nil {
-			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-		if err = me.XsdGoPkgHasElem_ReadLABELsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadLabel_XsdtString_.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-			return
-		}
-		if err = me.XsdGoPkgHasElem_ReadCLASSsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadClass_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadClass_.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-			return
-		}
-		if err = me.XsdGoPkgHasElem_ReadTYPEsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadType_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadType_Forward.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-			return
-		}
-		if err = me.XsdGoPkgHasElem_RelativeORDERchoicesequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_RelativeOrder_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceRelativeOrder_.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-			return
-		}
-		if err = me.XsdGoPkgHasElem_BaseCOORDchoicesequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_BaseCoord_XsdtInteger_.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-			return
-		}
-		if err = me.XsdGoPkgHasElem_ExpectedBasecallTABLEchoicesequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ExpectedBasecallTable_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTable_.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-			return
-		}
-		if err = me.XsdGoPkgHasElem_ReadINDEXsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadIndex_XsdtNonNegativeInteger_.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-			return
-		}
-		if fn != nil {
-			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-	}
-	return
-}
-
-type XsdGoPkgHasElems_ReadSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadSpec_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpec_ struct {
-	ReadSpecs []*TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpec `xml:"READ_SPEC"`
-}
-
-//	If the WalkHandlers.XsdGoPkgHasElems_ReadSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadSpec_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpec_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElems_ReadSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadSpec_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpec_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElems_ReadSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadSpec_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpec_ instance.
-func (me *XsdGoPkgHasElems_ReadSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadSpec_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpec_) Walk() (err error) {
-	if fn := WalkHandlers.XsdGoPkgHasElems_ReadSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadSpec_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpec_; me != nil {
-		if fn != nil {
-			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-		for _, x := range me.ReadSpecs {
-			if err = x.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-		if fn != nil {
-			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-	}
-	return
-}
-
-//	Number of base/color calls, cycles, or flows per spot (raw sequence length or flow length including all
-//	application and technical tags and mate pairs, but not including gap lengths). This value will be platform dependent,
-//	library dependent, and possibly run dependent. Variable length platforms will still have a constant flow/cycle length.
-type XsdGoPkgHasElem_SpotLENGTHsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_SpotLength_XsdtNonNegativeInteger_ struct {
-	//	Number of base/color calls, cycles, or flows per spot (raw sequence length or flow length including all
-	//	application and technical tags and mate pairs, but not including gap lengths). This value will be platform dependent,
-	//	library dependent, and possibly run dependent. Variable length platforms will still have a constant flow/cycle length.
-	SpotLength xsdt.NonNegativeInteger `xml:"SPOT_LENGTH"`
-}
-
-//	If the WalkHandlers.XsdGoPkgHasElem_SpotLENGTHsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_SpotLength_XsdtNonNegativeInteger_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElem_SpotLENGTHsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_SpotLength_XsdtNonNegativeInteger_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElem_SpotLENGTHsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_SpotLength_XsdtNonNegativeInteger_ instance.
-func (me *XsdGoPkgHasElem_SpotLENGTHsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_SpotLength_XsdtNonNegativeInteger_) Walk() (err error) {
-	if fn := WalkHandlers.XsdGoPkgHasElem_SpotLENGTHsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_SpotLength_XsdtNonNegativeInteger_; me != nil {
-		if fn != nil {
-			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-		if fn != nil {
-			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-	}
-	return
-}
-
-type TxsdSpotDescriptorTypeChoiceSpotDecodeSpec struct {
-	//	Number of base/color calls, cycles, or flows per spot (raw sequence length or flow length including all
-	//	application and technical tags and mate pairs, but not including gap lengths). This value will be platform dependent,
-	//	library dependent, and possibly run dependent. Variable length platforms will still have a constant flow/cycle length.
-	XsdGoPkgHasElem_SpotLENGTHsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_SpotLength_XsdtNonNegativeInteger_
-
-	XsdGoPkgHasElems_ReadSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadSpec_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpec_
-}
-
-//	If the WalkHandlers.TxsdSpotDescriptorTypeChoiceSpotDecodeSpec function is not nil (ie. was set by outside code), calls it with this TxsdSpotDescriptorTypeChoiceSpotDecodeSpec instance as the single argument. Then calls the Walk() method on 2/2 embed(s) and 0/0 field(s) belonging to this TxsdSpotDescriptorTypeChoiceSpotDecodeSpec instance.
-func (me *TxsdSpotDescriptorTypeChoiceSpotDecodeSpec) Walk() (err error) {
-	if fn := WalkHandlers.TxsdSpotDescriptorTypeChoiceSpotDecodeSpec; me != nil {
-		if fn != nil {
-			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-		if err = me.XsdGoPkgHasElem_SpotLENGTHsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_SpotLength_XsdtNonNegativeInteger_.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-			return
-		}
-		if err = me.XsdGoPkgHasElems_ReadSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadSpec_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpec_.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-			return
-		}
-		if fn != nil {
-			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-	}
-	return
-}
-
-type XsdGoPkgHasElem_SpotDecodeSPECchoiceSpotDescriptorTypeschema_SpotDecodeSpec_TxsdSpotDescriptorTypeChoiceSpotDecodeSpec_ struct {
-	SpotDecodeSpec *TxsdSpotDescriptorTypeChoiceSpotDecodeSpec `xml:"SPOT_DECODE_SPEC"`
-}
-
-//	If the WalkHandlers.XsdGoPkgHasElem_SpotDecodeSPECchoiceSpotDescriptorTypeschema_SpotDecodeSpec_TxsdSpotDescriptorTypeChoiceSpotDecodeSpec_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElem_SpotDecodeSPECchoiceSpotDescriptorTypeschema_SpotDecodeSpec_TxsdSpotDescriptorTypeChoiceSpotDecodeSpec_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 1/1 field(s) belonging to this XsdGoPkgHasElem_SpotDecodeSPECchoiceSpotDescriptorTypeschema_SpotDecodeSpec_TxsdSpotDescriptorTypeChoiceSpotDecodeSpec_ instance.
-func (me *XsdGoPkgHasElem_SpotDecodeSPECchoiceSpotDescriptorTypeschema_SpotDecodeSpec_TxsdSpotDescriptorTypeChoiceSpotDecodeSpec_) Walk() (err error) {
-	if fn := WalkHandlers.XsdGoPkgHasElem_SpotDecodeSPECchoiceSpotDescriptorTypeschema_SpotDecodeSpec_TxsdSpotDescriptorTypeChoiceSpotDecodeSpec_; me != nil {
-		if fn != nil {
-			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-		if err = me.SpotDecodeSpec.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-			return
-		}
-		if fn != nil {
-			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-	}
-	return
-}
-
-//	Whether the reference alignment identifies reads that appear to be duplicates.
-type XsdGoPkgHasElems_AlignmentMarksDuplicateReadsallAlignmentDirectivesTypeschema_AlignmentMarksDuplicateReads_XsdtBoolean_ struct {
-	//	Whether the reference alignment identifies reads that appear to be duplicates.
-	AlignmentMarksDuplicateReadses []xsdt.Boolean `xml:"alignment_marks_duplicate_reads"`
-}
-
-//	If the WalkHandlers.XsdGoPkgHasElems_AlignmentMarksDuplicateReadsallAlignmentDirectivesTypeschema_AlignmentMarksDuplicateReads_XsdtBoolean_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElems_AlignmentMarksDuplicateReadsallAlignmentDirectivesTypeschema_AlignmentMarksDuplicateReads_XsdtBoolean_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElems_AlignmentMarksDuplicateReadsallAlignmentDirectivesTypeschema_AlignmentMarksDuplicateReads_XsdtBoolean_ instance.
-func (me *XsdGoPkgHasElems_AlignmentMarksDuplicateReadsallAlignmentDirectivesTypeschema_AlignmentMarksDuplicateReads_XsdtBoolean_) Walk() (err error) {
-	if fn := WalkHandlers.XsdGoPkgHasElems_AlignmentMarksDuplicateReadsallAlignmentDirectivesTypeschema_AlignmentMarksDuplicateReads_XsdtBoolean_; me != nil {
-		if fn != nil {
-			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-		if fn != nil {
-			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-	}
-	return
-}
-
-type TxsdPlatformTypeChoiceHelicosAllInstrumentModel xsdt.String
-
-//	Since TxsdPlatformTypeChoiceHelicosAllInstrumentModel is just a simple String type, this merely sets the current value from the specified string.
-func (me *TxsdPlatformTypeChoiceHelicosAllInstrumentModel) Set(s string) { (*xsdt.String)(me).Set(s) }
-
-//	Since TxsdPlatformTypeChoiceHelicosAllInstrumentModel is just a simple String type, this merely returns the current string value.
-func (me TxsdPlatformTypeChoiceHelicosAllInstrumentModel) String() string {
-	return xsdt.String(me).String()
-}
-
-//	This convenience method just performs a simple type conversion to TxsdPlatformTypeChoiceHelicosAllInstrumentModel's alias type xsdt.String.
-func (me TxsdPlatformTypeChoiceHelicosAllInstrumentModel) ToXsdtString() xsdt.String {
-	return xsdt.String(me)
-}
-
-//	Returns true if the value of this enumerated TxsdPlatformTypeChoiceHelicosAllInstrumentModel is "Helicos HeliScope".
-func (me TxsdPlatformTypeChoiceHelicosAllInstrumentModel) IsHelicosHeliScope() bool {
-	return me.String() == "Helicos HeliScope"
-}
-
-//	Returns true if the value of this enumerated TxsdPlatformTypeChoiceHelicosAllInstrumentModel is "unspecified".
-func (me TxsdPlatformTypeChoiceHelicosAllInstrumentModel) IsUnspecified() bool {
+//	Returns true if the value of this enumerated TxsdPlatformTypeChoiceAbiSolidSequenceInstrumentModel is "unspecified".
+func (me TxsdPlatformTypeChoiceAbiSolidSequenceInstrumentModel) IsUnspecified() bool {
 	return me.String() == "unspecified"
 }
 
-type XsdGoPkgHasElem_InstrumentMODELallHELICOSchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceHelicosAllInstrumentModel_ struct {
-	InstrumentModel TxsdPlatformTypeChoiceHelicosAllInstrumentModel `xml:"INSTRUMENT_MODEL"`
-}
-
-//	If the WalkHandlers.XsdGoPkgHasElem_InstrumentMODELallHELICOSchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceHelicosAllInstrumentModel_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElem_InstrumentMODELallHELICOSchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceHelicosAllInstrumentModel_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElem_InstrumentMODELallHELICOSchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceHelicosAllInstrumentModel_ instance.
-func (me *XsdGoPkgHasElem_InstrumentMODELallHELICOSchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceHelicosAllInstrumentModel_) Walk() (err error) {
-	if fn := WalkHandlers.XsdGoPkgHasElem_InstrumentMODELallHELICOSchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceHelicosAllInstrumentModel_; me != nil {
-		if fn != nil {
-			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-		if fn != nil {
-			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-	}
-	return
-}
-
-//	Links to resources related to this study (publication, datasets, online databases).
-type XsdGoPkgHasElems_StudyLINKSsequenceStudyTypeschema_StudyLinks_TxsdStudyTypeSequenceStudyLinks_ struct {
-	//	Links to resources related to this study (publication, datasets, online databases).
-	StudyLinkses []*TxsdStudyTypeSequenceStudyLinks `xml:"STUDY_LINKS"`
-}
-
-//	If the WalkHandlers.XsdGoPkgHasElems_StudyLINKSsequenceStudyTypeschema_StudyLinks_TxsdStudyTypeSequenceStudyLinks_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElems_StudyLINKSsequenceStudyTypeschema_StudyLinks_TxsdStudyTypeSequenceStudyLinks_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElems_StudyLINKSsequenceStudyTypeschema_StudyLinks_TxsdStudyTypeSequenceStudyLinks_ instance.
-func (me *XsdGoPkgHasElems_StudyLINKSsequenceStudyTypeschema_StudyLinks_TxsdStudyTypeSequenceStudyLinks_) Walk() (err error) {
-	if fn := WalkHandlers.XsdGoPkgHasElems_StudyLINKSsequenceStudyTypeschema_StudyLinks_TxsdStudyTypeSequenceStudyLinks_; me != nil {
-		if fn != nil {
-			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-		for _, x := range me.StudyLinkses {
-			if err = x.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-		if fn != nil {
-			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-	}
-	return
-}
-
-type TxsdPlatformTypeChoicePacbioSmrtSequenceInstrumentModel xsdt.String
-
-//	Since TxsdPlatformTypeChoicePacbioSmrtSequenceInstrumentModel is just a simple String type, this merely sets the current value from the specified string.
-func (me *TxsdPlatformTypeChoicePacbioSmrtSequenceInstrumentModel) Set(s string) {
+//	Since TxsdPlatformTypeChoiceAbiSolidSequenceInstrumentModel is just a simple String type, this merely sets the current value from the specified string.
+func (me *TxsdPlatformTypeChoiceAbiSolidSequenceInstrumentModel) Set(s string) {
 	(*xsdt.String)(me).Set(s)
 }
 
-//	Since TxsdPlatformTypeChoicePacbioSmrtSequenceInstrumentModel is just a simple String type, this merely returns the current string value.
-func (me TxsdPlatformTypeChoicePacbioSmrtSequenceInstrumentModel) String() string {
+//	Returns true if the value of this enumerated TxsdPlatformTypeChoiceAbiSolidSequenceInstrumentModel is "AB SOLiD 3 Plus System".
+func (me TxsdPlatformTypeChoiceAbiSolidSequenceInstrumentModel) IsAbSOLiD3PlusSystem() bool {
+	return me.String() == "AB SOLiD 3 Plus System"
+}
+
+//	Returns true if the value of this enumerated TxsdPlatformTypeChoiceAbiSolidSequenceInstrumentModel is "AB SOLiD 4hq System".
+func (me TxsdPlatformTypeChoiceAbiSolidSequenceInstrumentModel) IsAbSOLiD4HqSystem() bool {
+	return me.String() == "AB SOLiD 4hq System"
+}
+
+//	Returns true if the value of this enumerated TxsdPlatformTypeChoiceAbiSolidSequenceInstrumentModel is "AB 5500xl Genetic Analyzer".
+func (me TxsdPlatformTypeChoiceAbiSolidSequenceInstrumentModel) IsAb5500XlGeneticAnalyzer() bool {
+	return me.String() == "AB 5500xl Genetic Analyzer"
+}
+
+type XsdGoPkgHasElem_InstrumentMODELsequenceABISOLIDchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceAbiSolidSequenceInstrumentModel_ struct {
+	InstrumentModel TxsdPlatformTypeChoiceAbiSolidSequenceInstrumentModel `xml:"INSTRUMENT_MODEL"`
+}
+
+//	If the WalkHandlers.XsdGoPkgHasElem_InstrumentMODELsequenceABISOLIDchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceAbiSolidSequenceInstrumentModel_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElem_InstrumentMODELsequenceABISOLIDchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceAbiSolidSequenceInstrumentModel_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElem_InstrumentMODELsequenceABISOLIDchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceAbiSolidSequenceInstrumentModel_ instance.
+func (me *XsdGoPkgHasElem_InstrumentMODELsequenceABISOLIDchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceAbiSolidSequenceInstrumentModel_) Walk() (err error) {
+	if fn := WalkHandlers.XsdGoPkgHasElem_InstrumentMODELsequenceABISOLIDchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceAbiSolidSequenceInstrumentModel_; me != nil {
+		if fn != nil {
+			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+		if fn != nil {
+			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+	}
+	return
+}
+
+//	Ion Torrent Personal Genome Machine (PGM) from Life Technologies.
+type TxsdPlatformTypeChoiceIonTorrentSequenceInstrumentModel xsdt.String
+
+//	Since TxsdPlatformTypeChoiceIonTorrentSequenceInstrumentModel is just a simple String type, this merely sets the current value from the specified string.
+func (me *TxsdPlatformTypeChoiceIonTorrentSequenceInstrumentModel) Set(s string) {
+	(*xsdt.String)(me).Set(s)
+}
+
+//	Since TxsdPlatformTypeChoiceIonTorrentSequenceInstrumentModel is just a simple String type, this merely returns the current string value.
+func (me TxsdPlatformTypeChoiceIonTorrentSequenceInstrumentModel) String() string {
 	return xsdt.String(me).String()
 }
 
-//	This convenience method just performs a simple type conversion to TxsdPlatformTypeChoicePacbioSmrtSequenceInstrumentModel's alias type xsdt.String.
-func (me TxsdPlatformTypeChoicePacbioSmrtSequenceInstrumentModel) ToXsdtString() xsdt.String {
+//	This convenience method just performs a simple type conversion to TxsdPlatformTypeChoiceIonTorrentSequenceInstrumentModel's alias type xsdt.String.
+func (me TxsdPlatformTypeChoiceIonTorrentSequenceInstrumentModel) ToXsdtString() xsdt.String {
 	return xsdt.String(me)
 }
 
-//	Returns true if the value of this enumerated TxsdPlatformTypeChoicePacbioSmrtSequenceInstrumentModel is "PacBio RS".
-func (me TxsdPlatformTypeChoicePacbioSmrtSequenceInstrumentModel) IsPacBioRs() bool {
-	return me.String() == "PacBio RS"
+//	Returns true if the value of this enumerated TxsdPlatformTypeChoiceIonTorrentSequenceInstrumentModel is "Ion Torrent PGM".
+func (me TxsdPlatformTypeChoiceIonTorrentSequenceInstrumentModel) IsIonTorrentPgm() bool {
+	return me.String() == "Ion Torrent PGM"
 }
 
-//	Returns true if the value of this enumerated TxsdPlatformTypeChoicePacbioSmrtSequenceInstrumentModel is "PacBio RS II".
-func (me TxsdPlatformTypeChoicePacbioSmrtSequenceInstrumentModel) IsPacBioRsIi() bool {
-	return me.String() == "PacBio RS II"
+//	Returns true if the value of this enumerated TxsdPlatformTypeChoiceIonTorrentSequenceInstrumentModel is "Ion Torrent Proton".
+func (me TxsdPlatformTypeChoiceIonTorrentSequenceInstrumentModel) IsIonTorrentProton() bool {
+	return me.String() == "Ion Torrent Proton"
+}
+
+//	Returns true if the value of this enumerated TxsdPlatformTypeChoiceIonTorrentSequenceInstrumentModel is "unspecified".
+func (me TxsdPlatformTypeChoiceIonTorrentSequenceInstrumentModel) IsUnspecified() bool {
+	return me.String() == "unspecified"
+}
+
+type XsdGoPkgHasElem_InstrumentMODELsequenceIONTORRENTchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceIonTorrentSequenceInstrumentModel_ struct {
+	InstrumentModel TxsdPlatformTypeChoiceIonTorrentSequenceInstrumentModel `xml:"INSTRUMENT_MODEL"`
+}
+
+//	If the WalkHandlers.XsdGoPkgHasElem_InstrumentMODELsequenceIONTORRENTchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceIonTorrentSequenceInstrumentModel_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElem_InstrumentMODELsequenceIONTORRENTchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceIonTorrentSequenceInstrumentModel_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElem_InstrumentMODELsequenceIONTORRENTchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceIonTorrentSequenceInstrumentModel_ instance.
+func (me *XsdGoPkgHasElem_InstrumentMODELsequenceIONTORRENTchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceIonTorrentSequenceInstrumentModel_) Walk() (err error) {
+	if fn := WalkHandlers.XsdGoPkgHasElem_InstrumentMODELsequenceIONTORRENTchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceIonTorrentSequenceInstrumentModel_; me != nil {
+		if fn != nil {
+			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+		if fn != nil {
+			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+	}
+	return
+}
+
+type TxsdPlatformTypeChoiceIonTorrent struct {
+	XsdGoPkgHasElem_InstrumentMODELsequenceIONTORRENTchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceIonTorrentSequenceInstrumentModel_
+}
+
+//	If the WalkHandlers.TxsdPlatformTypeChoiceIonTorrent function is not nil (ie. was set by outside code), calls it with this TxsdPlatformTypeChoiceIonTorrent instance as the single argument. Then calls the Walk() method on 1/1 embed(s) and 0/0 field(s) belonging to this TxsdPlatformTypeChoiceIonTorrent instance.
+func (me *TxsdPlatformTypeChoiceIonTorrent) Walk() (err error) {
+	if fn := WalkHandlers.TxsdPlatformTypeChoiceIonTorrent; me != nil {
+		if fn != nil {
+			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+		if err = me.XsdGoPkgHasElem_InstrumentMODELsequenceIONTORRENTchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceIonTorrentSequenceInstrumentModel_.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+			return
+		}
+		if fn != nil {
+			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+	}
+	return
+}
+
+type XsdGoPkgHasElem_IonTORRENTchoicePlatformTypeschema_IonTorrent_TxsdPlatformTypeChoiceIonTorrent_ struct {
+	//	Ion Torrent Personal Genome Machine (PGM) from Life Technologies.
+	IonTorrent *TxsdPlatformTypeChoiceIonTorrent `xml:"ION_TORRENT"`
+}
+
+//	If the WalkHandlers.XsdGoPkgHasElem_IonTORRENTchoicePlatformTypeschema_IonTorrent_TxsdPlatformTypeChoiceIonTorrent_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElem_IonTORRENTchoicePlatformTypeschema_IonTorrent_TxsdPlatformTypeChoiceIonTorrent_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 1/1 field(s) belonging to this XsdGoPkgHasElem_IonTORRENTchoicePlatformTypeschema_IonTorrent_TxsdPlatformTypeChoiceIonTorrent_ instance.
+func (me *XsdGoPkgHasElem_IonTORRENTchoicePlatformTypeschema_IonTorrent_TxsdPlatformTypeChoiceIonTorrent_) Walk() (err error) {
+	if fn := WalkHandlers.XsdGoPkgHasElem_IonTORRENTchoicePlatformTypeschema_IonTorrent_TxsdPlatformTypeChoiceIonTorrent_; me != nil {
+		if fn != nil {
+			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+		if err = me.IonTorrent.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+			return
+		}
+		if fn != nil {
+			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+	}
+	return
+}
+
+//	Generic processing pipeline specification.
+//	The PipelineType identifies the sequence or tree of actions to process the sequencing data.
+//	Notes about the program or process for primary analysis.
+type XsdGoPkgHasElem_NOTESsequencePIPESECTIONsequencePipelineTypeschema_Notes_XsdtString_ struct {
+	//	Notes about the program or process for primary analysis.
+	Notes xsdt.String `xml:"NOTES"`
+}
+
+//	If the WalkHandlers.XsdGoPkgHasElem_NOTESsequencePIPESECTIONsequencePipelineTypeschema_Notes_XsdtString_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElem_NOTESsequencePIPESECTIONsequencePipelineTypeschema_Notes_XsdtString_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElem_NOTESsequencePIPESECTIONsequencePipelineTypeschema_Notes_XsdtString_ instance.
+func (me *XsdGoPkgHasElem_NOTESsequencePIPESECTIONsequencePipelineTypeschema_Notes_XsdtString_) Walk() (err error) {
+	if fn := WalkHandlers.XsdGoPkgHasElem_NOTESsequencePIPESECTIONsequencePipelineTypeschema_Notes_XsdtString_; me != nil {
+		if fn != nil {
+			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+		if fn != nil {
+			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+	}
+	return
 }
 
 //	Lexically ordered value that allows for the pipe section to be hierarchically ordered. The float
@@ -2542,46 +2353,7 @@ func (me *XsdGoPkgHasElem_VERSIONsequencePIPESECTIONsequencePipelineTypeschema_V
 	return
 }
 
-//	Notes about the program or process for primary analysis.
-type XsdGoPkgHasElem_NOTESsequencePIPESECTIONsequencePipelineTypeschema_Notes_XsdtString_ struct {
-	//	Notes about the program or process for primary analysis.
-	Notes xsdt.String `xml:"NOTES"`
-}
-
-//	If the WalkHandlers.XsdGoPkgHasElem_NOTESsequencePIPESECTIONsequencePipelineTypeschema_Notes_XsdtString_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElem_NOTESsequencePIPESECTIONsequencePipelineTypeschema_Notes_XsdtString_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElem_NOTESsequencePIPESECTIONsequencePipelineTypeschema_Notes_XsdtString_ instance.
-func (me *XsdGoPkgHasElem_NOTESsequencePIPESECTIONsequencePipelineTypeschema_Notes_XsdtString_) Walk() (err error) {
-	if fn := WalkHandlers.XsdGoPkgHasElem_NOTESsequencePIPESECTIONsequencePipelineTypeschema_Notes_XsdtString_; me != nil {
-		if fn != nil {
-			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-		if fn != nil {
-			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-	}
-	return
-}
-
-//	Name of the processing pipeline section.
-type XsdGoPkgHasAttr_SectionName_XsdtString_ struct {
-	//	Name of the processing pipeline section.
-	SectionName xsdt.String `xml:"section_name,attr"`
-}
-
 type TxsdPipelineTypeSequencePipeSection struct {
-	//	STEP_INDEX of the previous step in the workflow. Set toNIL if the first pipe section.
-	XsdGoPkgHasElems_PrevStepINDEXsequencePIPESECTIONsequencePipelineTypeschema_PrevStepIndex_XsdtString_
-
-	//	Name of the program or process for primary analysis. This may include a test or condition that leads to
-	//	branching in the workflow.
-	XsdGoPkgHasElem_PROGRAMsequencePIPESECTIONsequencePipelineTypeschema_Program_XsdtString_
-
-	//	Version of the program or process for primary analysis.
-	XsdGoPkgHasElem_VERSIONsequencePIPESECTIONsequencePipelineTypeschema_Version_XsdtString_
-
 	//	Notes about the program or process for primary analysis.
 	XsdGoPkgHasElem_NOTESsequencePIPESECTIONsequencePipelineTypeschema_Notes_XsdtString_
 
@@ -2591,6 +2363,16 @@ type TxsdPipelineTypeSequencePipeSection struct {
 	//	Lexically ordered value that allows for the pipe section to be hierarchically ordered. The float
 	//	primitive data type is used to allow for pipe sections to be inserted later on.
 	XsdGoPkgHasElem_StepINDEXsequencePIPESECTIONsequencePipelineTypeschema_StepIndex_XsdtString_
+
+	//	STEP_INDEX of the previous step in the workflow. Set toNIL if the first pipe section.
+	XsdGoPkgHasElems_PrevStepINDEXsequencePIPESECTIONsequencePipelineTypeschema_PrevStepIndex_XsdtString_
+
+	//	Name of the program or process for primary analysis. This may include a test or condition that leads to
+	//	branching in the workflow.
+	XsdGoPkgHasElem_PROGRAMsequencePIPESECTIONsequencePipelineTypeschema_Program_XsdtString_
+
+	//	Version of the program or process for primary analysis.
+	XsdGoPkgHasElem_VERSIONsequencePIPESECTIONsequencePipelineTypeschema_Version_XsdtString_
 }
 
 //	If the WalkHandlers.TxsdPipelineTypeSequencePipeSection function is not nil (ie. was set by outside code), calls it with this TxsdPipelineTypeSequencePipeSection instance as the single argument. Then calls the Walk() method on 5/6 embed(s) and 0/0 field(s) belonging to this TxsdPipelineTypeSequencePipeSection instance.
@@ -2600,9 +2382,6 @@ func (me *TxsdPipelineTypeSequencePipeSection) Walk() (err error) {
 			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
 				return
 			}
-		}
-		if err = me.XsdGoPkgHasElems_PrevStepINDEXsequencePIPESECTIONsequencePipelineTypeschema_PrevStepIndex_XsdtString_.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-			return
 		}
 		if err = me.XsdGoPkgHasElem_PROGRAMsequencePIPESECTIONsequencePipelineTypeschema_Program_XsdtString_.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
 			return
@@ -2616,28 +2395,7 @@ func (me *TxsdPipelineTypeSequencePipeSection) Walk() (err error) {
 		if err = me.XsdGoPkgHasElem_StepINDEXsequencePIPESECTIONsequencePipelineTypeschema_StepIndex_XsdtString_.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
 			return
 		}
-		if fn != nil {
-			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-	}
-	return
-}
-
-type XsdGoPkgHasElem_PipeSECTIONsequencePipelineTypeschema_PipeSection_TxsdPipelineTypeSequencePipeSection_ struct {
-	PipeSection *TxsdPipelineTypeSequencePipeSection `xml:"PIPE_SECTION"`
-}
-
-//	If the WalkHandlers.XsdGoPkgHasElem_PipeSECTIONsequencePipelineTypeschema_PipeSection_TxsdPipelineTypeSequencePipeSection_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElem_PipeSECTIONsequencePipelineTypeschema_PipeSection_TxsdPipelineTypeSequencePipeSection_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 1/1 field(s) belonging to this XsdGoPkgHasElem_PipeSECTIONsequencePipelineTypeschema_PipeSection_TxsdPipelineTypeSequencePipeSection_ instance.
-func (me *XsdGoPkgHasElem_PipeSECTIONsequencePipelineTypeschema_PipeSection_TxsdPipelineTypeSequencePipeSection_) Walk() (err error) {
-	if fn := WalkHandlers.XsdGoPkgHasElem_PipeSECTIONsequencePipelineTypeschema_PipeSection_TxsdPipelineTypeSequencePipeSection_; me != nil {
-		if fn != nil {
-			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-		if err = me.PipeSection.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+		if err = me.XsdGoPkgHasElems_PrevStepINDEXsequencePIPESECTIONsequencePipelineTypeschema_PrevStepIndex_XsdtString_.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
 			return
 		}
 		if fn != nil {
@@ -2649,514 +2407,6 @@ func (me *XsdGoPkgHasElem_PipeSECTIONsequencePipelineTypeschema_PipeSection_Txsd
 	return
 }
 
-//	DEPRECATED. Use STUDY@center_name instead. Controlled vocabulary identifying the sequencing center, core
-//	facility, consortium, or laboratory responsible for the study.
-type XsdGoPkgHasElems_CenterNAMEallDESCRIPTORsequenceStudyTypeschema_CenterName_XsdtString_ struct {
-	//	DEPRECATED. Use STUDY@center_name instead. Controlled vocabulary identifying the sequencing center, core
-	//	facility, consortium, or laboratory responsible for the study.
-	CenterNames []xsdt.String `xml:"CENTER_NAME"`
-}
-
-//	If the WalkHandlers.XsdGoPkgHasElems_CenterNAMEallDESCRIPTORsequenceStudyTypeschema_CenterName_XsdtString_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElems_CenterNAMEallDESCRIPTORsequenceStudyTypeschema_CenterName_XsdtString_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElems_CenterNAMEallDESCRIPTORsequenceStudyTypeschema_CenterName_XsdtString_ instance.
-func (me *XsdGoPkgHasElems_CenterNAMEallDESCRIPTORsequenceStudyTypeschema_CenterName_XsdtString_) Walk() (err error) {
-	if fn := WalkHandlers.XsdGoPkgHasElems_CenterNAMEallDESCRIPTORsequenceStudyTypeschema_CenterName_XsdtString_; me != nil {
-		if fn != nil {
-			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-		if fn != nil {
-			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-	}
-	return
-}
-
-type XsdGoPkgHasElems_EntrezLINKchoiceLinkTypeschema_EntrezLink_TxsdLinkTypeChoiceEntrezLink_ struct {
-	EntrezLinks []*TxsdLinkTypeChoiceEntrezLink `xml:"ENTREZ_LINK"`
-}
-
-//	If the WalkHandlers.XsdGoPkgHasElems_EntrezLINKchoiceLinkTypeschema_EntrezLink_TxsdLinkTypeChoiceEntrezLink_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElems_EntrezLINKchoiceLinkTypeschema_EntrezLink_TxsdLinkTypeChoiceEntrezLink_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElems_EntrezLINKchoiceLinkTypeschema_EntrezLink_TxsdLinkTypeChoiceEntrezLink_ instance.
-func (me *XsdGoPkgHasElems_EntrezLINKchoiceLinkTypeschema_EntrezLink_TxsdLinkTypeChoiceEntrezLink_) Walk() (err error) {
-	if fn := WalkHandlers.XsdGoPkgHasElems_EntrezLINKchoiceLinkTypeschema_EntrezLink_TxsdLinkTypeChoiceEntrezLink_; me != nil {
-		if fn != nil {
-			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-		for _, x := range me.EntrezLinks {
-			if err = x.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-		if fn != nil {
-			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-	}
-	return
-}
-
-type XsdGoPkgHasElems_SpotDecodeSPECchoiceSpotDescriptorTypeschema_SpotDecodeSpec_TxsdSpotDescriptorTypeChoiceSpotDecodeSpec_ struct {
-	SpotDecodeSpecs []*TxsdSpotDescriptorTypeChoiceSpotDecodeSpec `xml:"SPOT_DECODE_SPEC"`
-}
-
-//	If the WalkHandlers.XsdGoPkgHasElems_SpotDecodeSPECchoiceSpotDescriptorTypeschema_SpotDecodeSpec_TxsdSpotDescriptorTypeChoiceSpotDecodeSpec_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElems_SpotDecodeSPECchoiceSpotDescriptorTypeschema_SpotDecodeSpec_TxsdSpotDescriptorTypeChoiceSpotDecodeSpec_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElems_SpotDecodeSPECchoiceSpotDescriptorTypeschema_SpotDecodeSpec_TxsdSpotDescriptorTypeChoiceSpotDecodeSpec_ instance.
-func (me *XsdGoPkgHasElems_SpotDecodeSPECchoiceSpotDescriptorTypeschema_SpotDecodeSpec_TxsdSpotDescriptorTypeChoiceSpotDecodeSpec_) Walk() (err error) {
-	if fn := WalkHandlers.XsdGoPkgHasElems_SpotDecodeSPECchoiceSpotDescriptorTypeschema_SpotDecodeSpec_TxsdSpotDescriptorTypeChoiceSpotDecodeSpec_; me != nil {
-		if fn != nil {
-			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-		for _, x := range me.SpotDecodeSpecs {
-			if err = x.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-		if fn != nil {
-			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-	}
-	return
-}
-
-type TxsdPlatformTypeChoiceLs454AllInstrumentModel xsdt.String
-
-//	This convenience method just performs a simple type conversion to TxsdPlatformTypeChoiceLs454AllInstrumentModel's alias type xsdt.String.
-func (me TxsdPlatformTypeChoiceLs454AllInstrumentModel) ToXsdtString() xsdt.String {
-	return xsdt.String(me)
-}
-
-//	Returns true if the value of this enumerated TxsdPlatformTypeChoiceLs454AllInstrumentModel is "454 GS".
-func (me TxsdPlatformTypeChoiceLs454AllInstrumentModel) Is454Gs() bool {
-	return me.String() == "454 GS"
-}
-
-//	Returns true if the value of this enumerated TxsdPlatformTypeChoiceLs454AllInstrumentModel is "454 GS 20".
-func (me TxsdPlatformTypeChoiceLs454AllInstrumentModel) Is454Gs20() bool {
-	return me.String() == "454 GS 20"
-}
-
-//	Returns true if the value of this enumerated TxsdPlatformTypeChoiceLs454AllInstrumentModel is "454 GS FLX Titanium".
-func (me TxsdPlatformTypeChoiceLs454AllInstrumentModel) Is454GsFlxTitanium() bool {
-	return me.String() == "454 GS FLX Titanium"
-}
-
-//	Since TxsdPlatformTypeChoiceLs454AllInstrumentModel is just a simple String type, this merely sets the current value from the specified string.
-func (me *TxsdPlatformTypeChoiceLs454AllInstrumentModel) Set(s string) { (*xsdt.String)(me).Set(s) }
-
-//	Returns true if the value of this enumerated TxsdPlatformTypeChoiceLs454AllInstrumentModel is "454 GS FLX+".
-func (me TxsdPlatformTypeChoiceLs454AllInstrumentModel) Is454GsFlx() bool {
-	return me.String() == "454 GS FLX+"
-}
-
-//	Returns true if the value of this enumerated TxsdPlatformTypeChoiceLs454AllInstrumentModel is "454 GS Junior".
-func (me TxsdPlatformTypeChoiceLs454AllInstrumentModel) Is454GsJunior() bool {
-	return me.String() == "454 GS Junior"
-}
-
-//	Returns true if the value of this enumerated TxsdPlatformTypeChoiceLs454AllInstrumentModel is "unspecified".
-func (me TxsdPlatformTypeChoiceLs454AllInstrumentModel) IsUnspecified() bool {
-	return me.String() == "unspecified"
-}
-
-//	Since TxsdPlatformTypeChoiceLs454AllInstrumentModel is just a simple String type, this merely returns the current string value.
-func (me TxsdPlatformTypeChoiceLs454AllInstrumentModel) String() string {
-	return xsdt.String(me).String()
-}
-
-type XsdGoPkgHasElems_InstrumentMODELallLS454ChoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceLs454AllInstrumentModel_ struct {
-	InstrumentModels []TxsdPlatformTypeChoiceLs454AllInstrumentModel `xml:"INSTRUMENT_MODEL"`
-}
-
-//	If the WalkHandlers.XsdGoPkgHasElems_InstrumentMODELallLS454ChoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceLs454AllInstrumentModel_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElems_InstrumentMODELallLS454ChoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceLs454AllInstrumentModel_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElems_InstrumentMODELallLS454ChoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceLs454AllInstrumentModel_ instance.
-func (me *XsdGoPkgHasElems_InstrumentMODELallLS454ChoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceLs454AllInstrumentModel_) Walk() (err error) {
-	if fn := WalkHandlers.XsdGoPkgHasElems_InstrumentMODELallLS454ChoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceLs454AllInstrumentModel_; me != nil {
-		if fn != nil {
-			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-		if fn != nil {
-			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-	}
-	return
-}
-
-//	Helicos is similar to 454 technology - uses 1-color sequential flows
-type TxsdPlatformTypeChoiceHelicos struct {
-	XsdGoPkgHasElem_InstrumentMODELallHELICOSchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceHelicosAllInstrumentModel_
-}
-
-//	If the WalkHandlers.TxsdPlatformTypeChoiceHelicos function is not nil (ie. was set by outside code), calls it with this TxsdPlatformTypeChoiceHelicos instance as the single argument. Then calls the Walk() method on 1/1 embed(s) and 0/0 field(s) belonging to this TxsdPlatformTypeChoiceHelicos instance.
-func (me *TxsdPlatformTypeChoiceHelicos) Walk() (err error) {
-	if fn := WalkHandlers.TxsdPlatformTypeChoiceHelicos; me != nil {
-		if fn != nil {
-			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-		if err = me.XsdGoPkgHasElem_InstrumentMODELallHELICOSchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceHelicosAllInstrumentModel_.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-			return
-		}
-		if fn != nil {
-			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-	}
-	return
-}
-
-type XsdGoPkgHasElems_HELICOSchoicePlatformTypeschema_Helicos_TxsdPlatformTypeChoiceHelicos_ struct {
-	//	Helicos is similar to 454 technology - uses 1-color sequential flows
-	Helicoses []*TxsdPlatformTypeChoiceHelicos `xml:"HELICOS"`
-}
-
-//	If the WalkHandlers.XsdGoPkgHasElems_HELICOSchoicePlatformTypeschema_Helicos_TxsdPlatformTypeChoiceHelicos_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElems_HELICOSchoicePlatformTypeschema_Helicos_TxsdPlatformTypeChoiceHelicos_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElems_HELICOSchoicePlatformTypeschema_Helicos_TxsdPlatformTypeChoiceHelicos_ instance.
-func (me *XsdGoPkgHasElems_HELICOSchoicePlatformTypeschema_Helicos_TxsdPlatformTypeChoiceHelicos_) Walk() (err error) {
-	if fn := WalkHandlers.XsdGoPkgHasElems_HELICOSchoicePlatformTypeschema_Helicos_TxsdPlatformTypeChoiceHelicos_; me != nil {
-		if fn != nil {
-			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-		for _, x := range me.Helicoses {
-			if err = x.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-		if fn != nil {
-			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-	}
-	return
-}
-
-//	Lexically ordered value that allows for the pipe section to be hierarchically ordered. The float
-//	primitive data type is used to allow for pipe sections to be inserted later on.
-type XsdGoPkgHasElems_StepINDEXsequencePIPESECTIONsequencePipelineTypeschema_StepIndex_XsdtString_ struct {
-	//	Lexically ordered value that allows for the pipe section to be hierarchically ordered. The float
-	//	primitive data type is used to allow for pipe sections to be inserted later on.
-	StepIndexs []xsdt.String `xml:"STEP_INDEX"`
-}
-
-//	If the WalkHandlers.XsdGoPkgHasElems_StepINDEXsequencePIPESECTIONsequencePipelineTypeschema_StepIndex_XsdtString_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElems_StepINDEXsequencePIPESECTIONsequencePipelineTypeschema_StepIndex_XsdtString_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElems_StepINDEXsequencePIPESECTIONsequencePipelineTypeschema_StepIndex_XsdtString_ instance.
-func (me *XsdGoPkgHasElems_StepINDEXsequencePIPESECTIONsequencePipelineTypeschema_StepIndex_XsdtString_) Walk() (err error) {
-	if fn := WalkHandlers.XsdGoPkgHasElems_StepINDEXsequencePIPESECTIONsequencePipelineTypeschema_StepIndex_XsdtString_; me != nil {
-		if fn != nil {
-			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-		if fn != nil {
-			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-	}
-	return
-}
-
-type TxsdPlatformTypeChoiceIonTorrentSequenceInstrumentModel xsdt.String
-
-//	This convenience method just performs a simple type conversion to TxsdPlatformTypeChoiceIonTorrentSequenceInstrumentModel's alias type xsdt.String.
-func (me TxsdPlatformTypeChoiceIonTorrentSequenceInstrumentModel) ToXsdtString() xsdt.String {
-	return xsdt.String(me)
-}
-
-//	Returns true if the value of this enumerated TxsdPlatformTypeChoiceIonTorrentSequenceInstrumentModel is "Ion Torrent PGM".
-func (me TxsdPlatformTypeChoiceIonTorrentSequenceInstrumentModel) IsIonTorrentPgm() bool {
-	return me.String() == "Ion Torrent PGM"
-}
-
-//	Returns true if the value of this enumerated TxsdPlatformTypeChoiceIonTorrentSequenceInstrumentModel is "Ion Torrent Proton".
-func (me TxsdPlatformTypeChoiceIonTorrentSequenceInstrumentModel) IsIonTorrentProton() bool {
-	return me.String() == "Ion Torrent Proton"
-}
-
-//	Returns true if the value of this enumerated TxsdPlatformTypeChoiceIonTorrentSequenceInstrumentModel is "unspecified".
-func (me TxsdPlatformTypeChoiceIonTorrentSequenceInstrumentModel) IsUnspecified() bool {
-	return me.String() == "unspecified"
-}
-
-//	Since TxsdPlatformTypeChoiceIonTorrentSequenceInstrumentModel is just a simple String type, this merely sets the current value from the specified string.
-func (me *TxsdPlatformTypeChoiceIonTorrentSequenceInstrumentModel) Set(s string) {
-	(*xsdt.String)(me).Set(s)
-}
-
-//	Since TxsdPlatformTypeChoiceIonTorrentSequenceInstrumentModel is just a simple String type, this merely returns the current string value.
-func (me TxsdPlatformTypeChoiceIonTorrentSequenceInstrumentModel) String() string {
-	return xsdt.String(me).String()
-}
-
-type XsdGoPkgHasElems_InstrumentMODELsequenceIONTORRENTchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceIonTorrentSequenceInstrumentModel_ struct {
-	InstrumentModels []TxsdPlatformTypeChoiceIonTorrentSequenceInstrumentModel `xml:"INSTRUMENT_MODEL"`
-}
-
-//	If the WalkHandlers.XsdGoPkgHasElems_InstrumentMODELsequenceIONTORRENTchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceIonTorrentSequenceInstrumentModel_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElems_InstrumentMODELsequenceIONTORRENTchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceIonTorrentSequenceInstrumentModel_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElems_InstrumentMODELsequenceIONTORRENTchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceIonTorrentSequenceInstrumentModel_ instance.
-func (me *XsdGoPkgHasElems_InstrumentMODELsequenceIONTORRENTchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceIonTorrentSequenceInstrumentModel_) Walk() (err error) {
-	if fn := WalkHandlers.XsdGoPkgHasElems_InstrumentMODELsequenceIONTORRENTchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceIonTorrentSequenceInstrumentModel_; me != nil {
-		if fn != nil {
-			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-		if fn != nil {
-			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-	}
-	return
-}
-
-//	CompleteGenomics platform type. At present there is no instrument model.
-type TxsdPlatformTypeChoiceCompleteGenomicsSequenceInstrumentModel xsdt.String
-
-//	Returns true if the value of this enumerated TxsdPlatformTypeChoiceCompleteGenomicsSequenceInstrumentModel is "Complete Genomics".
-func (me TxsdPlatformTypeChoiceCompleteGenomicsSequenceInstrumentModel) IsCompleteGenomics() bool {
-	return me.String() == "Complete Genomics"
-}
-
-//	Returns true if the value of this enumerated TxsdPlatformTypeChoiceCompleteGenomicsSequenceInstrumentModel is "unspecified".
-func (me TxsdPlatformTypeChoiceCompleteGenomicsSequenceInstrumentModel) IsUnspecified() bool {
-	return me.String() == "unspecified"
-}
-
-//	Since TxsdPlatformTypeChoiceCompleteGenomicsSequenceInstrumentModel is just a simple String type, this merely sets the current value from the specified string.
-func (me *TxsdPlatformTypeChoiceCompleteGenomicsSequenceInstrumentModel) Set(s string) {
-	(*xsdt.String)(me).Set(s)
-}
-
-//	Since TxsdPlatformTypeChoiceCompleteGenomicsSequenceInstrumentModel is just a simple String type, this merely returns the current string value.
-func (me TxsdPlatformTypeChoiceCompleteGenomicsSequenceInstrumentModel) String() string {
-	return xsdt.String(me).String()
-}
-
-//	This convenience method just performs a simple type conversion to TxsdPlatformTypeChoiceCompleteGenomicsSequenceInstrumentModel's alias type xsdt.String.
-func (me TxsdPlatformTypeChoiceCompleteGenomicsSequenceInstrumentModel) ToXsdtString() xsdt.String {
-	return xsdt.String(me)
-}
-
-type XsdGoPkgHasElem_InstrumentMODELsequenceCOMPLETEGENOMICSchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceCompleteGenomicsSequenceInstrumentModel_ struct {
-	InstrumentModel TxsdPlatformTypeChoiceCompleteGenomicsSequenceInstrumentModel `xml:"INSTRUMENT_MODEL"`
-}
-
-//	If the WalkHandlers.XsdGoPkgHasElem_InstrumentMODELsequenceCOMPLETEGENOMICSchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceCompleteGenomicsSequenceInstrumentModel_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElem_InstrumentMODELsequenceCOMPLETEGENOMICSchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceCompleteGenomicsSequenceInstrumentModel_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElem_InstrumentMODELsequenceCOMPLETEGENOMICSchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceCompleteGenomicsSequenceInstrumentModel_ instance.
-func (me *XsdGoPkgHasElem_InstrumentMODELsequenceCOMPLETEGENOMICSchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceCompleteGenomicsSequenceInstrumentModel_) Walk() (err error) {
-	if fn := WalkHandlers.XsdGoPkgHasElem_InstrumentMODELsequenceCOMPLETEGENOMICSchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceCompleteGenomicsSequenceInstrumentModel_; me != nil {
-		if fn != nil {
-			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-		if fn != nil {
-			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-	}
-	return
-}
-
-type TxsdPlatformTypeChoiceCompleteGenomics struct {
-	XsdGoPkgHasElem_InstrumentMODELsequenceCOMPLETEGENOMICSchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceCompleteGenomicsSequenceInstrumentModel_
-}
-
-//	If the WalkHandlers.TxsdPlatformTypeChoiceCompleteGenomics function is not nil (ie. was set by outside code), calls it with this TxsdPlatformTypeChoiceCompleteGenomics instance as the single argument. Then calls the Walk() method on 1/1 embed(s) and 0/0 field(s) belonging to this TxsdPlatformTypeChoiceCompleteGenomics instance.
-func (me *TxsdPlatformTypeChoiceCompleteGenomics) Walk() (err error) {
-	if fn := WalkHandlers.TxsdPlatformTypeChoiceCompleteGenomics; me != nil {
-		if fn != nil {
-			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-		if err = me.XsdGoPkgHasElem_InstrumentMODELsequenceCOMPLETEGENOMICSchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceCompleteGenomicsSequenceInstrumentModel_.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-			return
-		}
-		if fn != nil {
-			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-	}
-	return
-}
-
-type XsdGoPkgHasElems_CompleteGENOMICSchoicePlatformTypeschema_CompleteGenomics_TxsdPlatformTypeChoiceCompleteGenomics_ struct {
-	//	CompleteGenomics platform type. At present there is no instrument model.
-	CompleteGenomicses []*TxsdPlatformTypeChoiceCompleteGenomics `xml:"COMPLETE_GENOMICS"`
-}
-
-//	If the WalkHandlers.XsdGoPkgHasElems_CompleteGENOMICSchoicePlatformTypeschema_CompleteGenomics_TxsdPlatformTypeChoiceCompleteGenomics_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElems_CompleteGENOMICSchoicePlatformTypeschema_CompleteGenomics_TxsdPlatformTypeChoiceCompleteGenomics_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElems_CompleteGENOMICSchoicePlatformTypeschema_CompleteGenomics_TxsdPlatformTypeChoiceCompleteGenomics_ instance.
-func (me *XsdGoPkgHasElems_CompleteGENOMICSchoicePlatformTypeschema_CompleteGenomics_TxsdPlatformTypeChoiceCompleteGenomics_) Walk() (err error) {
-	if fn := WalkHandlers.XsdGoPkgHasElems_CompleteGENOMICSchoicePlatformTypeschema_CompleteGenomics_TxsdPlatformTypeChoiceCompleteGenomics_; me != nil {
-		if fn != nil {
-			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-		for _, x := range me.CompleteGenomicses {
-			if err = x.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-		if fn != nil {
-			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-	}
-	return
-}
-
-//	Whether the reference alignment includes unaligned reads.
-type XsdGoPkgHasElem_AlignmentIncludesUnalignedReadsallAlignmentDirectivesTypeschema_AlignmentIncludesUnalignedReads_XsdtBoolean_ struct {
-	//	Whether the reference alignment includes unaligned reads.
-	AlignmentIncludesUnalignedReads xsdt.Boolean `xml:"alignment_includes_unaligned_reads"`
-}
-
-//	If the WalkHandlers.XsdGoPkgHasElem_AlignmentIncludesUnalignedReadsallAlignmentDirectivesTypeschema_AlignmentIncludesUnalignedReads_XsdtBoolean_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElem_AlignmentIncludesUnalignedReadsallAlignmentDirectivesTypeschema_AlignmentIncludesUnalignedReads_XsdtBoolean_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElem_AlignmentIncludesUnalignedReadsallAlignmentDirectivesTypeschema_AlignmentIncludesUnalignedReads_XsdtBoolean_ instance.
-func (me *XsdGoPkgHasElem_AlignmentIncludesUnalignedReadsallAlignmentDirectivesTypeschema_AlignmentIncludesUnalignedReads_XsdtBoolean_) Walk() (err error) {
-	if fn := WalkHandlers.XsdGoPkgHasElem_AlignmentIncludesUnalignedReadsallAlignmentDirectivesTypeschema_AlignmentIncludesUnalignedReads_XsdtBoolean_; me != nil {
-		if fn != nil {
-			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-		if fn != nil {
-			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-	}
-	return
-}
-
-//	Whether the reference alignment identifies reads that appear to be duplicates.
-type XsdGoPkgHasElem_AlignmentMarksDuplicateReadsallAlignmentDirectivesTypeschema_AlignmentMarksDuplicateReads_XsdtBoolean_ struct {
-	//	Whether the reference alignment identifies reads that appear to be duplicates.
-	AlignmentMarksDuplicateReads xsdt.Boolean `xml:"alignment_marks_duplicate_reads"`
-}
-
-//	If the WalkHandlers.XsdGoPkgHasElem_AlignmentMarksDuplicateReadsallAlignmentDirectivesTypeschema_AlignmentMarksDuplicateReads_XsdtBoolean_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElem_AlignmentMarksDuplicateReadsallAlignmentDirectivesTypeschema_AlignmentMarksDuplicateReads_XsdtBoolean_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElem_AlignmentMarksDuplicateReadsallAlignmentDirectivesTypeschema_AlignmentMarksDuplicateReads_XsdtBoolean_ instance.
-func (me *XsdGoPkgHasElem_AlignmentMarksDuplicateReadsallAlignmentDirectivesTypeschema_AlignmentMarksDuplicateReads_XsdtBoolean_) Walk() (err error) {
-	if fn := WalkHandlers.XsdGoPkgHasElem_AlignmentMarksDuplicateReadsallAlignmentDirectivesTypeschema_AlignmentMarksDuplicateReads_XsdtBoolean_; me != nil {
-		if fn != nil {
-			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-		if fn != nil {
-			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-	}
-	return
-}
-
-//	Whether the reference alignment includes all reads regardless of whether they fail the instrument vendor's
-//	quality check.
-type XsdGoPkgHasElem_AlignmentIncludesFailedReadsallAlignmentDirectivesTypeschema_AlignmentIncludesFailedReads_XsdtBoolean_ struct {
-	//	Whether the reference alignment includes all reads regardless of whether they fail the instrument vendor's
-	//	quality check.
-	AlignmentIncludesFailedReads xsdt.Boolean `xml:"alignment_includes_failed_reads"`
-}
-
-//	If the WalkHandlers.XsdGoPkgHasElem_AlignmentIncludesFailedReadsallAlignmentDirectivesTypeschema_AlignmentIncludesFailedReads_XsdtBoolean_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElem_AlignmentIncludesFailedReadsallAlignmentDirectivesTypeschema_AlignmentIncludesFailedReads_XsdtBoolean_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElem_AlignmentIncludesFailedReadsallAlignmentDirectivesTypeschema_AlignmentIncludesFailedReads_XsdtBoolean_ instance.
-func (me *XsdGoPkgHasElem_AlignmentIncludesFailedReadsallAlignmentDirectivesTypeschema_AlignmentIncludesFailedReads_XsdtBoolean_) Walk() (err error) {
-	if fn := WalkHandlers.XsdGoPkgHasElem_AlignmentIncludesFailedReadsallAlignmentDirectivesTypeschema_AlignmentIncludesFailedReads_XsdtBoolean_; me != nil {
-		if fn != nil {
-			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-		if fn != nil {
-			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-	}
-	return
-}
-
-type TAlignmentDirectivesType struct {
-	//	Whether the reference alignment includes unaligned reads.
-	XsdGoPkgHasElem_AlignmentIncludesUnalignedReadsallAlignmentDirectivesTypeschema_AlignmentIncludesUnalignedReads_XsdtBoolean_
-
-	//	Whether the reference alignment identifies reads that appear to be duplicates.
-	XsdGoPkgHasElem_AlignmentMarksDuplicateReadsallAlignmentDirectivesTypeschema_AlignmentMarksDuplicateReads_XsdtBoolean_
-
-	//	Whether the reference alignment includes all reads regardless of whether they fail the instrument vendor's
-	//	quality check.
-	XsdGoPkgHasElem_AlignmentIncludesFailedReadsallAlignmentDirectivesTypeschema_AlignmentIncludesFailedReads_XsdtBoolean_
-}
-
-//	If the WalkHandlers.TAlignmentDirectivesType function is not nil (ie. was set by outside code), calls it with this TAlignmentDirectivesType instance as the single argument. Then calls the Walk() method on 3/3 embed(s) and 0/0 field(s) belonging to this TAlignmentDirectivesType instance.
-func (me *TAlignmentDirectivesType) Walk() (err error) {
-	if fn := WalkHandlers.TAlignmentDirectivesType; me != nil {
-		if fn != nil {
-			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-		if err = me.XsdGoPkgHasElem_AlignmentIncludesUnalignedReadsallAlignmentDirectivesTypeschema_AlignmentIncludesUnalignedReads_XsdtBoolean_.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-			return
-		}
-		if err = me.XsdGoPkgHasElem_AlignmentMarksDuplicateReadsallAlignmentDirectivesTypeschema_AlignmentMarksDuplicateReads_XsdtBoolean_.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-			return
-		}
-		if err = me.XsdGoPkgHasElem_AlignmentIncludesFailedReadsallAlignmentDirectivesTypeschema_AlignmentIncludesFailedReads_XsdtBoolean_.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-			return
-		}
-		if fn != nil {
-			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-	}
-	return
-}
-
-type XsdGoPkgHasElem_StudyATTRIBUTEsequenceTxsdStudyTypeSequenceStudyAttributesSTUDYATTRIBUTESsequenceStudyTypeschema_StudyAttribute_TAttributeType_ struct {
-	StudyAttribute *TAttributeType `xml:"STUDY_ATTRIBUTE"`
-}
-
-//	If the WalkHandlers.XsdGoPkgHasElem_StudyATTRIBUTEsequenceTxsdStudyTypeSequenceStudyAttributesSTUDYATTRIBUTESsequenceStudyTypeschema_StudyAttribute_TAttributeType_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElem_StudyATTRIBUTEsequenceTxsdStudyTypeSequenceStudyAttributesSTUDYATTRIBUTESsequenceStudyTypeschema_StudyAttribute_TAttributeType_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 1/1 field(s) belonging to this XsdGoPkgHasElem_StudyATTRIBUTEsequenceTxsdStudyTypeSequenceStudyAttributesSTUDYATTRIBUTESsequenceStudyTypeschema_StudyAttribute_TAttributeType_ instance.
-func (me *XsdGoPkgHasElem_StudyATTRIBUTEsequenceTxsdStudyTypeSequenceStudyAttributesSTUDYATTRIBUTESsequenceStudyTypeschema_StudyAttribute_TAttributeType_) Walk() (err error) {
-	if fn := WalkHandlers.XsdGoPkgHasElem_StudyATTRIBUTEsequenceTxsdStudyTypeSequenceStudyAttributesSTUDYATTRIBUTESsequenceStudyTypeschema_StudyAttribute_TAttributeType_; me != nil {
-		if fn != nil {
-			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-		if err = me.StudyAttribute.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-			return
-		}
-		if fn != nil {
-			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-	}
-	return
-}
-
-//	Generic processing pipeline specification.
-//	The PipelineType identifies the sequence or tree of actions to process the sequencing data.
 type XsdGoPkgHasElems_PipeSECTIONsequencePipelineTypeschema_PipeSection_TxsdPipelineTypeSequencePipeSection_ struct {
 	PipeSections []*TxsdPipelineTypeSequencePipeSection `xml:"PIPE_SECTION"`
 }
@@ -3232,44 +2482,40 @@ func (me *XsdGoPkgHasElem_PIPELINEsequenceProcessingTypeschema_Pipeline_TPipelin
 	return
 }
 
-//	Processing directives tell the Sequence Read Archive how to treat the input data, if any treatment is
-//	requested.
-//	Tells the Archive who will execute the sample demultiplexing operation..
-type TxsdSequencingDirectivesTypeAllSampleDemuxDirective xsdt.String
+type TxsdPlatformTypeChoicePacbioSmrtSequenceInstrumentModel xsdt.String
 
-//	This convenience method just performs a simple type conversion to TxsdSequencingDirectivesTypeAllSampleDemuxDirective's alias type xsdt.String.
-func (me TxsdSequencingDirectivesTypeAllSampleDemuxDirective) ToXsdtString() xsdt.String {
-	return xsdt.String(me)
-}
-
-//	Returns true if the value of this enumerated TxsdSequencingDirectivesTypeAllSampleDemuxDirective is "leave_as_pool".
-func (me TxsdSequencingDirectivesTypeAllSampleDemuxDirective) IsLeaveAsPool() bool {
-	return me.String() == "leave_as_pool"
-}
-
-//	Returns true if the value of this enumerated TxsdSequencingDirectivesTypeAllSampleDemuxDirective is "submitter_demultiplexed".
-func (me TxsdSequencingDirectivesTypeAllSampleDemuxDirective) IsSubmitterDemultiplexed() bool {
-	return me.String() == "submitter_demultiplexed"
-}
-
-//	Since TxsdSequencingDirectivesTypeAllSampleDemuxDirective is just a simple String type, this merely sets the current value from the specified string.
-func (me *TxsdSequencingDirectivesTypeAllSampleDemuxDirective) Set(s string) {
+//	Since TxsdPlatformTypeChoicePacbioSmrtSequenceInstrumentModel is just a simple String type, this merely sets the current value from the specified string.
+func (me *TxsdPlatformTypeChoicePacbioSmrtSequenceInstrumentModel) Set(s string) {
 	(*xsdt.String)(me).Set(s)
 }
 
-//	Since TxsdSequencingDirectivesTypeAllSampleDemuxDirective is just a simple String type, this merely returns the current string value.
-func (me TxsdSequencingDirectivesTypeAllSampleDemuxDirective) String() string {
+//	Since TxsdPlatformTypeChoicePacbioSmrtSequenceInstrumentModel is just a simple String type, this merely returns the current string value.
+func (me TxsdPlatformTypeChoicePacbioSmrtSequenceInstrumentModel) String() string {
 	return xsdt.String(me).String()
 }
 
-type XsdGoPkgHasElem_SampleDemuxDIRECTIVEallSequencingDirectivesTypeschema_SampleDemuxDirective_TxsdSequencingDirectivesTypeAllSampleDemuxDirective_ struct {
-	//	Tells the Archive who will execute the sample demultiplexing operation..
-	SampleDemuxDirective TxsdSequencingDirectivesTypeAllSampleDemuxDirective `xml:"SAMPLE_DEMUX_DIRECTIVE"`
+//	This convenience method just performs a simple type conversion to TxsdPlatformTypeChoicePacbioSmrtSequenceInstrumentModel's alias type xsdt.String.
+func (me TxsdPlatformTypeChoicePacbioSmrtSequenceInstrumentModel) ToXsdtString() xsdt.String {
+	return xsdt.String(me)
 }
 
-//	If the WalkHandlers.XsdGoPkgHasElem_SampleDemuxDIRECTIVEallSequencingDirectivesTypeschema_SampleDemuxDirective_TxsdSequencingDirectivesTypeAllSampleDemuxDirective_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElem_SampleDemuxDIRECTIVEallSequencingDirectivesTypeschema_SampleDemuxDirective_TxsdSequencingDirectivesTypeAllSampleDemuxDirective_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElem_SampleDemuxDIRECTIVEallSequencingDirectivesTypeschema_SampleDemuxDirective_TxsdSequencingDirectivesTypeAllSampleDemuxDirective_ instance.
-func (me *XsdGoPkgHasElem_SampleDemuxDIRECTIVEallSequencingDirectivesTypeschema_SampleDemuxDirective_TxsdSequencingDirectivesTypeAllSampleDemuxDirective_) Walk() (err error) {
-	if fn := WalkHandlers.XsdGoPkgHasElem_SampleDemuxDIRECTIVEallSequencingDirectivesTypeschema_SampleDemuxDirective_TxsdSequencingDirectivesTypeAllSampleDemuxDirective_; me != nil {
+//	Returns true if the value of this enumerated TxsdPlatformTypeChoicePacbioSmrtSequenceInstrumentModel is "PacBio RS".
+func (me TxsdPlatformTypeChoicePacbioSmrtSequenceInstrumentModel) IsPacBioRs() bool {
+	return me.String() == "PacBio RS"
+}
+
+//	Returns true if the value of this enumerated TxsdPlatformTypeChoicePacbioSmrtSequenceInstrumentModel is "PacBio RS II".
+func (me TxsdPlatformTypeChoicePacbioSmrtSequenceInstrumentModel) IsPacBioRsIi() bool {
+	return me.String() == "PacBio RS II"
+}
+
+type XsdGoPkgHasElems_InstrumentMODELsequencePACBIOSMRTchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoicePacbioSmrtSequenceInstrumentModel_ struct {
+	InstrumentModels []TxsdPlatformTypeChoicePacbioSmrtSequenceInstrumentModel `xml:"INSTRUMENT_MODEL"`
+}
+
+//	If the WalkHandlers.XsdGoPkgHasElems_InstrumentMODELsequencePACBIOSMRTchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoicePacbioSmrtSequenceInstrumentModel_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElems_InstrumentMODELsequencePACBIOSMRTchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoicePacbioSmrtSequenceInstrumentModel_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElems_InstrumentMODELsequencePACBIOSMRTchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoicePacbioSmrtSequenceInstrumentModel_ instance.
+func (me *XsdGoPkgHasElems_InstrumentMODELsequencePACBIOSMRTchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoicePacbioSmrtSequenceInstrumentModel_) Walk() (err error) {
+	if fn := WalkHandlers.XsdGoPkgHasElems_InstrumentMODELsequencePACBIOSMRTchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoicePacbioSmrtSequenceInstrumentModel_; me != nil {
 		if fn != nil {
 			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
 				return
@@ -3284,6 +2530,31 @@ func (me *XsdGoPkgHasElem_SampleDemuxDIRECTIVEallSequencingDirectivesTypeschema_
 	return
 }
 
+//	Tells the Archive who will execute the sample demultiplexing operation..
+type XsdGoPkgHasElems_SampleDemuxDIRECTIVEallSequencingDirectivesTypeschema_SampleDemuxDirective_TxsdSequencingDirectivesTypeAllSampleDemuxDirective_ struct {
+	//	Tells the Archive who will execute the sample demultiplexing operation..
+	SampleDemuxDirectives []TxsdSequencingDirectivesTypeAllSampleDemuxDirective `xml:"SAMPLE_DEMUX_DIRECTIVE"`
+}
+
+//	If the WalkHandlers.XsdGoPkgHasElems_SampleDemuxDIRECTIVEallSequencingDirectivesTypeschema_SampleDemuxDirective_TxsdSequencingDirectivesTypeAllSampleDemuxDirective_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElems_SampleDemuxDIRECTIVEallSequencingDirectivesTypeschema_SampleDemuxDirective_TxsdSequencingDirectivesTypeAllSampleDemuxDirective_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElems_SampleDemuxDIRECTIVEallSequencingDirectivesTypeschema_SampleDemuxDirective_TxsdSequencingDirectivesTypeAllSampleDemuxDirective_ instance.
+func (me *XsdGoPkgHasElems_SampleDemuxDIRECTIVEallSequencingDirectivesTypeschema_SampleDemuxDirective_TxsdSequencingDirectivesTypeAllSampleDemuxDirective_) Walk() (err error) {
+	if fn := WalkHandlers.XsdGoPkgHasElems_SampleDemuxDIRECTIVEallSequencingDirectivesTypeschema_SampleDemuxDirective_TxsdSequencingDirectivesTypeAllSampleDemuxDirective_; me != nil {
+		if fn != nil {
+			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+		if fn != nil {
+			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+	}
+	return
+}
+
+//	Processing directives tell the Sequence Read Archive how to treat the input data, if any treatment is
+//	requested.
 type TSequencingDirectivesType struct {
 	//	Tells the Archive who will execute the sample demultiplexing operation..
 	XsdGoPkgHasElem_SampleDemuxDIRECTIVEallSequencingDirectivesTypeschema_SampleDemuxDirective_TxsdSequencingDirectivesTypeAllSampleDemuxDirective_
@@ -3309,21 +2580,72 @@ func (me *TSequencingDirectivesType) Walk() (err error) {
 	return
 }
 
-type XsdGoPkgHasElem_DIRECTIVESsequenceProcessingTypeschema_Directives_TSequencingDirectivesType_ struct {
+type XsdGoPkgHasElems_DIRECTIVESsequenceProcessingTypeschema_Directives_TSequencingDirectivesType_ struct {
 	//	Processing directives tell the Sequence Read Archive how to treat the input data, if any treatment is
 	//	requested.
-	Directives *TSequencingDirectivesType `xml:"DIRECTIVES"`
+	Directiveses []*TSequencingDirectivesType `xml:"DIRECTIVES"`
 }
 
-//	If the WalkHandlers.XsdGoPkgHasElem_DIRECTIVESsequenceProcessingTypeschema_Directives_TSequencingDirectivesType_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElem_DIRECTIVESsequenceProcessingTypeschema_Directives_TSequencingDirectivesType_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 1/1 field(s) belonging to this XsdGoPkgHasElem_DIRECTIVESsequenceProcessingTypeschema_Directives_TSequencingDirectivesType_ instance.
-func (me *XsdGoPkgHasElem_DIRECTIVESsequenceProcessingTypeschema_Directives_TSequencingDirectivesType_) Walk() (err error) {
-	if fn := WalkHandlers.XsdGoPkgHasElem_DIRECTIVESsequenceProcessingTypeschema_Directives_TSequencingDirectivesType_; me != nil {
+//	If the WalkHandlers.XsdGoPkgHasElems_DIRECTIVESsequenceProcessingTypeschema_Directives_TSequencingDirectivesType_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElems_DIRECTIVESsequenceProcessingTypeschema_Directives_TSequencingDirectivesType_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElems_DIRECTIVESsequenceProcessingTypeschema_Directives_TSequencingDirectivesType_ instance.
+func (me *XsdGoPkgHasElems_DIRECTIVESsequenceProcessingTypeschema_Directives_TSequencingDirectivesType_) Walk() (err error) {
+	if fn := WalkHandlers.XsdGoPkgHasElems_DIRECTIVESsequenceProcessingTypeschema_Directives_TSequencingDirectivesType_; me != nil {
 		if fn != nil {
 			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
 				return
 			}
 		}
-		if err = me.Directives.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+		for _, x := range me.Directiveses {
+			if err = x.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+		if fn != nil {
+			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+	}
+	return
+}
+
+//	Whether this study object is designated as the primary source of the study or project
+//	information.
+type XsdGoPkgHasElems_IsPRIMARYsequenceTxsdStudyTypeSequenceDescriptorAllRelatedStudiesSequenceRelatedStudyRELATEDSTUDYsequenceTxsdStudyTypeSequenceDescriptorAllRelatedStudiesRELATEDSTUDIESallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_IsPrimary_XsdtBoolean_ struct {
+	//	Whether this study object is designated as the primary source of the study or project
+	//	information.
+	IsPrimaries []xsdt.Boolean `xml:"IS_PRIMARY"`
+}
+
+//	If the WalkHandlers.XsdGoPkgHasElems_IsPRIMARYsequenceTxsdStudyTypeSequenceDescriptorAllRelatedStudiesSequenceRelatedStudyRELATEDSTUDYsequenceTxsdStudyTypeSequenceDescriptorAllRelatedStudiesRELATEDSTUDIESallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_IsPrimary_XsdtBoolean_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElems_IsPRIMARYsequenceTxsdStudyTypeSequenceDescriptorAllRelatedStudiesSequenceRelatedStudyRELATEDSTUDYsequenceTxsdStudyTypeSequenceDescriptorAllRelatedStudiesRELATEDSTUDIESallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_IsPrimary_XsdtBoolean_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElems_IsPRIMARYsequenceTxsdStudyTypeSequenceDescriptorAllRelatedStudiesSequenceRelatedStudyRELATEDSTUDYsequenceTxsdStudyTypeSequenceDescriptorAllRelatedStudiesRELATEDSTUDIESallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_IsPrimary_XsdtBoolean_ instance.
+func (me *XsdGoPkgHasElems_IsPRIMARYsequenceTxsdStudyTypeSequenceDescriptorAllRelatedStudiesSequenceRelatedStudyRELATEDSTUDYsequenceTxsdStudyTypeSequenceDescriptorAllRelatedStudiesRELATEDSTUDIESallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_IsPrimary_XsdtBoolean_) Walk() (err error) {
+	if fn := WalkHandlers.XsdGoPkgHasElems_IsPRIMARYsequenceTxsdStudyTypeSequenceDescriptorAllRelatedStudiesSequenceRelatedStudyRELATEDSTUDYsequenceTxsdStudyTypeSequenceDescriptorAllRelatedStudiesRELATEDSTUDIESallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_IsPrimary_XsdtBoolean_; me != nil {
+		if fn != nil {
+			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+		if fn != nil {
+			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+	}
+	return
+}
+
+type XsdGoPkgHasElem_StudyATTRIBUTEsequenceSTUDYATTRIBUTESsequenceStudyTypeschema_StudyAttribute_TAttributeType_ struct {
+	StudyAttribute *TAttributeType `xml:"STUDY_ATTRIBUTE"`
+}
+
+//	If the WalkHandlers.XsdGoPkgHasElem_StudyATTRIBUTEsequenceSTUDYATTRIBUTESsequenceStudyTypeschema_StudyAttribute_TAttributeType_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElem_StudyATTRIBUTEsequenceSTUDYATTRIBUTESsequenceStudyTypeschema_StudyAttribute_TAttributeType_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 1/1 field(s) belonging to this XsdGoPkgHasElem_StudyATTRIBUTEsequenceSTUDYATTRIBUTESsequenceStudyTypeschema_StudyAttribute_TAttributeType_ instance.
+func (me *XsdGoPkgHasElem_StudyATTRIBUTEsequenceSTUDYATTRIBUTESsequenceStudyTypeschema_StudyAttribute_TAttributeType_) Walk() (err error) {
+	if fn := WalkHandlers.XsdGoPkgHasElem_StudyATTRIBUTEsequenceSTUDYATTRIBUTESsequenceStudyTypeschema_StudyAttribute_TAttributeType_; me != nil {
+		if fn != nil {
+			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+		if err = me.StudyAttribute.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
 			return
 		}
 		if fn != nil {
@@ -3335,124 +2657,59 @@ func (me *XsdGoPkgHasElem_DIRECTIVESsequenceProcessingTypeschema_Directives_TSeq
 	return
 }
 
-type TProcessingType struct {
-	//	Processing directives tell the Sequence Read Archive how to treat the input data, if any treatment is
-	//	requested.
-	XsdGoPkgHasElem_DIRECTIVESsequenceProcessingTypeschema_Directives_TSequencingDirectivesType_
+//	Number of base/color calls, cycles, or flows per spot (raw sequence length or flow length including all
+//	application and technical tags and mate pairs, but not including gap lengths). This value will be platform dependent,
+//	library dependent, and possibly run dependent. Variable length platforms will still have a constant flow/cycle length.
+type XsdGoPkgHasElems_SpotLENGTHsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_SpotLength_XsdtNonNegativeInteger_ struct {
+	//	Number of base/color calls, cycles, or flows per spot (raw sequence length or flow length including all
+	//	application and technical tags and mate pairs, but not including gap lengths). This value will be platform dependent,
+	//	library dependent, and possibly run dependent. Variable length platforms will still have a constant flow/cycle length.
+	SpotLengths []xsdt.NonNegativeInteger `xml:"SPOT_LENGTH"`
+}
 
+//	If the WalkHandlers.XsdGoPkgHasElems_SpotLENGTHsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_SpotLength_XsdtNonNegativeInteger_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElems_SpotLENGTHsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_SpotLength_XsdtNonNegativeInteger_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElems_SpotLENGTHsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_SpotLength_XsdtNonNegativeInteger_ instance.
+func (me *XsdGoPkgHasElems_SpotLENGTHsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_SpotLength_XsdtNonNegativeInteger_) Walk() (err error) {
+	if fn := WalkHandlers.XsdGoPkgHasElems_SpotLENGTHsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_SpotLength_XsdtNonNegativeInteger_; me != nil {
+		if fn != nil {
+			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+		if fn != nil {
+			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+	}
+	return
+}
+
+//	Where the match should occur. Changes the rules on how min_match and max_mismatch
+//	are counted.
+type XsdGoPkgHasAttr_MatchEdge_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTableSequenceBasecallSimpleContentExtensionMatchEdge_ struct {
+	//	Where the match should occur. Changes the rules on how min_match and max_mismatch
+	//	are counted.
+	MatchEdge TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTableSequenceBasecallSimpleContentExtensionMatchEdge `xml:"match_edge,attr"`
+}
+
+//	Generic processing pipeline specification.
+type XsdGoPkgHasElems_PIPELINEsequenceProcessingTypeschema_Pipeline_TPipelineType_ struct {
 	//	Generic processing pipeline specification.
-	XsdGoPkgHasElem_PIPELINEsequenceProcessingTypeschema_Pipeline_TPipelineType_
+	Pipelines []*TPipelineType `xml:"PIPELINE"`
 }
 
-//	If the WalkHandlers.TProcessingType function is not nil (ie. was set by outside code), calls it with this TProcessingType instance as the single argument. Then calls the Walk() method on 2/2 embed(s) and 0/0 field(s) belonging to this TProcessingType instance.
-func (me *TProcessingType) Walk() (err error) {
-	if fn := WalkHandlers.TProcessingType; me != nil {
+//	If the WalkHandlers.XsdGoPkgHasElems_PIPELINEsequenceProcessingTypeschema_Pipeline_TPipelineType_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElems_PIPELINEsequenceProcessingTypeschema_Pipeline_TPipelineType_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElems_PIPELINEsequenceProcessingTypeschema_Pipeline_TPipelineType_ instance.
+func (me *XsdGoPkgHasElems_PIPELINEsequenceProcessingTypeschema_Pipeline_TPipelineType_) Walk() (err error) {
+	if fn := WalkHandlers.XsdGoPkgHasElems_PIPELINEsequenceProcessingTypeschema_Pipeline_TPipelineType_; me != nil {
 		if fn != nil {
 			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
 				return
 			}
 		}
-		if err = me.XsdGoPkgHasElem_PIPELINEsequenceProcessingTypeschema_Pipeline_TPipelineType_.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-			return
-		}
-		if err = me.XsdGoPkgHasElem_DIRECTIVESsequenceProcessingTypeschema_Directives_TSequencingDirectivesType_.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-			return
-		}
-		if fn != nil {
-			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+		for _, x := range me.Pipelines {
+			if err = x.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
 				return
 			}
-		}
-	}
-	return
-}
-
-//	Numeric record id meaningful to the NCBI Entrez system.
-type XsdGoPkgHasElems_IDchoicesequenceENTREZLINKchoiceLinkTypeschema_Id_XsdtNonNegativeInteger_ struct {
-	//	Numeric record id meaningful to the NCBI Entrez system.
-	Ids []*xsdt.NonNegativeInteger `xml:"ID"`
-}
-
-//	If the WalkHandlers.XsdGoPkgHasElems_IDchoicesequenceENTREZLINKchoiceLinkTypeschema_Id_XsdtNonNegativeInteger_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElems_IDchoicesequenceENTREZLINKchoiceLinkTypeschema_Id_XsdtNonNegativeInteger_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElems_IDchoicesequenceENTREZLINKchoiceLinkTypeschema_Id_XsdtNonNegativeInteger_ instance.
-func (me *XsdGoPkgHasElems_IDchoicesequenceENTREZLINKchoiceLinkTypeschema_Id_XsdtNonNegativeInteger_) Walk() (err error) {
-	if fn := WalkHandlers.XsdGoPkgHasElems_IDchoicesequenceENTREZLINKchoiceLinkTypeschema_Id_XsdtNonNegativeInteger_; me != nil {
-		if fn != nil {
-			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-		if fn != nil {
-			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-	}
-	return
-}
-
-type XsdGoPkgHasElem_InstrumentMODELsequenceIONTORRENTchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceIonTorrentSequenceInstrumentModel_ struct {
-	InstrumentModel TxsdPlatformTypeChoiceIonTorrentSequenceInstrumentModel `xml:"INSTRUMENT_MODEL"`
-}
-
-//	If the WalkHandlers.XsdGoPkgHasElem_InstrumentMODELsequenceIONTORRENTchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceIonTorrentSequenceInstrumentModel_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElem_InstrumentMODELsequenceIONTORRENTchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceIonTorrentSequenceInstrumentModel_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElem_InstrumentMODELsequenceIONTORRENTchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceIonTorrentSequenceInstrumentModel_ instance.
-func (me *XsdGoPkgHasElem_InstrumentMODELsequenceIONTORRENTchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceIonTorrentSequenceInstrumentModel_) Walk() (err error) {
-	if fn := WalkHandlers.XsdGoPkgHasElem_InstrumentMODELsequenceIONTORRENTchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceIonTorrentSequenceInstrumentModel_; me != nil {
-		if fn != nil {
-			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-		if fn != nil {
-			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-	}
-	return
-}
-
-type TxsdPlatformTypeChoiceIonTorrent struct {
-	XsdGoPkgHasElem_InstrumentMODELsequenceIONTORRENTchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceIonTorrentSequenceInstrumentModel_
-}
-
-//	If the WalkHandlers.TxsdPlatformTypeChoiceIonTorrent function is not nil (ie. was set by outside code), calls it with this TxsdPlatformTypeChoiceIonTorrent instance as the single argument. Then calls the Walk() method on 1/1 embed(s) and 0/0 field(s) belonging to this TxsdPlatformTypeChoiceIonTorrent instance.
-func (me *TxsdPlatformTypeChoiceIonTorrent) Walk() (err error) {
-	if fn := WalkHandlers.TxsdPlatformTypeChoiceIonTorrent; me != nil {
-		if fn != nil {
-			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-		if err = me.XsdGoPkgHasElem_InstrumentMODELsequenceIONTORRENTchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceIonTorrentSequenceInstrumentModel_.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-			return
-		}
-		if fn != nil {
-			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-	}
-	return
-}
-
-//	An identifier from a public non-SRA resource. @namespace would be an official short name of that
-//	resource.
-type XsdGoPkgHasElem_ExternalIDsequenceIdentifierTypeschema_ExternalId_TQualifiedNameType_ struct {
-	//	An identifier from a public non-SRA resource. @namespace would be an official short name of that
-	//	resource.
-	ExternalId *TQualifiedNameType `xml:"EXTERNAL_ID"`
-}
-
-//	If the WalkHandlers.XsdGoPkgHasElem_ExternalIDsequenceIdentifierTypeschema_ExternalId_TQualifiedNameType_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElem_ExternalIDsequenceIdentifierTypeschema_ExternalId_TQualifiedNameType_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 1/1 field(s) belonging to this XsdGoPkgHasElem_ExternalIDsequenceIdentifierTypeschema_ExternalId_TQualifiedNameType_ instance.
-func (me *XsdGoPkgHasElem_ExternalIDsequenceIdentifierTypeschema_ExternalId_TQualifiedNameType_) Walk() (err error) {
-	if fn := WalkHandlers.XsdGoPkgHasElem_ExternalIDsequenceIdentifierTypeschema_ExternalId_TQualifiedNameType_; me != nil {
-		if fn != nil {
-			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-		if err = me.ExternalId.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-			return
 		}
 		if fn != nil {
 			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
@@ -3464,65 +2721,14 @@ func (me *XsdGoPkgHasElem_ExternalIDsequenceIdentifierTypeschema_ExternalId_TQua
 }
 
 //	Text label to display for the link.
-type XsdGoPkgHasElems_LABELallXRefTypeschema_Label_XsdtString_ struct {
+type XsdGoPkgHasElems_LABELallURLLINKchoiceLinkTypeschema_Label_XsdtString_ struct {
 	//	Text label to display for the link.
 	Labels []xsdt.String `xml:"LABEL"`
 }
 
-//	If the WalkHandlers.XsdGoPkgHasElems_LABELallXRefTypeschema_Label_XsdtString_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElems_LABELallXRefTypeschema_Label_XsdtString_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElems_LABELallXRefTypeschema_Label_XsdtString_ instance.
-func (me *XsdGoPkgHasElems_LABELallXRefTypeschema_Label_XsdtString_) Walk() (err error) {
-	if fn := WalkHandlers.XsdGoPkgHasElems_LABELallXRefTypeschema_Label_XsdtString_; me != nil {
-		if fn != nil {
-			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-		if fn != nil {
-			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-	}
-	return
-}
-
-//	Element's body contains a basecall, attribute provide description of this read meaning as
-//	well as matching rules.
-type XsdGoPkgHasElem_BASECALLsequenceEXPECTEDBasecallTABLEchoicesequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_Basecall_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTableSequenceBasecall_ struct {
-	//	Element's body contains a basecall, attribute provide description of this read meaning as
-	//	well as matching rules.
-	Basecall *TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTableSequenceBasecall `xml:"BASECALL"`
-}
-
-//	If the WalkHandlers.XsdGoPkgHasElem_BASECALLsequenceEXPECTEDBasecallTABLEchoicesequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_Basecall_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTableSequenceBasecall_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElem_BASECALLsequenceEXPECTEDBasecallTABLEchoicesequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_Basecall_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTableSequenceBasecall_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 1/1 field(s) belonging to this XsdGoPkgHasElem_BASECALLsequenceEXPECTEDBasecallTABLEchoicesequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_Basecall_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTableSequenceBasecall_ instance.
-func (me *XsdGoPkgHasElem_BASECALLsequenceEXPECTEDBasecallTABLEchoicesequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_Basecall_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTableSequenceBasecall_) Walk() (err error) {
-	if fn := WalkHandlers.XsdGoPkgHasElem_BASECALLsequenceEXPECTEDBasecallTABLEchoicesequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_Basecall_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTableSequenceBasecall_; me != nil {
-		if fn != nil {
-			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-		if err = me.Basecall.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-			return
-		}
-		if fn != nil {
-			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-	}
-	return
-}
-
-//	Value of the attribute.
-type XsdGoPkgHasElems_VALUEallAttributeTypeschema_Value_XsdtString_ struct {
-	//	Value of the attribute.
-	Values []xsdt.String `xml:"VALUE"`
-}
-
-//	If the WalkHandlers.XsdGoPkgHasElems_VALUEallAttributeTypeschema_Value_XsdtString_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElems_VALUEallAttributeTypeschema_Value_XsdtString_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElems_VALUEallAttributeTypeschema_Value_XsdtString_ instance.
-func (me *XsdGoPkgHasElems_VALUEallAttributeTypeschema_Value_XsdtString_) Walk() (err error) {
-	if fn := WalkHandlers.XsdGoPkgHasElems_VALUEallAttributeTypeschema_Value_XsdtString_; me != nil {
+//	If the WalkHandlers.XsdGoPkgHasElems_LABELallURLLINKchoiceLinkTypeschema_Label_XsdtString_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElems_LABELallURLLINKchoiceLinkTypeschema_Label_XsdtString_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElems_LABELallURLLINKchoiceLinkTypeschema_Label_XsdtString_ instance.
+func (me *XsdGoPkgHasElems_LABELallURLLINKchoiceLinkTypeschema_Label_XsdtString_) Walk() (err error) {
+	if fn := WalkHandlers.XsdGoPkgHasElems_LABELallURLLINKchoiceLinkTypeschema_Label_XsdtString_; me != nil {
 		if fn != nil {
 			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
 				return
@@ -3583,216 +2789,20 @@ func (me *TxsdPlatformTypeChoicePacbioSmrt) Walk() (err error) {
 	return
 }
 
-type XsdGoPkgHasElem_PacbioSMRTchoicePlatformTypeschema_PacbioSmrt_TxsdPlatformTypeChoicePacbioSmrt_ struct {
+type XsdGoPkgHasElems_PacbioSMRTchoicePlatformTypeschema_PacbioSmrt_TxsdPlatformTypeChoicePacbioSmrt_ struct {
 	//	PacificBiosciences platform type for the single molecule real time (SMRT) technology.
-	PacbioSmrt *TxsdPlatformTypeChoicePacbioSmrt `xml:"PACBIO_SMRT"`
+	PacbioSmrts []*TxsdPlatformTypeChoicePacbioSmrt `xml:"PACBIO_SMRT"`
 }
 
-//	If the WalkHandlers.XsdGoPkgHasElem_PacbioSMRTchoicePlatformTypeschema_PacbioSmrt_TxsdPlatformTypeChoicePacbioSmrt_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElem_PacbioSMRTchoicePlatformTypeschema_PacbioSmrt_TxsdPlatformTypeChoicePacbioSmrt_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 1/1 field(s) belonging to this XsdGoPkgHasElem_PacbioSMRTchoicePlatformTypeschema_PacbioSmrt_TxsdPlatformTypeChoicePacbioSmrt_ instance.
-func (me *XsdGoPkgHasElem_PacbioSMRTchoicePlatformTypeschema_PacbioSmrt_TxsdPlatformTypeChoicePacbioSmrt_) Walk() (err error) {
-	if fn := WalkHandlers.XsdGoPkgHasElem_PacbioSMRTchoicePlatformTypeschema_PacbioSmrt_TxsdPlatformTypeChoicePacbioSmrt_; me != nil {
+//	If the WalkHandlers.XsdGoPkgHasElems_PacbioSMRTchoicePlatformTypeschema_PacbioSmrt_TxsdPlatformTypeChoicePacbioSmrt_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElems_PacbioSMRTchoicePlatformTypeschema_PacbioSmrt_TxsdPlatformTypeChoicePacbioSmrt_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElems_PacbioSMRTchoicePlatformTypeschema_PacbioSmrt_TxsdPlatformTypeChoicePacbioSmrt_ instance.
+func (me *XsdGoPkgHasElems_PacbioSMRTchoicePlatformTypeschema_PacbioSmrt_TxsdPlatformTypeChoicePacbioSmrt_) Walk() (err error) {
+	if fn := WalkHandlers.XsdGoPkgHasElems_PacbioSMRTchoicePlatformTypeschema_PacbioSmrt_TxsdPlatformTypeChoicePacbioSmrt_; me != nil {
 		if fn != nil {
 			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
 				return
 			}
 		}
-		if err = me.PacbioSmrt.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-			return
-		}
-		if fn != nil {
-			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-	}
-	return
-}
-
-type TxsdPlatformTypeChoiceIlluminaSequenceInstrumentModel xsdt.String
-
-//	Returns true if the value of this enumerated TxsdPlatformTypeChoiceIlluminaSequenceInstrumentModel is "Illumina HiSeq 1000".
-func (me TxsdPlatformTypeChoiceIlluminaSequenceInstrumentModel) IsIlluminaHiSeq1000() bool {
-	return me.String() == "Illumina HiSeq 1000"
-}
-
-//	Returns true if the value of this enumerated TxsdPlatformTypeChoiceIlluminaSequenceInstrumentModel is "unspecified".
-func (me TxsdPlatformTypeChoiceIlluminaSequenceInstrumentModel) IsUnspecified() bool {
-	return me.String() == "unspecified"
-}
-
-//	Returns true if the value of this enumerated TxsdPlatformTypeChoiceIlluminaSequenceInstrumentModel is "Illumina HiSeq 1500".
-func (me TxsdPlatformTypeChoiceIlluminaSequenceInstrumentModel) IsIlluminaHiSeq1500() bool {
-	return me.String() == "Illumina HiSeq 1500"
-}
-
-//	Returns true if the value of this enumerated TxsdPlatformTypeChoiceIlluminaSequenceInstrumentModel is "Illumina MiSeq".
-func (me TxsdPlatformTypeChoiceIlluminaSequenceInstrumentModel) IsIlluminaMiSeq() bool {
-	return me.String() == "Illumina MiSeq"
-}
-
-//	Returns true if the value of this enumerated TxsdPlatformTypeChoiceIlluminaSequenceInstrumentModel is "Illumina HiScanSQ".
-func (me TxsdPlatformTypeChoiceIlluminaSequenceInstrumentModel) IsIlluminaHiScanSQ() bool {
-	return me.String() == "Illumina HiScanSQ"
-}
-
-//	Returns true if the value of this enumerated TxsdPlatformTypeChoiceIlluminaSequenceInstrumentModel is "NextSeq 500".
-func (me TxsdPlatformTypeChoiceIlluminaSequenceInstrumentModel) IsNextSeq500() bool {
-	return me.String() == "NextSeq 500"
-}
-
-//	Since TxsdPlatformTypeChoiceIlluminaSequenceInstrumentModel is just a simple String type, this merely returns the current string value.
-func (me TxsdPlatformTypeChoiceIlluminaSequenceInstrumentModel) String() string {
-	return xsdt.String(me).String()
-}
-
-//	Returns true if the value of this enumerated TxsdPlatformTypeChoiceIlluminaSequenceInstrumentModel is "Illumina Genome Analyzer IIx".
-func (me TxsdPlatformTypeChoiceIlluminaSequenceInstrumentModel) IsIlluminaGenomeAnalyzerIIx() bool {
-	return me.String() == "Illumina Genome Analyzer IIx"
-}
-
-//	Returns true if the value of this enumerated TxsdPlatformTypeChoiceIlluminaSequenceInstrumentModel is "Illumina HiSeq 2500".
-func (me TxsdPlatformTypeChoiceIlluminaSequenceInstrumentModel) IsIlluminaHiSeq2500() bool {
-	return me.String() == "Illumina HiSeq 2500"
-}
-
-//	This convenience method just performs a simple type conversion to TxsdPlatformTypeChoiceIlluminaSequenceInstrumentModel's alias type xsdt.String.
-func (me TxsdPlatformTypeChoiceIlluminaSequenceInstrumentModel) ToXsdtString() xsdt.String {
-	return xsdt.String(me)
-}
-
-//	Returns true if the value of this enumerated TxsdPlatformTypeChoiceIlluminaSequenceInstrumentModel is "Illumina Genome Analyzer".
-func (me TxsdPlatformTypeChoiceIlluminaSequenceInstrumentModel) IsIlluminaGenomeAnalyzer() bool {
-	return me.String() == "Illumina Genome Analyzer"
-}
-
-//	Returns true if the value of this enumerated TxsdPlatformTypeChoiceIlluminaSequenceInstrumentModel is "HiSeq X Ten".
-func (me TxsdPlatformTypeChoiceIlluminaSequenceInstrumentModel) IsHiSeqXTen() bool {
-	return me.String() == "HiSeq X Ten"
-}
-
-//	Since TxsdPlatformTypeChoiceIlluminaSequenceInstrumentModel is just a simple String type, this merely sets the current value from the specified string.
-func (me *TxsdPlatformTypeChoiceIlluminaSequenceInstrumentModel) Set(s string) {
-	(*xsdt.String)(me).Set(s)
-}
-
-//	Returns true if the value of this enumerated TxsdPlatformTypeChoiceIlluminaSequenceInstrumentModel is "Illumina Genome Analyzer II".
-func (me TxsdPlatformTypeChoiceIlluminaSequenceInstrumentModel) IsIlluminaGenomeAnalyzerIi() bool {
-	return me.String() == "Illumina Genome Analyzer II"
-}
-
-//	Returns true if the value of this enumerated TxsdPlatformTypeChoiceIlluminaSequenceInstrumentModel is "Illumina HiSeq 2000".
-func (me TxsdPlatformTypeChoiceIlluminaSequenceInstrumentModel) IsIlluminaHiSeq2000() bool {
-	return me.String() == "Illumina HiSeq 2000"
-}
-
-type XsdGoPkgHasElem_InstrumentMODELsequenceILLUMINAchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceIlluminaSequenceInstrumentModel_ struct {
-	InstrumentModel TxsdPlatformTypeChoiceIlluminaSequenceInstrumentModel `xml:"INSTRUMENT_MODEL"`
-}
-
-//	If the WalkHandlers.XsdGoPkgHasElem_InstrumentMODELsequenceILLUMINAchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceIlluminaSequenceInstrumentModel_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElem_InstrumentMODELsequenceILLUMINAchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceIlluminaSequenceInstrumentModel_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElem_InstrumentMODELsequenceILLUMINAchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceIlluminaSequenceInstrumentModel_ instance.
-func (me *XsdGoPkgHasElem_InstrumentMODELsequenceILLUMINAchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceIlluminaSequenceInstrumentModel_) Walk() (err error) {
-	if fn := WalkHandlers.XsdGoPkgHasElem_InstrumentMODELsequenceILLUMINAchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceIlluminaSequenceInstrumentModel_; me != nil {
-		if fn != nil {
-			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-		if fn != nil {
-			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-	}
-	return
-}
-
-type TxsdPlatformTypeChoiceAbiSolidSequenceInstrumentModel xsdt.String
-
-//	Returns true if the value of this enumerated TxsdPlatformTypeChoiceAbiSolidSequenceInstrumentModel is "AB SOLiD System 2.0".
-func (me TxsdPlatformTypeChoiceAbiSolidSequenceInstrumentModel) IsAbSOLiDSystem20() bool {
-	return me.String() == "AB SOLiD System 2.0"
-}
-
-//	Returns true if the value of this enumerated TxsdPlatformTypeChoiceAbiSolidSequenceInstrumentModel is "AB SOLiD System 3.0".
-func (me TxsdPlatformTypeChoiceAbiSolidSequenceInstrumentModel) IsAbSOLiDSystem30() bool {
-	return me.String() == "AB SOLiD System 3.0"
-}
-
-//	Returns true if the value of this enumerated TxsdPlatformTypeChoiceAbiSolidSequenceInstrumentModel is "unspecified".
-func (me TxsdPlatformTypeChoiceAbiSolidSequenceInstrumentModel) IsUnspecified() bool {
-	return me.String() == "unspecified"
-}
-
-//	Returns true if the value of this enumerated TxsdPlatformTypeChoiceAbiSolidSequenceInstrumentModel is "AB 5500 Genetic Analyzer".
-func (me TxsdPlatformTypeChoiceAbiSolidSequenceInstrumentModel) IsAb5500GeneticAnalyzer() bool {
-	return me.String() == "AB 5500 Genetic Analyzer"
-}
-
-//	Returns true if the value of this enumerated TxsdPlatformTypeChoiceAbiSolidSequenceInstrumentModel is "AB 5500xl Genetic Analyzer".
-func (me TxsdPlatformTypeChoiceAbiSolidSequenceInstrumentModel) IsAb5500XlGeneticAnalyzer() bool {
-	return me.String() == "AB 5500xl Genetic Analyzer"
-}
-
-//	Since TxsdPlatformTypeChoiceAbiSolidSequenceInstrumentModel is just a simple String type, this merely sets the current value from the specified string.
-func (me *TxsdPlatformTypeChoiceAbiSolidSequenceInstrumentModel) Set(s string) {
-	(*xsdt.String)(me).Set(s)
-}
-
-//	Since TxsdPlatformTypeChoiceAbiSolidSequenceInstrumentModel is just a simple String type, this merely returns the current string value.
-func (me TxsdPlatformTypeChoiceAbiSolidSequenceInstrumentModel) String() string {
-	return xsdt.String(me).String()
-}
-
-//	Returns true if the value of this enumerated TxsdPlatformTypeChoiceAbiSolidSequenceInstrumentModel is "AB SOLiD 3 Plus System".
-func (me TxsdPlatformTypeChoiceAbiSolidSequenceInstrumentModel) IsAbSOLiD3PlusSystem() bool {
-	return me.String() == "AB SOLiD 3 Plus System"
-}
-
-//	Returns true if the value of this enumerated TxsdPlatformTypeChoiceAbiSolidSequenceInstrumentModel is "AB SOLiD 4 System".
-func (me TxsdPlatformTypeChoiceAbiSolidSequenceInstrumentModel) IsAbSOLiD4System() bool {
-	return me.String() == "AB SOLiD 4 System"
-}
-
-//	Returns true if the value of this enumerated TxsdPlatformTypeChoiceAbiSolidSequenceInstrumentModel is "AB SOLiD PI System".
-func (me TxsdPlatformTypeChoiceAbiSolidSequenceInstrumentModel) IsAbSOLiDPiSystem() bool {
-	return me.String() == "AB SOLiD PI System"
-}
-
-//	Returns true if the value of this enumerated TxsdPlatformTypeChoiceAbiSolidSequenceInstrumentModel is "AB 5500xl-W Genetic Analysis System".
-func (me TxsdPlatformTypeChoiceAbiSolidSequenceInstrumentModel) IsAb5500XlWGeneticAnalysisSystem() bool {
-	return me.String() == "AB 5500xl-W Genetic Analysis System"
-}
-
-//	This convenience method just performs a simple type conversion to TxsdPlatformTypeChoiceAbiSolidSequenceInstrumentModel's alias type xsdt.String.
-func (me TxsdPlatformTypeChoiceAbiSolidSequenceInstrumentModel) ToXsdtString() xsdt.String {
-	return xsdt.String(me)
-}
-
-//	Returns true if the value of this enumerated TxsdPlatformTypeChoiceAbiSolidSequenceInstrumentModel is "AB SOLiD System".
-func (me TxsdPlatformTypeChoiceAbiSolidSequenceInstrumentModel) IsAbSOLiDSystem() bool {
-	return me.String() == "AB SOLiD System"
-}
-
-//	Returns true if the value of this enumerated TxsdPlatformTypeChoiceAbiSolidSequenceInstrumentModel is "AB SOLiD 4hq System".
-func (me TxsdPlatformTypeChoiceAbiSolidSequenceInstrumentModel) IsAbSOLiD4HqSystem() bool {
-	return me.String() == "AB SOLiD 4hq System"
-}
-
-//	List of primary and alternate identifiers including those records replacing or replaced by this record.
-type XsdGoPkgHasElems_IDENTIFIERSsequenceStudyTypeschema_Identifiers_TIdentifierType_ struct {
-	//	List of primary and alternate identifiers including those records replacing or replaced by this record.
-	Identifierses []*TIdentifierType `xml:"IDENTIFIERS"`
-}
-
-//	If the WalkHandlers.XsdGoPkgHasElems_IDENTIFIERSsequenceStudyTypeschema_Identifiers_TIdentifierType_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElems_IDENTIFIERSsequenceStudyTypeschema_Identifiers_TIdentifierType_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElems_IDENTIFIERSsequenceStudyTypeschema_Identifiers_TIdentifierType_ instance.
-func (me *XsdGoPkgHasElems_IDENTIFIERSsequenceStudyTypeschema_Identifiers_TIdentifierType_) Walk() (err error) {
-	if fn := WalkHandlers.XsdGoPkgHasElems_IDENTIFIERSsequenceStudyTypeschema_Identifiers_TIdentifierType_; me != nil {
-		if fn != nil {
-			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-		for _, x := range me.Identifierses {
+		for _, x := range me.PacbioSmrts {
 			if err = x.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
 				return
 			}
@@ -3806,25 +2816,437 @@ func (me *XsdGoPkgHasElems_IDENTIFIERSsequenceStudyTypeschema_Identifiers_TIdent
 	return
 }
 
-//	A submitter provided identifier of the (new) record. used in submisison process and replaced by primary archive
-//	id on successfull load. @namespace is optional and may refer to submitter private database or LIMS
-//	identifier.
-type XsdGoPkgHasElem_SubmitterIDsequenceIdentifierTypeschema_SubmitterId_TQualifiedNameType_ struct {
-	//	A submitter provided identifier of the (new) record. used in submisison process and replaced by primary archive
-	//	id on successfull load. @namespace is optional and may refer to submitter private database or LIMS
-	//	identifier.
-	SubmitterId *TQualifiedNameType `xml:"SUBMITTER_ID"`
+//	Notes about the program or process for primary analysis.
+type XsdGoPkgHasElems_NOTESsequencePIPESECTIONsequencePipelineTypeschema_Notes_XsdtString_ struct {
+	//	Notes about the program or process for primary analysis.
+	Noteses []xsdt.String `xml:"NOTES"`
 }
 
-//	If the WalkHandlers.XsdGoPkgHasElem_SubmitterIDsequenceIdentifierTypeschema_SubmitterId_TQualifiedNameType_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElem_SubmitterIDsequenceIdentifierTypeschema_SubmitterId_TQualifiedNameType_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 1/1 field(s) belonging to this XsdGoPkgHasElem_SubmitterIDsequenceIdentifierTypeschema_SubmitterId_TQualifiedNameType_ instance.
-func (me *XsdGoPkgHasElem_SubmitterIDsequenceIdentifierTypeschema_SubmitterId_TQualifiedNameType_) Walk() (err error) {
-	if fn := WalkHandlers.XsdGoPkgHasElem_SubmitterIDsequenceIdentifierTypeschema_SubmitterId_TQualifiedNameType_; me != nil {
+//	If the WalkHandlers.XsdGoPkgHasElems_NOTESsequencePIPESECTIONsequencePipelineTypeschema_Notes_XsdtString_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElems_NOTESsequencePIPESECTIONsequencePipelineTypeschema_Notes_XsdtString_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElems_NOTESsequencePIPESECTIONsequencePipelineTypeschema_Notes_XsdtString_ instance.
+func (me *XsdGoPkgHasElems_NOTESsequencePIPESECTIONsequencePipelineTypeschema_Notes_XsdtString_) Walk() (err error) {
+	if fn := WalkHandlers.XsdGoPkgHasElems_NOTESsequencePIPESECTIONsequencePipelineTypeschema_Notes_XsdtString_; me != nil {
 		if fn != nil {
 			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
 				return
 			}
 		}
-		if err = me.SubmitterId.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+		if fn != nil {
+			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+	}
+	return
+}
+
+//	INSDC controlled vocabulary of permitted cross references. Please see http://www.insdc.org/db_xref.html . For
+//	example, FLYBASE.
+type XsdGoPkgHasElems_DBallXRefTypeschema_Db_XsdtString_ struct {
+	//	INSDC controlled vocabulary of permitted cross references. Please see http://www.insdc.org/db_xref.html . For
+	//	example, FLYBASE.
+	Dbs []xsdt.String `xml:"DB"`
+}
+
+//	If the WalkHandlers.XsdGoPkgHasElems_DBallXRefTypeschema_Db_XsdtString_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElems_DBallXRefTypeschema_Db_XsdtString_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElems_DBallXRefTypeschema_Db_XsdtString_ instance.
+func (me *XsdGoPkgHasElems_DBallXRefTypeschema_Db_XsdtString_) Walk() (err error) {
+	if fn := WalkHandlers.XsdGoPkgHasElems_DBallXRefTypeschema_Db_XsdtString_; me != nil {
+		if fn != nil {
+			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+		if fn != nil {
+			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+	}
+	return
+}
+
+type TxsdPlatformTypeChoiceLs454AllInstrumentModel xsdt.String
+
+//	Since TxsdPlatformTypeChoiceLs454AllInstrumentModel is just a simple String type, this merely returns the current string value.
+func (me TxsdPlatformTypeChoiceLs454AllInstrumentModel) String() string {
+	return xsdt.String(me).String()
+}
+
+//	Returns true if the value of this enumerated TxsdPlatformTypeChoiceLs454AllInstrumentModel is "454 GS 20".
+func (me TxsdPlatformTypeChoiceLs454AllInstrumentModel) Is454Gs20() bool {
+	return me.String() == "454 GS 20"
+}
+
+//	Returns true if the value of this enumerated TxsdPlatformTypeChoiceLs454AllInstrumentModel is "454 GS FLX+".
+func (me TxsdPlatformTypeChoiceLs454AllInstrumentModel) Is454GsFlx() bool {
+	return me.String() == "454 GS FLX+"
+}
+
+//	Returns true if the value of this enumerated TxsdPlatformTypeChoiceLs454AllInstrumentModel is "454 GS FLX Titanium".
+func (me TxsdPlatformTypeChoiceLs454AllInstrumentModel) Is454GsFlxTitanium() bool {
+	return me.String() == "454 GS FLX Titanium"
+}
+
+//	Returns true if the value of this enumerated TxsdPlatformTypeChoiceLs454AllInstrumentModel is "454 GS Junior".
+func (me TxsdPlatformTypeChoiceLs454AllInstrumentModel) Is454GsJunior() bool {
+	return me.String() == "454 GS Junior"
+}
+
+//	Returns true if the value of this enumerated TxsdPlatformTypeChoiceLs454AllInstrumentModel is "unspecified".
+func (me TxsdPlatformTypeChoiceLs454AllInstrumentModel) IsUnspecified() bool {
+	return me.String() == "unspecified"
+}
+
+//	Since TxsdPlatformTypeChoiceLs454AllInstrumentModel is just a simple String type, this merely sets the current value from the specified string.
+func (me *TxsdPlatformTypeChoiceLs454AllInstrumentModel) Set(s string) { (*xsdt.String)(me).Set(s) }
+
+//	This convenience method just performs a simple type conversion to TxsdPlatformTypeChoiceLs454AllInstrumentModel's alias type xsdt.String.
+func (me TxsdPlatformTypeChoiceLs454AllInstrumentModel) ToXsdtString() xsdt.String {
+	return xsdt.String(me)
+}
+
+//	Returns true if the value of this enumerated TxsdPlatformTypeChoiceLs454AllInstrumentModel is "454 GS".
+func (me TxsdPlatformTypeChoiceLs454AllInstrumentModel) Is454Gs() bool {
+	return me.String() == "454 GS"
+}
+
+//	DEPRECATED. Use STUDY@center_name instead. Controlled vocabulary identifying the sequencing center, core
+//	facility, consortium, or laboratory responsible for the study.
+type XsdGoPkgHasElems_CenterNAMEallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_CenterName_XsdtString_ struct {
+	//	DEPRECATED. Use STUDY@center_name instead. Controlled vocabulary identifying the sequencing center, core
+	//	facility, consortium, or laboratory responsible for the study.
+	CenterNames []xsdt.String `xml:"CENTER_NAME"`
+}
+
+//	If the WalkHandlers.XsdGoPkgHasElems_CenterNAMEallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_CenterName_XsdtString_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElems_CenterNAMEallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_CenterName_XsdtString_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElems_CenterNAMEallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_CenterName_XsdtString_ instance.
+func (me *XsdGoPkgHasElems_CenterNAMEallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_CenterName_XsdtString_) Walk() (err error) {
+	if fn := WalkHandlers.XsdGoPkgHasElems_CenterNAMEallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_CenterName_XsdtString_; me != nil {
+		if fn != nil {
+			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+		if fn != nil {
+			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+	}
+	return
+}
+
+//	READ_INDEX starts at 0 and is incrementally increased for each sequential READ_SPEC within a
+//	SPOT_DECODE_SPEC
+type XsdGoPkgHasElem_ReadINDEXsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadIndex_XsdtNonNegativeInteger_ struct {
+	//	READ_INDEX starts at 0 and is incrementally increased for each sequential READ_SPEC within a
+	//	SPOT_DECODE_SPEC
+	ReadIndex xsdt.NonNegativeInteger `xml:"READ_INDEX"`
+}
+
+//	If the WalkHandlers.XsdGoPkgHasElem_ReadINDEXsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadIndex_XsdtNonNegativeInteger_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElem_ReadINDEXsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadIndex_XsdtNonNegativeInteger_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElem_ReadINDEXsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadIndex_XsdtNonNegativeInteger_ instance.
+func (me *XsdGoPkgHasElem_ReadINDEXsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadIndex_XsdtNonNegativeInteger_) Walk() (err error) {
+	if fn := WalkHandlers.XsdGoPkgHasElem_ReadINDEXsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadIndex_XsdtNonNegativeInteger_; me != nil {
+		if fn != nil {
+			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+		if fn != nil {
+			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+	}
+	return
+}
+
+//	READ_LABEL is a name for this tag, and can be used to on output to determine read name, for example
+//	F or R.
+type XsdGoPkgHasElem_ReadLABELsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadLabel_XsdtString_ struct {
+	//	READ_LABEL is a name for this tag, and can be used to on output to determine read name, for example
+	//	F or R.
+	ReadLabel xsdt.String `xml:"READ_LABEL"`
+}
+
+//	If the WalkHandlers.XsdGoPkgHasElem_ReadLABELsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadLabel_XsdtString_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElem_ReadLABELsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadLabel_XsdtString_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElem_ReadLABELsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadLabel_XsdtString_ instance.
+func (me *XsdGoPkgHasElem_ReadLABELsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadLabel_XsdtString_) Walk() (err error) {
+	if fn := WalkHandlers.XsdGoPkgHasElem_ReadLABELsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadLabel_XsdtString_; me != nil {
+		if fn != nil {
+			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+		if fn != nil {
+			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+	}
+	return
+}
+
+type TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadClass xsdt.String
+
+//	Since TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadClass is just a simple String type, this merely sets the current value from the specified string.
+func (me *TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadClass) Set(s string) {
+	(*xsdt.String)(me).Set(s)
+}
+
+//	Since TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadClass is just a simple String type, this merely returns the current string value.
+func (me TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadClass) String() string {
+	return xsdt.String(me).String()
+}
+
+//	This convenience method just performs a simple type conversion to TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadClass's alias type xsdt.String.
+func (me TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadClass) ToXsdtString() xsdt.String {
+	return xsdt.String(me)
+}
+
+//	Returns true if the value of this enumerated TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadClass is "Application Read".
+func (me TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadClass) IsApplicationRead() bool {
+	return me.String() == "Application Read"
+}
+
+//	Returns true if the value of this enumerated TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadClass is "Technical Read".
+func (me TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadClass) IsTechnicalRead() bool {
+	return me.String() == "Technical Read"
+}
+
+type XsdGoPkgHasElem_ReadCLASSsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadClass_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadClass_ struct {
+	ReadClass TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadClass `xml:"READ_CLASS"`
+}
+
+//	If the WalkHandlers.XsdGoPkgHasElem_ReadCLASSsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadClass_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadClass_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElem_ReadCLASSsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadClass_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadClass_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElem_ReadCLASSsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadClass_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadClass_ instance.
+func (me *XsdGoPkgHasElem_ReadCLASSsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadClass_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadClass_) Walk() (err error) {
+	if fn := WalkHandlers.XsdGoPkgHasElem_ReadCLASSsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadClass_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadClass_; me != nil {
+		if fn != nil {
+			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+		if fn != nil {
+			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+	}
+	return
+}
+
+type TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadType xsdt.String
+
+//	Returns true if the value of this enumerated TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadType is "BarCode".
+func (me TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadType) IsBarCode() bool {
+	return me.String() == "BarCode"
+}
+
+//	Returns true if the value of this enumerated TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadType is "Other".
+func (me TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadType) IsOther() bool {
+	return me.String() == "Other"
+}
+
+//	Since TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadType is just a simple String type, this merely sets the current value from the specified string.
+func (me *TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadType) Set(s string) {
+	(*xsdt.String)(me).Set(s)
+}
+
+//	Since TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadType is just a simple String type, this merely returns the current string value.
+func (me TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadType) String() string {
+	return xsdt.String(me).String()
+}
+
+//	This convenience method just performs a simple type conversion to TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadType's alias type xsdt.String.
+func (me TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadType) ToXsdtString() xsdt.String {
+	return xsdt.String(me)
+}
+
+//	Returns true if the value of this enumerated TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadType is "Adapter".
+func (me TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadType) IsAdapter() bool {
+	return me.String() == "Adapter"
+}
+
+//	Returns true if the value of this enumerated TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadType is "Forward".
+func (me TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadType) IsForward() bool {
+	return me.String() == "Forward"
+}
+
+//	Returns true if the value of this enumerated TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadType is "Reverse".
+func (me TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadType) IsReverse() bool {
+	return me.String() == "Reverse"
+}
+
+//	Returns true if the value of this enumerated TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadType is "Primer".
+func (me TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadType) IsPrimer() bool {
+	return me.String() == "Primer"
+}
+
+//	Returns true if the value of this enumerated TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadType is "Linker".
+func (me TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadType) IsLinker() bool {
+	return me.String() == "Linker"
+}
+
+type XsdGoPkgHasElem_ReadTYPEsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadType_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadType_Forward struct {
+	ReadType TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadType `xml:"READ_TYPE"`
+}
+
+//	If the WalkHandlers.XsdGoPkgHasElem_ReadTYPEsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadType_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadType_Forward function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElem_ReadTYPEsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadType_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadType_Forward instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElem_ReadTYPEsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadType_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadType_Forward instance.
+func (me *XsdGoPkgHasElem_ReadTYPEsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadType_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadType_Forward) Walk() (err error) {
+	if fn := WalkHandlers.XsdGoPkgHasElem_ReadTYPEsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadType_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadType_Forward; me != nil {
+		if fn != nil {
+			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+		if fn != nil {
+			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+	}
+	return
+}
+
+//	Returns the default value for ReadType -- "Forward"
+func (me XsdGoPkgHasElem_ReadTYPEsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadType_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadType_Forward) ReadTypeDefault() TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadType {
+	return TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadType("Forward")
+}
+
+//	The location of the read start in terms of base count (1 is beginning of spot).
+type XsdGoPkgHasElem_BaseCOORDchoicesequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_BaseCoord_XsdtInteger_ struct {
+	//	The location of the read start in terms of base count (1 is beginning of spot).
+	BaseCoord *xsdt.Integer `xml:"BASE_COORD"`
+}
+
+//	If the WalkHandlers.XsdGoPkgHasElem_BaseCOORDchoicesequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_BaseCoord_XsdtInteger_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElem_BaseCOORDchoicesequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_BaseCoord_XsdtInteger_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElem_BaseCOORDchoicesequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_BaseCoord_XsdtInteger_ instance.
+func (me *XsdGoPkgHasElem_BaseCOORDchoicesequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_BaseCoord_XsdtInteger_) Walk() (err error) {
+	if fn := WalkHandlers.XsdGoPkgHasElem_BaseCOORDchoicesequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_BaseCoord_XsdtInteger_; me != nil {
+		if fn != nil {
+			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+		if fn != nil {
+			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+	}
+	return
+}
+
+//	A set of choices of expected basecalls for a current read. Read will be zero-length if none is
+//	found.
+//	Element's body contains a basecall, attribute provide description of this read meaning as
+//	well as matching rules.
+//	Minimum number of matches to trigger identification.
+type XsdGoPkgHasAttr_MinMatch_XsdtNonNegativeInteger_ struct {
+	//	Minimum number of matches to trigger identification.
+	MinMatch xsdt.NonNegativeInteger `xml:"min_match,attr"`
+}
+
+//	When match occurs, the read will be tagged with this group membership
+type XsdGoPkgHasAttr_ReadGroupTag_XsdtString_ struct {
+	//	When match occurs, the read will be tagged with this group membership
+	ReadGroupTag xsdt.String `xml:"read_group_tag,attr"`
+}
+
+type TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTableSequenceBasecall struct {
+	XsdtString
+
+	//	Maximum number of mismatches
+	XsdGoPkgHasAttr_MaxMismatch_XsdtNonNegativeInteger_
+
+	//	Where the match should occur. Changes the rules on how min_match and max_mismatch
+	//	are counted.
+	XsdGoPkgHasAttr_MatchEdge_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTableSequenceBasecallSimpleContentExtensionMatchEdge_
+
+	//	When match occurs, the read will be tagged with this group membership
+	XsdGoPkgHasAttr_ReadGroupTag_XsdtString_
+
+	//	Minimum number of matches to trigger identification.
+	XsdGoPkgHasAttr_MinMatch_XsdtNonNegativeInteger_
+}
+
+//	If the WalkHandlers.TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTableSequenceBasecall function is not nil (ie. was set by outside code), calls it with this TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTableSequenceBasecall instance as the single argument. Then calls the Walk() method on 0/5 embed(s) and 0/0 field(s) belonging to this TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTableSequenceBasecall instance.
+func (me *TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTableSequenceBasecall) Walk() (err error) {
+	if fn := WalkHandlers.TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTableSequenceBasecall; me != nil {
+		if fn != nil {
+			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+		if fn != nil {
+			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+	}
+	return
+}
+
+type XsdGoPkgHasElems_BASECALLsequenceEXPECTEDBasecallTABLEchoicesequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_Basecall_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTableSequenceBasecall_ struct {
+	//	Element's body contains a basecall, attribute provide description of this read meaning as
+	//	well as matching rules.
+	Basecalls []*TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTableSequenceBasecall `xml:"BASECALL"`
+}
+
+//	If the WalkHandlers.XsdGoPkgHasElems_BASECALLsequenceEXPECTEDBasecallTABLEchoicesequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_Basecall_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTableSequenceBasecall_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElems_BASECALLsequenceEXPECTEDBasecallTABLEchoicesequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_Basecall_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTableSequenceBasecall_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElems_BASECALLsequenceEXPECTEDBasecallTABLEchoicesequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_Basecall_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTableSequenceBasecall_ instance.
+func (me *XsdGoPkgHasElems_BASECALLsequenceEXPECTEDBasecallTABLEchoicesequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_Basecall_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTableSequenceBasecall_) Walk() (err error) {
+	if fn := WalkHandlers.XsdGoPkgHasElems_BASECALLsequenceEXPECTEDBasecallTABLEchoicesequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_Basecall_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTableSequenceBasecall_; me != nil {
+		if fn != nil {
+			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+		for _, x := range me.Basecalls {
+			if err = x.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+		if fn != nil {
+			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+	}
+	return
+}
+
+//	Specify whether the spot should have a default length for this tag if the expected base
+//	cannot be matched.
+type XsdGoPkgHasAttr_DefaultLength_XsdtNonNegativeInteger_ struct {
+	//	Specify whether the spot should have a default length for this tag if the expected base
+	//	cannot be matched.
+	DefaultLength xsdt.NonNegativeInteger `xml:"default_length,attr"`
+}
+
+//	Specify an optional starting point for tag (base offset from 1).
+type XsdGoPkgHasAttr_BaseCoord_XsdtNonNegativeInteger_ struct {
+	//	Specify an optional starting point for tag (base offset from 1).
+	BaseCoord xsdt.NonNegativeInteger `xml:"base_coord,attr"`
+}
+
+type TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTable struct {
+	//	Specify an optional starting point for tag (base offset from 1).
+	XsdGoPkgHasAttr_BaseCoord_XsdtNonNegativeInteger_
+
+	//	Element's body contains a basecall, attribute provide description of this read meaning as
+	//	well as matching rules.
+	XsdGoPkgHasElems_BASECALLsequenceEXPECTEDBasecallTABLEchoicesequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_Basecall_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTableSequenceBasecall_
+
+	//	Specify whether the spot should have a default length for this tag if the expected base
+	//	cannot be matched.
+	XsdGoPkgHasAttr_DefaultLength_XsdtNonNegativeInteger_
+}
+
+//	If the WalkHandlers.TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTable function is not nil (ie. was set by outside code), calls it with this TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTable instance as the single argument. Then calls the Walk() method on 1/3 embed(s) and 0/0 field(s) belonging to this TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTable instance.
+func (me *TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTable) Walk() (err error) {
+	if fn := WalkHandlers.TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTable; me != nil {
+		if fn != nil {
+			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+		if err = me.XsdGoPkgHasElems_BASECALLsequenceEXPECTEDBasecallTABLEchoicesequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_Basecall_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTableSequenceBasecall_.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
 			return
 		}
 		if fn != nil {
@@ -3836,21 +3258,288 @@ func (me *XsdGoPkgHasElem_SubmitterIDsequenceIdentifierTypeschema_SubmitterId_TQ
 	return
 }
 
-//	NCBI controlled vocabulary of permitted cross references. Please see
-//	http://www.ncbi.nlm.nih.gov/entrez/eutils/einfo.fcgi? .
-type XsdGoPkgHasElems_DBsequenceENTREZLINKchoiceLinkTypeschema_Db_XsdtString_ struct {
-	//	NCBI controlled vocabulary of permitted cross references. Please see
-	//	http://www.ncbi.nlm.nih.gov/entrez/eutils/einfo.fcgi? .
-	Dbs []xsdt.String `xml:"DB"`
+type XsdGoPkgHasElem_ExpectedBasecallTABLEchoicesequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ExpectedBasecallTable_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTable_ struct {
+	//	A set of choices of expected basecalls for a current read. Read will be zero-length if none is
+	//	found.
+	ExpectedBasecallTable *TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTable `xml:"EXPECTED_BASECALL_TABLE"`
 }
 
-//	If the WalkHandlers.XsdGoPkgHasElems_DBsequenceENTREZLINKchoiceLinkTypeschema_Db_XsdtString_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElems_DBsequenceENTREZLINKchoiceLinkTypeschema_Db_XsdtString_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElems_DBsequenceENTREZLINKchoiceLinkTypeschema_Db_XsdtString_ instance.
-func (me *XsdGoPkgHasElems_DBsequenceENTREZLINKchoiceLinkTypeschema_Db_XsdtString_) Walk() (err error) {
-	if fn := WalkHandlers.XsdGoPkgHasElems_DBsequenceENTREZLINKchoiceLinkTypeschema_Db_XsdtString_; me != nil {
+//	If the WalkHandlers.XsdGoPkgHasElem_ExpectedBasecallTABLEchoicesequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ExpectedBasecallTable_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTable_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElem_ExpectedBasecallTABLEchoicesequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ExpectedBasecallTable_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTable_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 1/1 field(s) belonging to this XsdGoPkgHasElem_ExpectedBasecallTABLEchoicesequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ExpectedBasecallTable_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTable_ instance.
+func (me *XsdGoPkgHasElem_ExpectedBasecallTABLEchoicesequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ExpectedBasecallTable_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTable_) Walk() (err error) {
+	if fn := WalkHandlers.XsdGoPkgHasElem_ExpectedBasecallTABLEchoicesequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ExpectedBasecallTable_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTable_; me != nil {
 		if fn != nil {
 			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
 				return
 			}
+		}
+		if err = me.ExpectedBasecallTable.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+			return
+		}
+		if fn != nil {
+			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+	}
+	return
+}
+
+type TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpec struct {
+	XsdGoPkgHasElem_ReadTYPEsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadType_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadType_Forward
+
+	//	There are various methods to ordering the reads on the spot.
+	//	The read is located beginning at the offset or cycle relative to another read. This choice is
+	//	appropriate for example when specifying a read that follows a variable length expected sequence(s).
+	XsdGoPkgHasElem_RelativeORDERchoicesequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_RelativeOrder_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceRelativeOrder_
+
+	//	There are various methods to ordering the reads on the spot.
+	//	The location of the read start in terms of base count (1 is beginning of spot).
+	XsdGoPkgHasElem_BaseCOORDchoicesequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_BaseCoord_XsdtInteger_
+
+	//	There are various methods to ordering the reads on the spot.
+	//	A set of choices of expected basecalls for a current read. Read will be zero-length if none is
+	//	found.
+	XsdGoPkgHasElem_ExpectedBasecallTABLEchoicesequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ExpectedBasecallTable_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTable_
+
+	//	READ_INDEX starts at 0 and is incrementally increased for each sequential READ_SPEC within a
+	//	SPOT_DECODE_SPEC
+	XsdGoPkgHasElem_ReadINDEXsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadIndex_XsdtNonNegativeInteger_
+
+	//	READ_LABEL is a name for this tag, and can be used to on output to determine read name, for example
+	//	F or R.
+	XsdGoPkgHasElem_ReadLABELsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadLabel_XsdtString_
+
+	XsdGoPkgHasElem_ReadCLASSsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadClass_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadClass_
+}
+
+//	If the WalkHandlers.TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpec function is not nil (ie. was set by outside code), calls it with this TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpec instance as the single argument. Then calls the Walk() method on 7/7 embed(s) and 0/0 field(s) belonging to this TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpec instance.
+func (me *TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpec) Walk() (err error) {
+	if fn := WalkHandlers.TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpec; me != nil {
+		if fn != nil {
+			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+		if err = me.XsdGoPkgHasElem_RelativeORDERchoicesequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_RelativeOrder_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceRelativeOrder_.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+			return
+		}
+		if err = me.XsdGoPkgHasElem_BaseCOORDchoicesequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_BaseCoord_XsdtInteger_.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+			return
+		}
+		if err = me.XsdGoPkgHasElem_ExpectedBasecallTABLEchoicesequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ExpectedBasecallTable_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTable_.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+			return
+		}
+		if err = me.XsdGoPkgHasElem_ReadINDEXsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadIndex_XsdtNonNegativeInteger_.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+			return
+		}
+		if err = me.XsdGoPkgHasElem_ReadLABELsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadLabel_XsdtString_.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+			return
+		}
+		if err = me.XsdGoPkgHasElem_ReadCLASSsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadClass_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadClass_.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+			return
+		}
+		if err = me.XsdGoPkgHasElem_ReadTYPEsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadType_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadType_Forward.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+			return
+		}
+		if fn != nil {
+			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+	}
+	return
+}
+
+type XsdGoPkgHasElem_ReadSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadSpec_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpec_ struct {
+	ReadSpec *TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpec `xml:"READ_SPEC"`
+}
+
+//	If the WalkHandlers.XsdGoPkgHasElem_ReadSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadSpec_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpec_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElem_ReadSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadSpec_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpec_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 1/1 field(s) belonging to this XsdGoPkgHasElem_ReadSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadSpec_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpec_ instance.
+func (me *XsdGoPkgHasElem_ReadSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadSpec_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpec_) Walk() (err error) {
+	if fn := WalkHandlers.XsdGoPkgHasElem_ReadSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadSpec_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpec_; me != nil {
+		if fn != nil {
+			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+		if err = me.ReadSpec.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+			return
+		}
+		if fn != nil {
+			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+	}
+	return
+}
+
+type XsdGoPkgHasElem_StudyLINKsequenceSTUDYLINKSsequenceStudyTypeschema_StudyLink_TLinkType_ struct {
+	StudyLink *TLinkType `xml:"STUDY_LINK"`
+}
+
+//	If the WalkHandlers.XsdGoPkgHasElem_StudyLINKsequenceSTUDYLINKSsequenceStudyTypeschema_StudyLink_TLinkType_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElem_StudyLINKsequenceSTUDYLINKSsequenceStudyTypeschema_StudyLink_TLinkType_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 1/1 field(s) belonging to this XsdGoPkgHasElem_StudyLINKsequenceSTUDYLINKSsequenceStudyTypeschema_StudyLink_TLinkType_ instance.
+func (me *XsdGoPkgHasElem_StudyLINKsequenceSTUDYLINKSsequenceStudyTypeschema_StudyLink_TLinkType_) Walk() (err error) {
+	if fn := WalkHandlers.XsdGoPkgHasElem_StudyLINKsequenceSTUDYLINKSsequenceStudyTypeschema_StudyLink_TLinkType_; me != nil {
+		if fn != nil {
+			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+		if err = me.StudyLink.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+			return
+		}
+		if fn != nil {
+			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+	}
+	return
+}
+
+//	Whether the reference alignment includes unaligned reads.
+type XsdGoPkgHasElem_AlignmentIncludesUnalignedReadsallAlignmentDirectivesTypeschema_AlignmentIncludesUnalignedReads_XsdtBoolean_ struct {
+	//	Whether the reference alignment includes unaligned reads.
+	AlignmentIncludesUnalignedReads xsdt.Boolean `xml:"alignment_includes_unaligned_reads"`
+}
+
+//	If the WalkHandlers.XsdGoPkgHasElem_AlignmentIncludesUnalignedReadsallAlignmentDirectivesTypeschema_AlignmentIncludesUnalignedReads_XsdtBoolean_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElem_AlignmentIncludesUnalignedReadsallAlignmentDirectivesTypeschema_AlignmentIncludesUnalignedReads_XsdtBoolean_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElem_AlignmentIncludesUnalignedReadsallAlignmentDirectivesTypeschema_AlignmentIncludesUnalignedReads_XsdtBoolean_ instance.
+func (me *XsdGoPkgHasElem_AlignmentIncludesUnalignedReadsallAlignmentDirectivesTypeschema_AlignmentIncludesUnalignedReads_XsdtBoolean_) Walk() (err error) {
+	if fn := WalkHandlers.XsdGoPkgHasElem_AlignmentIncludesUnalignedReadsallAlignmentDirectivesTypeschema_AlignmentIncludesUnalignedReads_XsdtBoolean_; me != nil {
+		if fn != nil {
+			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+		if fn != nil {
+			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+	}
+	return
+}
+
+//	Sequencers based on capillary electrophoresis technology manufactured by LifeTech (formerly Applied
+//	BioSciences).
+type XsdGoPkgHasElem_InstrumentMODELsequenceCAPILLARYchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceCapillarySequenceInstrumentModel_ struct {
+	InstrumentModel TxsdPlatformTypeChoiceCapillarySequenceInstrumentModel `xml:"INSTRUMENT_MODEL"`
+}
+
+//	If the WalkHandlers.XsdGoPkgHasElem_InstrumentMODELsequenceCAPILLARYchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceCapillarySequenceInstrumentModel_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElem_InstrumentMODELsequenceCAPILLARYchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceCapillarySequenceInstrumentModel_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElem_InstrumentMODELsequenceCAPILLARYchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceCapillarySequenceInstrumentModel_ instance.
+func (me *XsdGoPkgHasElem_InstrumentMODELsequenceCAPILLARYchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceCapillarySequenceInstrumentModel_) Walk() (err error) {
+	if fn := WalkHandlers.XsdGoPkgHasElem_InstrumentMODELsequenceCAPILLARYchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceCapillarySequenceInstrumentModel_; me != nil {
+		if fn != nil {
+			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+		if fn != nil {
+			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+	}
+	return
+}
+
+type TxsdPlatformTypeChoiceCapillary struct {
+	XsdGoPkgHasElem_InstrumentMODELsequenceCAPILLARYchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceCapillarySequenceInstrumentModel_
+}
+
+//	If the WalkHandlers.TxsdPlatformTypeChoiceCapillary function is not nil (ie. was set by outside code), calls it with this TxsdPlatformTypeChoiceCapillary instance as the single argument. Then calls the Walk() method on 1/1 embed(s) and 0/0 field(s) belonging to this TxsdPlatformTypeChoiceCapillary instance.
+func (me *TxsdPlatformTypeChoiceCapillary) Walk() (err error) {
+	if fn := WalkHandlers.TxsdPlatformTypeChoiceCapillary; me != nil {
+		if fn != nil {
+			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+		if err = me.XsdGoPkgHasElem_InstrumentMODELsequenceCAPILLARYchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceCapillarySequenceInstrumentModel_.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+			return
+		}
+		if fn != nil {
+			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+	}
+	return
+}
+
+type XsdGoPkgHasElems_CAPILLARYchoicePlatformTypeschema_Capillary_TxsdPlatformTypeChoiceCapillary_ struct {
+	//	Sequencers based on capillary electrophoresis technology manufactured by LifeTech (formerly Applied
+	//	BioSciences).
+	Capillaries []*TxsdPlatformTypeChoiceCapillary `xml:"CAPILLARY"`
+}
+
+//	If the WalkHandlers.XsdGoPkgHasElems_CAPILLARYchoicePlatformTypeschema_Capillary_TxsdPlatformTypeChoiceCapillary_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElems_CAPILLARYchoicePlatformTypeschema_Capillary_TxsdPlatformTypeChoiceCapillary_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElems_CAPILLARYchoicePlatformTypeschema_Capillary_TxsdPlatformTypeChoiceCapillary_ instance.
+func (me *XsdGoPkgHasElems_CAPILLARYchoicePlatformTypeschema_Capillary_TxsdPlatformTypeChoiceCapillary_) Walk() (err error) {
+	if fn := WalkHandlers.XsdGoPkgHasElems_CAPILLARYchoicePlatformTypeschema_Capillary_TxsdPlatformTypeChoiceCapillary_; me != nil {
+		if fn != nil {
+			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+		for _, x := range me.Capillaries {
+			if err = x.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+		if fn != nil {
+			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+	}
+	return
+}
+
+type XsdGoPkgHasElems_DESCRIPTORsequenceStudyTypeschema_Descriptor_TxsdStudyTypeSequenceDescriptor_ struct {
+	Descriptors []*TxsdStudyTypeSequenceDescriptor `xml:"DESCRIPTOR"`
+}
+
+//	If the WalkHandlers.XsdGoPkgHasElems_DESCRIPTORsequenceStudyTypeschema_Descriptor_TxsdStudyTypeSequenceDescriptor_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElems_DESCRIPTORsequenceStudyTypeschema_Descriptor_TxsdStudyTypeSequenceDescriptor_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElems_DESCRIPTORsequenceStudyTypeschema_Descriptor_TxsdStudyTypeSequenceDescriptor_ instance.
+func (me *XsdGoPkgHasElems_DESCRIPTORsequenceStudyTypeschema_Descriptor_TxsdStudyTypeSequenceDescriptor_) Walk() (err error) {
+	if fn := WalkHandlers.XsdGoPkgHasElems_DESCRIPTORsequenceStudyTypeschema_Descriptor_TxsdStudyTypeSequenceDescriptor_; me != nil {
+		if fn != nil {
+			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+		for _, x := range me.Descriptors {
+			if err = x.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+		if fn != nil {
+			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+	}
+	return
+}
+
+//	Element's body contains a basecall, attribute provide description of this read meaning as
+//	well as matching rules.
+type XsdGoPkgHasElem_BASECALLsequenceEXPECTEDBasecallTABLEchoicesequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_Basecall_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTableSequenceBasecall_ struct {
+	//	Element's body contains a basecall, attribute provide description of this read meaning as
+	//	well as matching rules.
+	Basecall *TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTableSequenceBasecall `xml:"BASECALL"`
+}
+
+//	If the WalkHandlers.XsdGoPkgHasElem_BASECALLsequenceEXPECTEDBasecallTABLEchoicesequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_Basecall_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTableSequenceBasecall_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElem_BASECALLsequenceEXPECTEDBasecallTABLEchoicesequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_Basecall_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTableSequenceBasecall_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 1/1 field(s) belonging to this XsdGoPkgHasElem_BASECALLsequenceEXPECTEDBasecallTABLEchoicesequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_Basecall_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTableSequenceBasecall_ instance.
+func (me *XsdGoPkgHasElem_BASECALLsequenceEXPECTEDBasecallTABLEchoicesequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_Basecall_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTableSequenceBasecall_) Walk() (err error) {
+	if fn := WalkHandlers.XsdGoPkgHasElem_BASECALLsequenceEXPECTEDBasecallTABLEchoicesequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_Basecall_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTableSequenceBasecall_; me != nil {
+		if fn != nil {
+			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+		if err = me.Basecall.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+			return
 		}
 		if fn != nil {
 			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
@@ -3906,20 +3595,40 @@ func (me *TxsdPlatformTypeChoiceLs454) Walk() (err error) {
 	return
 }
 
-type XsdGoPkgHasElems_DESCRIPTORsequenceStudyTypeschema_Descriptor_TxsdStudyTypeSequenceDescriptor_ struct {
-	Descriptors []*TxsdStudyTypeSequenceDescriptor `xml:"DESCRIPTOR"`
+type TxsdPlatformTypeChoiceHelicosAllInstrumentModel xsdt.String
+
+//	Since TxsdPlatformTypeChoiceHelicosAllInstrumentModel is just a simple String type, this merely sets the current value from the specified string.
+func (me *TxsdPlatformTypeChoiceHelicosAllInstrumentModel) Set(s string) { (*xsdt.String)(me).Set(s) }
+
+//	Since TxsdPlatformTypeChoiceHelicosAllInstrumentModel is just a simple String type, this merely returns the current string value.
+func (me TxsdPlatformTypeChoiceHelicosAllInstrumentModel) String() string {
+	return xsdt.String(me).String()
 }
 
-//	If the WalkHandlers.XsdGoPkgHasElems_DESCRIPTORsequenceStudyTypeschema_Descriptor_TxsdStudyTypeSequenceDescriptor_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElems_DESCRIPTORsequenceStudyTypeschema_Descriptor_TxsdStudyTypeSequenceDescriptor_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElems_DESCRIPTORsequenceStudyTypeschema_Descriptor_TxsdStudyTypeSequenceDescriptor_ instance.
-func (me *XsdGoPkgHasElems_DESCRIPTORsequenceStudyTypeschema_Descriptor_TxsdStudyTypeSequenceDescriptor_) Walk() (err error) {
-	if fn := WalkHandlers.XsdGoPkgHasElems_DESCRIPTORsequenceStudyTypeschema_Descriptor_TxsdStudyTypeSequenceDescriptor_; me != nil {
+//	This convenience method just performs a simple type conversion to TxsdPlatformTypeChoiceHelicosAllInstrumentModel's alias type xsdt.String.
+func (me TxsdPlatformTypeChoiceHelicosAllInstrumentModel) ToXsdtString() xsdt.String {
+	return xsdt.String(me)
+}
+
+//	Returns true if the value of this enumerated TxsdPlatformTypeChoiceHelicosAllInstrumentModel is "Helicos HeliScope".
+func (me TxsdPlatformTypeChoiceHelicosAllInstrumentModel) IsHelicosHeliScope() bool {
+	return me.String() == "Helicos HeliScope"
+}
+
+//	Returns true if the value of this enumerated TxsdPlatformTypeChoiceHelicosAllInstrumentModel is "unspecified".
+func (me TxsdPlatformTypeChoiceHelicosAllInstrumentModel) IsUnspecified() bool {
+	return me.String() == "unspecified"
+}
+
+type XsdGoPkgHasElem_InstrumentMODELallHELICOSchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceHelicosAllInstrumentModel_ struct {
+	InstrumentModel TxsdPlatformTypeChoiceHelicosAllInstrumentModel `xml:"INSTRUMENT_MODEL"`
+}
+
+//	If the WalkHandlers.XsdGoPkgHasElem_InstrumentMODELallHELICOSchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceHelicosAllInstrumentModel_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElem_InstrumentMODELallHELICOSchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceHelicosAllInstrumentModel_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElem_InstrumentMODELallHELICOSchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceHelicosAllInstrumentModel_ instance.
+func (me *XsdGoPkgHasElem_InstrumentMODELallHELICOSchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceHelicosAllInstrumentModel_) Walk() (err error) {
+	if fn := WalkHandlers.XsdGoPkgHasElem_InstrumentMODELallHELICOSchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceHelicosAllInstrumentModel_; me != nil {
 		if fn != nil {
 			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-		for _, x := range me.Descriptors {
-			if err = x.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
 				return
 			}
 		}
@@ -3932,19 +3641,82 @@ func (me *XsdGoPkgHasElems_DESCRIPTORsequenceStudyTypeschema_Descriptor_TxsdStud
 	return
 }
 
-//	Whether the reference alignment includes unaligned reads.
-type XsdGoPkgHasElems_AlignmentIncludesUnalignedReadsallAlignmentDirectivesTypeschema_AlignmentIncludesUnalignedReads_XsdtBoolean_ struct {
+//	Whether the reference alignment identifies reads that appear to be duplicates.
+type XsdGoPkgHasElem_AlignmentMarksDuplicateReadsallAlignmentDirectivesTypeschema_AlignmentMarksDuplicateReads_XsdtBoolean_ struct {
+	//	Whether the reference alignment identifies reads that appear to be duplicates.
+	AlignmentMarksDuplicateReads xsdt.Boolean `xml:"alignment_marks_duplicate_reads"`
+}
+
+//	If the WalkHandlers.XsdGoPkgHasElem_AlignmentMarksDuplicateReadsallAlignmentDirectivesTypeschema_AlignmentMarksDuplicateReads_XsdtBoolean_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElem_AlignmentMarksDuplicateReadsallAlignmentDirectivesTypeschema_AlignmentMarksDuplicateReads_XsdtBoolean_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElem_AlignmentMarksDuplicateReadsallAlignmentDirectivesTypeschema_AlignmentMarksDuplicateReads_XsdtBoolean_ instance.
+func (me *XsdGoPkgHasElem_AlignmentMarksDuplicateReadsallAlignmentDirectivesTypeschema_AlignmentMarksDuplicateReads_XsdtBoolean_) Walk() (err error) {
+	if fn := WalkHandlers.XsdGoPkgHasElem_AlignmentMarksDuplicateReadsallAlignmentDirectivesTypeschema_AlignmentMarksDuplicateReads_XsdtBoolean_; me != nil {
+		if fn != nil {
+			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+		if fn != nil {
+			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+	}
+	return
+}
+
+//	Whether the reference alignment includes all reads regardless of whether they fail the instrument vendor's
+//	quality check.
+type XsdGoPkgHasElem_AlignmentIncludesFailedReadsallAlignmentDirectivesTypeschema_AlignmentIncludesFailedReads_XsdtBoolean_ struct {
+	//	Whether the reference alignment includes all reads regardless of whether they fail the instrument vendor's
+	//	quality check.
+	AlignmentIncludesFailedReads xsdt.Boolean `xml:"alignment_includes_failed_reads"`
+}
+
+//	If the WalkHandlers.XsdGoPkgHasElem_AlignmentIncludesFailedReadsallAlignmentDirectivesTypeschema_AlignmentIncludesFailedReads_XsdtBoolean_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElem_AlignmentIncludesFailedReadsallAlignmentDirectivesTypeschema_AlignmentIncludesFailedReads_XsdtBoolean_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElem_AlignmentIncludesFailedReadsallAlignmentDirectivesTypeschema_AlignmentIncludesFailedReads_XsdtBoolean_ instance.
+func (me *XsdGoPkgHasElem_AlignmentIncludesFailedReadsallAlignmentDirectivesTypeschema_AlignmentIncludesFailedReads_XsdtBoolean_) Walk() (err error) {
+	if fn := WalkHandlers.XsdGoPkgHasElem_AlignmentIncludesFailedReadsallAlignmentDirectivesTypeschema_AlignmentIncludesFailedReads_XsdtBoolean_; me != nil {
+		if fn != nil {
+			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+		if fn != nil {
+			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+	}
+	return
+}
+
+type TAlignmentDirectivesType struct {
+	//	Whether the reference alignment includes all reads regardless of whether they fail the instrument vendor's
+	//	quality check.
+	XsdGoPkgHasElem_AlignmentIncludesFailedReadsallAlignmentDirectivesTypeschema_AlignmentIncludesFailedReads_XsdtBoolean_
+
 	//	Whether the reference alignment includes unaligned reads.
-	AlignmentIncludesUnalignedReadses []xsdt.Boolean `xml:"alignment_includes_unaligned_reads"`
+	XsdGoPkgHasElem_AlignmentIncludesUnalignedReadsallAlignmentDirectivesTypeschema_AlignmentIncludesUnalignedReads_XsdtBoolean_
+
+	//	Whether the reference alignment identifies reads that appear to be duplicates.
+	XsdGoPkgHasElem_AlignmentMarksDuplicateReadsallAlignmentDirectivesTypeschema_AlignmentMarksDuplicateReads_XsdtBoolean_
 }
 
-//	If the WalkHandlers.XsdGoPkgHasElems_AlignmentIncludesUnalignedReadsallAlignmentDirectivesTypeschema_AlignmentIncludesUnalignedReads_XsdtBoolean_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElems_AlignmentIncludesUnalignedReadsallAlignmentDirectivesTypeschema_AlignmentIncludesUnalignedReads_XsdtBoolean_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElems_AlignmentIncludesUnalignedReadsallAlignmentDirectivesTypeschema_AlignmentIncludesUnalignedReads_XsdtBoolean_ instance.
-func (me *XsdGoPkgHasElems_AlignmentIncludesUnalignedReadsallAlignmentDirectivesTypeschema_AlignmentIncludesUnalignedReads_XsdtBoolean_) Walk() (err error) {
-	if fn := WalkHandlers.XsdGoPkgHasElems_AlignmentIncludesUnalignedReadsallAlignmentDirectivesTypeschema_AlignmentIncludesUnalignedReads_XsdtBoolean_; me != nil {
+//	If the WalkHandlers.TAlignmentDirectivesType function is not nil (ie. was set by outside code), calls it with this TAlignmentDirectivesType instance as the single argument. Then calls the Walk() method on 3/3 embed(s) and 0/0 field(s) belonging to this TAlignmentDirectivesType instance.
+func (me *TAlignmentDirectivesType) Walk() (err error) {
+	if fn := WalkHandlers.TAlignmentDirectivesType; me != nil {
 		if fn != nil {
 			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
 				return
 			}
+		}
+		if err = me.XsdGoPkgHasElem_AlignmentIncludesFailedReadsallAlignmentDirectivesTypeschema_AlignmentIncludesFailedReads_XsdtBoolean_.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+			return
+		}
+		if err = me.XsdGoPkgHasElem_AlignmentIncludesUnalignedReadsallAlignmentDirectivesTypeschema_AlignmentIncludesUnalignedReads_XsdtBoolean_.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+			return
+		}
+		if err = me.XsdGoPkgHasElem_AlignmentMarksDuplicateReadsallAlignmentDirectivesTypeschema_AlignmentMarksDuplicateReads_XsdtBoolean_.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+			return
 		}
 		if fn != nil {
 			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
@@ -3955,46 +3727,23 @@ func (me *XsdGoPkgHasElems_AlignmentIncludesUnalignedReadsallAlignmentDirectives
 	return
 }
 
-//	More extensive free-form description of the study.
-type XsdGoPkgHasElems_StudyDESCRIPTIONallDESCRIPTORsequenceStudyTypeschema_StudyDescription_XsdtString_ struct {
-	//	More extensive free-form description of the study.
-	StudyDescriptions []xsdt.String `xml:"STUDY_DESCRIPTION"`
+//	The STUDY_TYPE presents a controlled vocabulary for expressing the overall purpose of the
+//	study.
+type XsdGoPkgHasElems_StudyTYPEallDESCRIPTORsequenceStudyTypeschema_StudyType_TxsdStudyTypeSequenceDescriptorAllStudyType_ struct {
+	//	The STUDY_TYPE presents a controlled vocabulary for expressing the overall purpose of the
+	//	study.
+	StudyTypes []*TxsdStudyTypeSequenceDescriptorAllStudyType `xml:"STUDY_TYPE"`
 }
 
-//	If the WalkHandlers.XsdGoPkgHasElems_StudyDESCRIPTIONallDESCRIPTORsequenceStudyTypeschema_StudyDescription_XsdtString_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElems_StudyDESCRIPTIONallDESCRIPTORsequenceStudyTypeschema_StudyDescription_XsdtString_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElems_StudyDESCRIPTIONallDESCRIPTORsequenceStudyTypeschema_StudyDescription_XsdtString_ instance.
-func (me *XsdGoPkgHasElems_StudyDESCRIPTIONallDESCRIPTORsequenceStudyTypeschema_StudyDescription_XsdtString_) Walk() (err error) {
-	if fn := WalkHandlers.XsdGoPkgHasElems_StudyDESCRIPTIONallDESCRIPTORsequenceStudyTypeschema_StudyDescription_XsdtString_; me != nil {
+//	If the WalkHandlers.XsdGoPkgHasElems_StudyTYPEallDESCRIPTORsequenceStudyTypeschema_StudyType_TxsdStudyTypeSequenceDescriptorAllStudyType_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElems_StudyTYPEallDESCRIPTORsequenceStudyTypeschema_StudyType_TxsdStudyTypeSequenceDescriptorAllStudyType_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElems_StudyTYPEallDESCRIPTORsequenceStudyTypeschema_StudyType_TxsdStudyTypeSequenceDescriptorAllStudyType_ instance.
+func (me *XsdGoPkgHasElems_StudyTYPEallDESCRIPTORsequenceStudyTypeschema_StudyType_TxsdStudyTypeSequenceDescriptorAllStudyType_) Walk() (err error) {
+	if fn := WalkHandlers.XsdGoPkgHasElems_StudyTYPEallDESCRIPTORsequenceStudyTypeschema_StudyType_TxsdStudyTypeSequenceDescriptorAllStudyType_; me != nil {
 		if fn != nil {
 			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
 				return
 			}
 		}
-		if fn != nil {
-			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-	}
-	return
-}
-
-//	A set of choices of expected basecalls for a current read. Read will be zero-length if none is
-//	found.
-type XsdGoPkgHasElems_ExpectedBasecallTABLEchoicesequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ExpectedBasecallTable_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTable_ struct {
-	//	A set of choices of expected basecalls for a current read. Read will be zero-length if none is
-	//	found.
-	ExpectedBasecallTables []*TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTable `xml:"EXPECTED_BASECALL_TABLE"`
-}
-
-//	If the WalkHandlers.XsdGoPkgHasElems_ExpectedBasecallTABLEchoicesequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ExpectedBasecallTable_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTable_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElems_ExpectedBasecallTABLEchoicesequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ExpectedBasecallTable_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTable_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElems_ExpectedBasecallTABLEchoicesequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ExpectedBasecallTable_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTable_ instance.
-func (me *XsdGoPkgHasElems_ExpectedBasecallTABLEchoicesequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ExpectedBasecallTable_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTable_) Walk() (err error) {
-	if fn := WalkHandlers.XsdGoPkgHasElems_ExpectedBasecallTABLEchoicesequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ExpectedBasecallTable_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTable_; me != nil {
-		if fn != nil {
-			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-		for _, x := range me.ExpectedBasecallTables {
+		for _, x := range me.StudyTypes {
 			if err = x.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
 				return
 			}
@@ -4008,63 +3757,21 @@ func (me *XsdGoPkgHasElems_ExpectedBasecallTABLEchoicesequenceREADSPECsequenceSP
 	return
 }
 
-type XsdGoPkgHasCdata struct {
-	XsdGoPkgCDATA string `xml:",chardata"`
+//	primary accession of the record in one of INSDC SRA archives.
+type XsdGoPkgHasElems_PrimaryIDsequenceIdentifierTypeschema_PrimaryId_TNameAndLabelType_ struct {
+	//	primary accession of the record in one of INSDC SRA archives.
+	PrimaryIds []*TNameAndLabelType `xml:"PRIMARY_ID"`
 }
 
-//	If the WalkHandlers.XsdGoPkgHasCdata function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasCdata instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasCdata instance.
-func (me *XsdGoPkgHasCdata) Walk() (err error) {
-	if fn := WalkHandlers.XsdGoPkgHasCdata; me != nil {
+//	If the WalkHandlers.XsdGoPkgHasElems_PrimaryIDsequenceIdentifierTypeschema_PrimaryId_TNameAndLabelType_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElems_PrimaryIDsequenceIdentifierTypeschema_PrimaryId_TNameAndLabelType_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElems_PrimaryIDsequenceIdentifierTypeschema_PrimaryId_TNameAndLabelType_ instance.
+func (me *XsdGoPkgHasElems_PrimaryIDsequenceIdentifierTypeschema_PrimaryId_TNameAndLabelType_) Walk() (err error) {
+	if fn := WalkHandlers.XsdGoPkgHasElems_PrimaryIDsequenceIdentifierTypeschema_PrimaryId_TNameAndLabelType_; me != nil {
 		if fn != nil {
 			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
 				return
 			}
 		}
-		if fn != nil {
-			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-	}
-	return
-}
-
-//	The location of the read start in terms of base count (1 is beginning of spot).
-type XsdGoPkgHasElems_BaseCOORDchoicesequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_BaseCoord_XsdtInteger_ struct {
-	//	The location of the read start in terms of base count (1 is beginning of spot).
-	BaseCoords []*xsdt.Integer `xml:"BASE_COORD"`
-}
-
-//	If the WalkHandlers.XsdGoPkgHasElems_BaseCOORDchoicesequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_BaseCoord_XsdtInteger_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElems_BaseCOORDchoicesequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_BaseCoord_XsdtInteger_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElems_BaseCOORDchoicesequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_BaseCoord_XsdtInteger_ instance.
-func (me *XsdGoPkgHasElems_BaseCOORDchoicesequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_BaseCoord_XsdtInteger_) Walk() (err error) {
-	if fn := WalkHandlers.XsdGoPkgHasElems_BaseCOORDchoicesequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_BaseCoord_XsdtInteger_; me != nil {
-		if fn != nil {
-			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-		if fn != nil {
-			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-	}
-	return
-}
-
-type XsdGoPkgHasElems_XrefLINKchoiceLinkTypeschema_XrefLink_TXRefType_ struct {
-	XrefLinks []*TXRefType `xml:"XREF_LINK"`
-}
-
-//	If the WalkHandlers.XsdGoPkgHasElems_XrefLINKchoiceLinkTypeschema_XrefLink_TXRefType_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElems_XrefLINKchoiceLinkTypeschema_XrefLink_TXRefType_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElems_XrefLINKchoiceLinkTypeschema_XrefLink_TXRefType_ instance.
-func (me *XsdGoPkgHasElems_XrefLINKchoiceLinkTypeschema_XrefLink_TXRefType_) Walk() (err error) {
-	if fn := WalkHandlers.XsdGoPkgHasElems_XrefLINKchoiceLinkTypeschema_XrefLink_TXRefType_; me != nil {
-		if fn != nil {
-			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-		for _, x := range me.XrefLinks {
+		for _, x := range me.PrimaryIds {
 			if err = x.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
 				return
 			}
@@ -4078,13 +3785,63 @@ func (me *XsdGoPkgHasElems_XrefLINKchoiceLinkTypeschema_XrefLink_TXRefType_) Wal
 	return
 }
 
-type XsdGoPkgHasElems_InstrumentMODELsequenceCOMPLETEGENOMICSchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceCompleteGenomicsSequenceInstrumentModel_ struct {
-	InstrumentModels []TxsdPlatformTypeChoiceCompleteGenomicsSequenceInstrumentModel `xml:"INSTRUMENT_MODEL"`
+type TxsdPlatformTypeChoiceCompleteGenomicsSequenceInstrumentModel xsdt.String
+
+//	This convenience method just performs a simple type conversion to TxsdPlatformTypeChoiceCompleteGenomicsSequenceInstrumentModel's alias type xsdt.String.
+func (me TxsdPlatformTypeChoiceCompleteGenomicsSequenceInstrumentModel) ToXsdtString() xsdt.String {
+	return xsdt.String(me)
 }
 
-//	If the WalkHandlers.XsdGoPkgHasElems_InstrumentMODELsequenceCOMPLETEGENOMICSchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceCompleteGenomicsSequenceInstrumentModel_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElems_InstrumentMODELsequenceCOMPLETEGENOMICSchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceCompleteGenomicsSequenceInstrumentModel_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElems_InstrumentMODELsequenceCOMPLETEGENOMICSchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceCompleteGenomicsSequenceInstrumentModel_ instance.
-func (me *XsdGoPkgHasElems_InstrumentMODELsequenceCOMPLETEGENOMICSchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceCompleteGenomicsSequenceInstrumentModel_) Walk() (err error) {
-	if fn := WalkHandlers.XsdGoPkgHasElems_InstrumentMODELsequenceCOMPLETEGENOMICSchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceCompleteGenomicsSequenceInstrumentModel_; me != nil {
+//	Returns true if the value of this enumerated TxsdPlatformTypeChoiceCompleteGenomicsSequenceInstrumentModel is "Complete Genomics".
+func (me TxsdPlatformTypeChoiceCompleteGenomicsSequenceInstrumentModel) IsCompleteGenomics() bool {
+	return me.String() == "Complete Genomics"
+}
+
+//	Returns true if the value of this enumerated TxsdPlatformTypeChoiceCompleteGenomicsSequenceInstrumentModel is "unspecified".
+func (me TxsdPlatformTypeChoiceCompleteGenomicsSequenceInstrumentModel) IsUnspecified() bool {
+	return me.String() == "unspecified"
+}
+
+//	Since TxsdPlatformTypeChoiceCompleteGenomicsSequenceInstrumentModel is just a simple String type, this merely sets the current value from the specified string.
+func (me *TxsdPlatformTypeChoiceCompleteGenomicsSequenceInstrumentModel) Set(s string) {
+	(*xsdt.String)(me).Set(s)
+}
+
+//	Since TxsdPlatformTypeChoiceCompleteGenomicsSequenceInstrumentModel is just a simple String type, this merely returns the current string value.
+func (me TxsdPlatformTypeChoiceCompleteGenomicsSequenceInstrumentModel) String() string {
+	return xsdt.String(me).String()
+}
+
+type XsdGoPkgHasElem_InstrumentMODELsequenceCOMPLETEGENOMICSchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceCompleteGenomicsSequenceInstrumentModel_ struct {
+	InstrumentModel TxsdPlatformTypeChoiceCompleteGenomicsSequenceInstrumentModel `xml:"INSTRUMENT_MODEL"`
+}
+
+//	If the WalkHandlers.XsdGoPkgHasElem_InstrumentMODELsequenceCOMPLETEGENOMICSchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceCompleteGenomicsSequenceInstrumentModel_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElem_InstrumentMODELsequenceCOMPLETEGENOMICSchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceCompleteGenomicsSequenceInstrumentModel_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElem_InstrumentMODELsequenceCOMPLETEGENOMICSchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceCompleteGenomicsSequenceInstrumentModel_ instance.
+func (me *XsdGoPkgHasElem_InstrumentMODELsequenceCOMPLETEGENOMICSchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceCompleteGenomicsSequenceInstrumentModel_) Walk() (err error) {
+	if fn := WalkHandlers.XsdGoPkgHasElem_InstrumentMODELsequenceCOMPLETEGENOMICSchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceCompleteGenomicsSequenceInstrumentModel_; me != nil {
+		if fn != nil {
+			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+		if fn != nil {
+			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+	}
+	return
+}
+
+//	Version of the program or process for primary analysis.
+type XsdGoPkgHasElems_VERSIONsequencePIPESECTIONsequencePipelineTypeschema_Version_XsdtString_ struct {
+	//	Version of the program or process for primary analysis.
+	Versions []xsdt.String `xml:"VERSION"`
+}
+
+//	If the WalkHandlers.XsdGoPkgHasElems_VERSIONsequencePIPESECTIONsequencePipelineTypeschema_Version_XsdtString_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElems_VERSIONsequencePIPESECTIONsequencePipelineTypeschema_Version_XsdtString_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElems_VERSIONsequencePIPESECTIONsequencePipelineTypeschema_Version_XsdtString_ instance.
+func (me *XsdGoPkgHasElems_VERSIONsequencePIPESECTIONsequencePipelineTypeschema_Version_XsdtString_) Walk() (err error) {
+	if fn := WalkHandlers.XsdGoPkgHasElems_VERSIONsequencePIPESECTIONsequencePipelineTypeschema_Version_XsdtString_; me != nil {
 		if fn != nil {
 			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
 				return
@@ -4101,16 +3858,6 @@ func (me *XsdGoPkgHasElems_InstrumentMODELsequenceCOMPLETEGENOMICSchoicePlatform
 
 type TxsdPlatformTypeChoiceOxfordNanoporeSequenceInstrumentModel xsdt.String
 
-//	Since TxsdPlatformTypeChoiceOxfordNanoporeSequenceInstrumentModel is just a simple String type, this merely sets the current value from the specified string.
-func (me *TxsdPlatformTypeChoiceOxfordNanoporeSequenceInstrumentModel) Set(s string) {
-	(*xsdt.String)(me).Set(s)
-}
-
-//	Since TxsdPlatformTypeChoiceOxfordNanoporeSequenceInstrumentModel is just a simple String type, this merely returns the current string value.
-func (me TxsdPlatformTypeChoiceOxfordNanoporeSequenceInstrumentModel) String() string {
-	return xsdt.String(me).String()
-}
-
 //	This convenience method just performs a simple type conversion to TxsdPlatformTypeChoiceOxfordNanoporeSequenceInstrumentModel's alias type xsdt.String.
 func (me TxsdPlatformTypeChoiceOxfordNanoporeSequenceInstrumentModel) ToXsdtString() xsdt.String {
 	return xsdt.String(me)
@@ -4126,25 +3873,14 @@ func (me TxsdPlatformTypeChoiceOxfordNanoporeSequenceInstrumentModel) IsGridION(
 	return me.String() == "GridION"
 }
 
-type XsdGoPkgHasElem_InstrumentMODELsequenceOXFORDNANOPOREchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceOxfordNanoporeSequenceInstrumentModel_ struct {
-	InstrumentModel TxsdPlatformTypeChoiceOxfordNanoporeSequenceInstrumentModel `xml:"INSTRUMENT_MODEL"`
+//	Since TxsdPlatformTypeChoiceOxfordNanoporeSequenceInstrumentModel is just a simple String type, this merely sets the current value from the specified string.
+func (me *TxsdPlatformTypeChoiceOxfordNanoporeSequenceInstrumentModel) Set(s string) {
+	(*xsdt.String)(me).Set(s)
 }
 
-//	If the WalkHandlers.XsdGoPkgHasElem_InstrumentMODELsequenceOXFORDNANOPOREchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceOxfordNanoporeSequenceInstrumentModel_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElem_InstrumentMODELsequenceOXFORDNANOPOREchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceOxfordNanoporeSequenceInstrumentModel_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElem_InstrumentMODELsequenceOXFORDNANOPOREchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceOxfordNanoporeSequenceInstrumentModel_ instance.
-func (me *XsdGoPkgHasElem_InstrumentMODELsequenceOXFORDNANOPOREchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceOxfordNanoporeSequenceInstrumentModel_) Walk() (err error) {
-	if fn := WalkHandlers.XsdGoPkgHasElem_InstrumentMODELsequenceOXFORDNANOPOREchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceOxfordNanoporeSequenceInstrumentModel_; me != nil {
-		if fn != nil {
-			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-		if fn != nil {
-			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-	}
-	return
+//	Since TxsdPlatformTypeChoiceOxfordNanoporeSequenceInstrumentModel is just a simple String type, this merely returns the current string value.
+func (me TxsdPlatformTypeChoiceOxfordNanoporeSequenceInstrumentModel) String() string {
+	return xsdt.String(me).String()
 }
 
 //	Name of the attribute.
@@ -4170,117 +3906,20 @@ func (me *XsdGoPkgHasElems_TAGallAttributeTypeschema_Tag_XsdtString_) Walk() (er
 	return
 }
 
-//	ABI is 4-channel flowgram with 1-to-1 mapping between basecalls and flows
-type XsdGoPkgHasElem_InstrumentMODELsequenceABISOLIDchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceAbiSolidSequenceInstrumentModel_ struct {
-	InstrumentModel TxsdPlatformTypeChoiceAbiSolidSequenceInstrumentModel `xml:"INSTRUMENT_MODEL"`
+type XsdGoPkgHasElems_UrlLINKchoiceLinkTypeschema_UrlLink_TxsdLinkTypeChoiceUrlLink_ struct {
+	UrlLinks []*TxsdLinkTypeChoiceUrlLink `xml:"URL_LINK"`
 }
 
-//	If the WalkHandlers.XsdGoPkgHasElem_InstrumentMODELsequenceABISOLIDchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceAbiSolidSequenceInstrumentModel_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElem_InstrumentMODELsequenceABISOLIDchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceAbiSolidSequenceInstrumentModel_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElem_InstrumentMODELsequenceABISOLIDchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceAbiSolidSequenceInstrumentModel_ instance.
-func (me *XsdGoPkgHasElem_InstrumentMODELsequenceABISOLIDchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceAbiSolidSequenceInstrumentModel_) Walk() (err error) {
-	if fn := WalkHandlers.XsdGoPkgHasElem_InstrumentMODELsequenceABISOLIDchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceAbiSolidSequenceInstrumentModel_; me != nil {
+//	If the WalkHandlers.XsdGoPkgHasElems_UrlLINKchoiceLinkTypeschema_UrlLink_TxsdLinkTypeChoiceUrlLink_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElems_UrlLINKchoiceLinkTypeschema_UrlLink_TxsdLinkTypeChoiceUrlLink_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElems_UrlLINKchoiceLinkTypeschema_UrlLink_TxsdLinkTypeChoiceUrlLink_ instance.
+func (me *XsdGoPkgHasElems_UrlLINKchoiceLinkTypeschema_UrlLink_TxsdLinkTypeChoiceUrlLink_) Walk() (err error) {
+	if fn := WalkHandlers.XsdGoPkgHasElems_UrlLINKchoiceLinkTypeschema_UrlLink_TxsdLinkTypeChoiceUrlLink_; me != nil {
 		if fn != nil {
 			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
 				return
 			}
 		}
-		if fn != nil {
-			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-	}
-	return
-}
-
-type TxsdPlatformTypeChoiceAbiSolid struct {
-	XsdGoPkgHasElem_InstrumentMODELsequenceABISOLIDchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceAbiSolidSequenceInstrumentModel_
-}
-
-//	If the WalkHandlers.TxsdPlatformTypeChoiceAbiSolid function is not nil (ie. was set by outside code), calls it with this TxsdPlatformTypeChoiceAbiSolid instance as the single argument. Then calls the Walk() method on 1/1 embed(s) and 0/0 field(s) belonging to this TxsdPlatformTypeChoiceAbiSolid instance.
-func (me *TxsdPlatformTypeChoiceAbiSolid) Walk() (err error) {
-	if fn := WalkHandlers.TxsdPlatformTypeChoiceAbiSolid; me != nil {
-		if fn != nil {
-			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-		if err = me.XsdGoPkgHasElem_InstrumentMODELsequenceABISOLIDchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceAbiSolidSequenceInstrumentModel_.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-			return
-		}
-		if fn != nil {
-			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-	}
-	return
-}
-
-type XsdGoPkgHasElems_AbiSOLIDchoicePlatformTypeschema_AbiSolid_TxsdPlatformTypeChoiceAbiSolid_ struct {
-	//	ABI is 4-channel flowgram with 1-to-1 mapping between basecalls and flows
-	AbiSolids []*TxsdPlatformTypeChoiceAbiSolid `xml:"ABI_SOLID"`
-}
-
-//	If the WalkHandlers.XsdGoPkgHasElems_AbiSOLIDchoicePlatformTypeschema_AbiSolid_TxsdPlatformTypeChoiceAbiSolid_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElems_AbiSOLIDchoicePlatformTypeschema_AbiSolid_TxsdPlatformTypeChoiceAbiSolid_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElems_AbiSOLIDchoicePlatformTypeschema_AbiSolid_TxsdPlatformTypeChoiceAbiSolid_ instance.
-func (me *XsdGoPkgHasElems_AbiSOLIDchoicePlatformTypeschema_AbiSolid_TxsdPlatformTypeChoiceAbiSolid_) Walk() (err error) {
-	if fn := WalkHandlers.XsdGoPkgHasElems_AbiSOLIDchoicePlatformTypeschema_AbiSolid_TxsdPlatformTypeChoiceAbiSolid_; me != nil {
-		if fn != nil {
-			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-		for _, x := range me.AbiSolids {
+		for _, x := range me.UrlLinks {
 			if err = x.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-		if fn != nil {
-			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-	}
-	return
-}
-
-//	Name of the program or process for primary analysis. This may include a test or condition that leads to
-//	branching in the workflow.
-type XsdGoPkgHasElems_PROGRAMsequencePIPESECTIONsequencePipelineTypeschema_Program_XsdtString_ struct {
-	//	Name of the program or process for primary analysis. This may include a test or condition that leads to
-	//	branching in the workflow.
-	Programs []xsdt.String `xml:"PROGRAM"`
-}
-
-//	If the WalkHandlers.XsdGoPkgHasElems_PROGRAMsequencePIPESECTIONsequencePipelineTypeschema_Program_XsdtString_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElems_PROGRAMsequencePIPESECTIONsequencePipelineTypeschema_Program_XsdtString_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElems_PROGRAMsequencePIPESECTIONsequencePipelineTypeschema_Program_XsdtString_ instance.
-func (me *XsdGoPkgHasElems_PROGRAMsequencePIPESECTIONsequencePipelineTypeschema_Program_XsdtString_) Walk() (err error) {
-	if fn := WalkHandlers.XsdGoPkgHasElems_PROGRAMsequencePIPESECTIONsequencePipelineTypeschema_Program_XsdtString_; me != nil {
-		if fn != nil {
-			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-		if fn != nil {
-			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-	}
-	return
-}
-
-//	Submitter defined project name. This field is intended for backward tracking of the study record to the
-//	submitter's LIMS.
-type XsdGoPkgHasElems_CenterProjectNAMEallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_CenterProjectName_XsdtString_ struct {
-	//	Submitter defined project name. This field is intended for backward tracking of the study record to the
-	//	submitter's LIMS.
-	CenterProjectNames []xsdt.String `xml:"CENTER_PROJECT_NAME"`
-}
-
-//	If the WalkHandlers.XsdGoPkgHasElems_CenterProjectNAMEallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_CenterProjectName_XsdtString_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElems_CenterProjectNAMEallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_CenterProjectName_XsdtString_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElems_CenterProjectNAMEallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_CenterProjectName_XsdtString_ instance.
-func (me *XsdGoPkgHasElems_CenterProjectNAMEallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_CenterProjectName_XsdtString_) Walk() (err error) {
-	if fn := WalkHandlers.XsdGoPkgHasElems_CenterProjectNAMEallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_CenterProjectName_XsdtString_; me != nil {
-		if fn != nil {
-			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
 				return
 			}
 		}
@@ -4321,45 +3960,23 @@ func (me *XsdGoPkgHasElems_IonTORRENTchoicePlatformTypeschema_IonTorrent_TxsdPla
 	return
 }
 
-type XsdGoPkgHasElem_ReadSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadSpec_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpec_ struct {
-	ReadSpec *TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpec `xml:"READ_SPEC"`
+//	Sequencers based on capillary electrophoresis technology manufactured by LifeTech (formerly Applied
+//	BioSciences).
+type XsdGoPkgHasElem_CAPILLARYchoicePlatformTypeschema_Capillary_TxsdPlatformTypeChoiceCapillary_ struct {
+	//	Sequencers based on capillary electrophoresis technology manufactured by LifeTech (formerly Applied
+	//	BioSciences).
+	Capillary *TxsdPlatformTypeChoiceCapillary `xml:"CAPILLARY"`
 }
 
-//	If the WalkHandlers.XsdGoPkgHasElem_ReadSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadSpec_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpec_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElem_ReadSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadSpec_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpec_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 1/1 field(s) belonging to this XsdGoPkgHasElem_ReadSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadSpec_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpec_ instance.
-func (me *XsdGoPkgHasElem_ReadSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadSpec_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpec_) Walk() (err error) {
-	if fn := WalkHandlers.XsdGoPkgHasElem_ReadSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadSpec_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpec_; me != nil {
+//	If the WalkHandlers.XsdGoPkgHasElem_CAPILLARYchoicePlatformTypeschema_Capillary_TxsdPlatformTypeChoiceCapillary_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElem_CAPILLARYchoicePlatformTypeschema_Capillary_TxsdPlatformTypeChoiceCapillary_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 1/1 field(s) belonging to this XsdGoPkgHasElem_CAPILLARYchoicePlatformTypeschema_Capillary_TxsdPlatformTypeChoiceCapillary_ instance.
+func (me *XsdGoPkgHasElem_CAPILLARYchoicePlatformTypeschema_Capillary_TxsdPlatformTypeChoiceCapillary_) Walk() (err error) {
+	if fn := WalkHandlers.XsdGoPkgHasElem_CAPILLARYchoicePlatformTypeschema_Capillary_TxsdPlatformTypeChoiceCapillary_; me != nil {
 		if fn != nil {
 			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
 				return
 			}
 		}
-		if err = me.ReadSpec.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-			return
-		}
-		if fn != nil {
-			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-	}
-	return
-}
-
-//	454 technology use 1-color sequential flows
-type XsdGoPkgHasElem_Ls454ChoicePlatformTypeschema_Ls454_TxsdPlatformTypeChoiceLs454_ struct {
-	//	454 technology use 1-color sequential flows
-	Ls454 *TxsdPlatformTypeChoiceLs454 `xml:"LS454"`
-}
-
-//	If the WalkHandlers.XsdGoPkgHasElem_Ls454ChoicePlatformTypeschema_Ls454_TxsdPlatformTypeChoiceLs454_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElem_Ls454ChoicePlatformTypeschema_Ls454_TxsdPlatformTypeChoiceLs454_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 1/1 field(s) belonging to this XsdGoPkgHasElem_Ls454ChoicePlatformTypeschema_Ls454_TxsdPlatformTypeChoiceLs454_ instance.
-func (me *XsdGoPkgHasElem_Ls454ChoicePlatformTypeschema_Ls454_TxsdPlatformTypeChoiceLs454_) Walk() (err error) {
-	if fn := WalkHandlers.XsdGoPkgHasElem_Ls454ChoicePlatformTypeschema_Ls454_TxsdPlatformTypeChoiceLs454_; me != nil {
-		if fn != nil {
-			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-		if err = me.Ls454.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+		if err = me.Capillary.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
 			return
 		}
 		if fn != nil {
@@ -4399,9 +4016,228 @@ func (me *XsdGoPkgHasElems_Ls454ChoicePlatformTypeschema_Ls454_TxsdPlatformTypeC
 	return
 }
 
+type XsdGoPkgHasElem_InstrumentMODELsequenceOXFORDNANOPOREchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceOxfordNanoporeSequenceInstrumentModel_ struct {
+	InstrumentModel TxsdPlatformTypeChoiceOxfordNanoporeSequenceInstrumentModel `xml:"INSTRUMENT_MODEL"`
+}
+
+//	If the WalkHandlers.XsdGoPkgHasElem_InstrumentMODELsequenceOXFORDNANOPOREchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceOxfordNanoporeSequenceInstrumentModel_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElem_InstrumentMODELsequenceOXFORDNANOPOREchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceOxfordNanoporeSequenceInstrumentModel_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElem_InstrumentMODELsequenceOXFORDNANOPOREchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceOxfordNanoporeSequenceInstrumentModel_ instance.
+func (me *XsdGoPkgHasElem_InstrumentMODELsequenceOXFORDNANOPOREchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceOxfordNanoporeSequenceInstrumentModel_) Walk() (err error) {
+	if fn := WalkHandlers.XsdGoPkgHasElem_InstrumentMODELsequenceOXFORDNANOPOREchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceOxfordNanoporeSequenceInstrumentModel_; me != nil {
+		if fn != nil {
+			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+		if fn != nil {
+			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+	}
+	return
+}
+
+type TxsdPlatformTypeChoiceOxfordNanopore struct {
+	XsdGoPkgHasElem_InstrumentMODELsequenceOXFORDNANOPOREchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceOxfordNanoporeSequenceInstrumentModel_
+}
+
+//	If the WalkHandlers.TxsdPlatformTypeChoiceOxfordNanopore function is not nil (ie. was set by outside code), calls it with this TxsdPlatformTypeChoiceOxfordNanopore instance as the single argument. Then calls the Walk() method on 1/1 embed(s) and 0/0 field(s) belonging to this TxsdPlatformTypeChoiceOxfordNanopore instance.
+func (me *TxsdPlatformTypeChoiceOxfordNanopore) Walk() (err error) {
+	if fn := WalkHandlers.TxsdPlatformTypeChoiceOxfordNanopore; me != nil {
+		if fn != nil {
+			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+		if err = me.XsdGoPkgHasElem_InstrumentMODELsequenceOXFORDNANOPOREchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceOxfordNanoporeSequenceInstrumentModel_.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+			return
+		}
+		if fn != nil {
+			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+	}
+	return
+}
+
+//	Oxford Nanopore platform type. nanopore-based electronic single molecule analysis
+type XsdGoPkgHasElems_OxfordNANOPOREchoicePlatformTypeschema_OxfordNanopore_TxsdPlatformTypeChoiceOxfordNanopore_ struct {
+	//	Oxford Nanopore platform type. nanopore-based electronic single molecule analysis
+	OxfordNanopores []*TxsdPlatformTypeChoiceOxfordNanopore `xml:"OXFORD_NANOPORE"`
+}
+
+//	If the WalkHandlers.XsdGoPkgHasElems_OxfordNANOPOREchoicePlatformTypeschema_OxfordNanopore_TxsdPlatformTypeChoiceOxfordNanopore_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElems_OxfordNANOPOREchoicePlatformTypeschema_OxfordNanopore_TxsdPlatformTypeChoiceOxfordNanopore_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElems_OxfordNANOPOREchoicePlatformTypeschema_OxfordNanopore_TxsdPlatformTypeChoiceOxfordNanopore_ instance.
+func (me *XsdGoPkgHasElems_OxfordNANOPOREchoicePlatformTypeschema_OxfordNanopore_TxsdPlatformTypeChoiceOxfordNanopore_) Walk() (err error) {
+	if fn := WalkHandlers.XsdGoPkgHasElems_OxfordNANOPOREchoicePlatformTypeschema_OxfordNanopore_TxsdPlatformTypeChoiceOxfordNanopore_; me != nil {
+		if fn != nil {
+			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+		for _, x := range me.OxfordNanopores {
+			if err = x.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+		if fn != nil {
+			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+	}
+	return
+}
+
+//	Title of the study as would be used in a publication.
+type XsdGoPkgHasElems_StudyTITLEallDESCRIPTORsequenceStudyTypeschema_StudyTitle_XsdtString_ struct {
+	//	Title of the study as would be used in a publication.
+	StudyTitles []xsdt.String `xml:"STUDY_TITLE"`
+}
+
+//	If the WalkHandlers.XsdGoPkgHasElems_StudyTITLEallDESCRIPTORsequenceStudyTypeschema_StudyTitle_XsdtString_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElems_StudyTITLEallDESCRIPTORsequenceStudyTypeschema_StudyTitle_XsdtString_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElems_StudyTITLEallDESCRIPTORsequenceStudyTypeschema_StudyTitle_XsdtString_ instance.
+func (me *XsdGoPkgHasElems_StudyTITLEallDESCRIPTORsequenceStudyTypeschema_StudyTitle_XsdtString_) Walk() (err error) {
+	if fn := WalkHandlers.XsdGoPkgHasElems_StudyTITLEallDESCRIPTORsequenceStudyTypeschema_StudyTitle_XsdtString_; me != nil {
+		if fn != nil {
+			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+		if fn != nil {
+			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+	}
+	return
+}
+
+//	Briefly describes the goals, purpose, and scope of the Study. This need not be listed if it can be
+//	inherited from a referenced publication.
+type XsdGoPkgHasElems_StudyABSTRACTallDESCRIPTORsequenceStudyTypeschema_StudyAbstract_XsdtString_ struct {
+	//	Briefly describes the goals, purpose, and scope of the Study. This need not be listed if it can be
+	//	inherited from a referenced publication.
+	StudyAbstracts []xsdt.String `xml:"STUDY_ABSTRACT"`
+}
+
+//	If the WalkHandlers.XsdGoPkgHasElems_StudyABSTRACTallDESCRIPTORsequenceStudyTypeschema_StudyAbstract_XsdtString_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElems_StudyABSTRACTallDESCRIPTORsequenceStudyTypeschema_StudyAbstract_XsdtString_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElems_StudyABSTRACTallDESCRIPTORsequenceStudyTypeschema_StudyAbstract_XsdtString_ instance.
+func (me *XsdGoPkgHasElems_StudyABSTRACTallDESCRIPTORsequenceStudyTypeschema_StudyAbstract_XsdtString_) Walk() (err error) {
+	if fn := WalkHandlers.XsdGoPkgHasElems_StudyABSTRACTallDESCRIPTORsequenceStudyTypeschema_StudyAbstract_XsdtString_; me != nil {
+		if fn != nil {
+			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+		if fn != nil {
+			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+	}
+	return
+}
+
 //	The PLATFORM record selects which sequencing platform and platform-specific runtime parameters. This will be
 //	determined by the Center.
 //	Illumina is 4-channel flowgram with 1-to-1 mapping between basecalls and flows
+type TxsdPlatformTypeChoiceIlluminaSequenceInstrumentModel xsdt.String
+
+//	Since TxsdPlatformTypeChoiceIlluminaSequenceInstrumentModel is just a simple String type, this merely sets the current value from the specified string.
+func (me *TxsdPlatformTypeChoiceIlluminaSequenceInstrumentModel) Set(s string) {
+	(*xsdt.String)(me).Set(s)
+}
+
+//	Returns true if the value of this enumerated TxsdPlatformTypeChoiceIlluminaSequenceInstrumentModel is "Illumina Genome Analyzer IIx".
+func (me TxsdPlatformTypeChoiceIlluminaSequenceInstrumentModel) IsIlluminaGenomeAnalyzerIIx() bool {
+	return me.String() == "Illumina Genome Analyzer IIx"
+}
+
+//	Returns true if the value of this enumerated TxsdPlatformTypeChoiceIlluminaSequenceInstrumentModel is "Illumina HiScanSQ".
+func (me TxsdPlatformTypeChoiceIlluminaSequenceInstrumentModel) IsIlluminaHiScanSQ() bool {
+	return me.String() == "Illumina HiScanSQ"
+}
+
+//	Returns true if the value of this enumerated TxsdPlatformTypeChoiceIlluminaSequenceInstrumentModel is "HiSeq X Ten".
+func (me TxsdPlatformTypeChoiceIlluminaSequenceInstrumentModel) IsHiSeqXTen() bool {
+	return me.String() == "HiSeq X Ten"
+}
+
+//	Returns true if the value of this enumerated TxsdPlatformTypeChoiceIlluminaSequenceInstrumentModel is "Illumina HiSeq 1500".
+func (me TxsdPlatformTypeChoiceIlluminaSequenceInstrumentModel) IsIlluminaHiSeq1500() bool {
+	return me.String() == "Illumina HiSeq 1500"
+}
+
+//	Returns true if the value of this enumerated TxsdPlatformTypeChoiceIlluminaSequenceInstrumentModel is "Illumina HiSeq 1000".
+func (me TxsdPlatformTypeChoiceIlluminaSequenceInstrumentModel) IsIlluminaHiSeq1000() bool {
+	return me.String() == "Illumina HiSeq 1000"
+}
+
+//	Returns true if the value of this enumerated TxsdPlatformTypeChoiceIlluminaSequenceInstrumentModel is "Illumina MiSeq".
+func (me TxsdPlatformTypeChoiceIlluminaSequenceInstrumentModel) IsIlluminaMiSeq() bool {
+	return me.String() == "Illumina MiSeq"
+}
+
+//	Returns true if the value of this enumerated TxsdPlatformTypeChoiceIlluminaSequenceInstrumentModel is "Illumina Genome Analyzer".
+func (me TxsdPlatformTypeChoiceIlluminaSequenceInstrumentModel) IsIlluminaGenomeAnalyzer() bool {
+	return me.String() == "Illumina Genome Analyzer"
+}
+
+//	Returns true if the value of this enumerated TxsdPlatformTypeChoiceIlluminaSequenceInstrumentModel is "unspecified".
+func (me TxsdPlatformTypeChoiceIlluminaSequenceInstrumentModel) IsUnspecified() bool {
+	return me.String() == "unspecified"
+}
+
+//	Returns true if the value of this enumerated TxsdPlatformTypeChoiceIlluminaSequenceInstrumentModel is "Illumina HiSeq 2500".
+func (me TxsdPlatformTypeChoiceIlluminaSequenceInstrumentModel) IsIlluminaHiSeq2500() bool {
+	return me.String() == "Illumina HiSeq 2500"
+}
+
+//	Returns true if the value of this enumerated TxsdPlatformTypeChoiceIlluminaSequenceInstrumentModel is "Illumina HiSeq 2000".
+func (me TxsdPlatformTypeChoiceIlluminaSequenceInstrumentModel) IsIlluminaHiSeq2000() bool {
+	return me.String() == "Illumina HiSeq 2000"
+}
+
+//	Returns true if the value of this enumerated TxsdPlatformTypeChoiceIlluminaSequenceInstrumentModel is "NextSeq 500".
+func (me TxsdPlatformTypeChoiceIlluminaSequenceInstrumentModel) IsNextSeq500() bool {
+	return me.String() == "NextSeq 500"
+}
+
+//	Since TxsdPlatformTypeChoiceIlluminaSequenceInstrumentModel is just a simple String type, this merely returns the current string value.
+func (me TxsdPlatformTypeChoiceIlluminaSequenceInstrumentModel) String() string {
+	return xsdt.String(me).String()
+}
+
+//	This convenience method just performs a simple type conversion to TxsdPlatformTypeChoiceIlluminaSequenceInstrumentModel's alias type xsdt.String.
+func (me TxsdPlatformTypeChoiceIlluminaSequenceInstrumentModel) ToXsdtString() xsdt.String {
+	return xsdt.String(me)
+}
+
+//	Returns true if the value of this enumerated TxsdPlatformTypeChoiceIlluminaSequenceInstrumentModel is "Illumina Genome Analyzer II".
+func (me TxsdPlatformTypeChoiceIlluminaSequenceInstrumentModel) IsIlluminaGenomeAnalyzerIi() bool {
+	return me.String() == "Illumina Genome Analyzer II"
+}
+
+type XsdGoPkgHasElem_InstrumentMODELsequenceILLUMINAchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceIlluminaSequenceInstrumentModel_ struct {
+	InstrumentModel TxsdPlatformTypeChoiceIlluminaSequenceInstrumentModel `xml:"INSTRUMENT_MODEL"`
+}
+
+//	If the WalkHandlers.XsdGoPkgHasElem_InstrumentMODELsequenceILLUMINAchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceIlluminaSequenceInstrumentModel_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElem_InstrumentMODELsequenceILLUMINAchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceIlluminaSequenceInstrumentModel_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElem_InstrumentMODELsequenceILLUMINAchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceIlluminaSequenceInstrumentModel_ instance.
+func (me *XsdGoPkgHasElem_InstrumentMODELsequenceILLUMINAchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceIlluminaSequenceInstrumentModel_) Walk() (err error) {
+	if fn := WalkHandlers.XsdGoPkgHasElem_InstrumentMODELsequenceILLUMINAchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceIlluminaSequenceInstrumentModel_; me != nil {
+		if fn != nil {
+			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+		if fn != nil {
+			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+	}
+	return
+}
+
 type TxsdPlatformTypeChoiceIllumina struct {
 	XsdGoPkgHasElem_InstrumentMODELsequenceILLUMINAchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceIlluminaSequenceInstrumentModel_
 }
@@ -4451,59 +4287,31 @@ func (me *XsdGoPkgHasElem_ILLUMINAchoicePlatformTypeschema_Illumina_TxsdPlatform
 	return
 }
 
-//	CompleteGenomics platform type. At present there is no instrument model.
-type XsdGoPkgHasElem_CompleteGENOMICSchoicePlatformTypeschema_CompleteGenomics_TxsdPlatformTypeChoiceCompleteGenomics_ struct {
-	//	CompleteGenomics platform type. At present there is no instrument model.
-	CompleteGenomics *TxsdPlatformTypeChoiceCompleteGenomics `xml:"COMPLETE_GENOMICS"`
-}
-
-//	If the WalkHandlers.XsdGoPkgHasElem_CompleteGENOMICSchoicePlatformTypeschema_CompleteGenomics_TxsdPlatformTypeChoiceCompleteGenomics_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElem_CompleteGENOMICSchoicePlatformTypeschema_CompleteGenomics_TxsdPlatformTypeChoiceCompleteGenomics_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 1/1 field(s) belonging to this XsdGoPkgHasElem_CompleteGENOMICSchoicePlatformTypeschema_CompleteGenomics_TxsdPlatformTypeChoiceCompleteGenomics_ instance.
-func (me *XsdGoPkgHasElem_CompleteGENOMICSchoicePlatformTypeschema_CompleteGenomics_TxsdPlatformTypeChoiceCompleteGenomics_) Walk() (err error) {
-	if fn := WalkHandlers.XsdGoPkgHasElem_CompleteGENOMICSchoicePlatformTypeschema_CompleteGenomics_TxsdPlatformTypeChoiceCompleteGenomics_; me != nil {
-		if fn != nil {
-			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-		if err = me.CompleteGenomics.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-			return
-		}
-		if fn != nil {
-			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-	}
-	return
-}
-
-//	Ion Torrent Personal Genome Machine (PGM) from Life Technologies.
-type XsdGoPkgHasElem_IonTORRENTchoicePlatformTypeschema_IonTorrent_TxsdPlatformTypeChoiceIonTorrent_ struct {
-	//	Ion Torrent Personal Genome Machine (PGM) from Life Technologies.
-	IonTorrent *TxsdPlatformTypeChoiceIonTorrent `xml:"ION_TORRENT"`
-}
-
-//	If the WalkHandlers.XsdGoPkgHasElem_IonTORRENTchoicePlatformTypeschema_IonTorrent_TxsdPlatformTypeChoiceIonTorrent_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElem_IonTORRENTchoicePlatformTypeschema_IonTorrent_TxsdPlatformTypeChoiceIonTorrent_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 1/1 field(s) belonging to this XsdGoPkgHasElem_IonTORRENTchoicePlatformTypeschema_IonTorrent_TxsdPlatformTypeChoiceIonTorrent_ instance.
-func (me *XsdGoPkgHasElem_IonTORRENTchoicePlatformTypeschema_IonTorrent_TxsdPlatformTypeChoiceIonTorrent_) Walk() (err error) {
-	if fn := WalkHandlers.XsdGoPkgHasElem_IonTORRENTchoicePlatformTypeschema_IonTorrent_TxsdPlatformTypeChoiceIonTorrent_; me != nil {
-		if fn != nil {
-			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-		if err = me.IonTorrent.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-			return
-		}
-		if fn != nil {
-			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-	}
-	return
-}
-
 //	Helicos is similar to 454 technology - uses 1-color sequential flows
+type TxsdPlatformTypeChoiceHelicos struct {
+	XsdGoPkgHasElem_InstrumentMODELallHELICOSchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceHelicosAllInstrumentModel_
+}
+
+//	If the WalkHandlers.TxsdPlatformTypeChoiceHelicos function is not nil (ie. was set by outside code), calls it with this TxsdPlatformTypeChoiceHelicos instance as the single argument. Then calls the Walk() method on 1/1 embed(s) and 0/0 field(s) belonging to this TxsdPlatformTypeChoiceHelicos instance.
+func (me *TxsdPlatformTypeChoiceHelicos) Walk() (err error) {
+	if fn := WalkHandlers.TxsdPlatformTypeChoiceHelicos; me != nil {
+		if fn != nil {
+			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+		if err = me.XsdGoPkgHasElem_InstrumentMODELallHELICOSchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceHelicosAllInstrumentModel_.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+			return
+		}
+		if fn != nil {
+			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+	}
+	return
+}
+
 type XsdGoPkgHasElem_HELICOSchoicePlatformTypeschema_Helicos_TxsdPlatformTypeChoiceHelicos_ struct {
 	//	Helicos is similar to 454 technology - uses 1-color sequential flows
 	Helicos *TxsdPlatformTypeChoiceHelicos `xml:"HELICOS"`
@@ -4530,6 +4338,30 @@ func (me *XsdGoPkgHasElem_HELICOSchoicePlatformTypeschema_Helicos_TxsdPlatformTy
 }
 
 //	ABI is 4-channel flowgram with 1-to-1 mapping between basecalls and flows
+type TxsdPlatformTypeChoiceAbiSolid struct {
+	XsdGoPkgHasElem_InstrumentMODELsequenceABISOLIDchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceAbiSolidSequenceInstrumentModel_
+}
+
+//	If the WalkHandlers.TxsdPlatformTypeChoiceAbiSolid function is not nil (ie. was set by outside code), calls it with this TxsdPlatformTypeChoiceAbiSolid instance as the single argument. Then calls the Walk() method on 1/1 embed(s) and 0/0 field(s) belonging to this TxsdPlatformTypeChoiceAbiSolid instance.
+func (me *TxsdPlatformTypeChoiceAbiSolid) Walk() (err error) {
+	if fn := WalkHandlers.TxsdPlatformTypeChoiceAbiSolid; me != nil {
+		if fn != nil {
+			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+		if err = me.XsdGoPkgHasElem_InstrumentMODELsequenceABISOLIDchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceAbiSolidSequenceInstrumentModel_.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+			return
+		}
+		if fn != nil {
+			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+	}
+	return
+}
+
 type XsdGoPkgHasElem_AbiSOLIDchoicePlatformTypeschema_AbiSolid_TxsdPlatformTypeChoiceAbiSolid_ struct {
 	//	ABI is 4-channel flowgram with 1-to-1 mapping between basecalls and flows
 	AbiSolid *TxsdPlatformTypeChoiceAbiSolid `xml:"ABI_SOLID"`
@@ -4555,20 +4387,20 @@ func (me *XsdGoPkgHasElem_AbiSOLIDchoicePlatformTypeschema_AbiSolid_TxsdPlatform
 	return
 }
 
-//	Oxford Nanopore platform type. nanopore-based electronic single molecule analysis
-type TxsdPlatformTypeChoiceOxfordNanopore struct {
-	XsdGoPkgHasElem_InstrumentMODELsequenceOXFORDNANOPOREchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceOxfordNanoporeSequenceInstrumentModel_
+//	CompleteGenomics platform type. At present there is no instrument model.
+type TxsdPlatformTypeChoiceCompleteGenomics struct {
+	XsdGoPkgHasElem_InstrumentMODELsequenceCOMPLETEGENOMICSchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceCompleteGenomicsSequenceInstrumentModel_
 }
 
-//	If the WalkHandlers.TxsdPlatformTypeChoiceOxfordNanopore function is not nil (ie. was set by outside code), calls it with this TxsdPlatformTypeChoiceOxfordNanopore instance as the single argument. Then calls the Walk() method on 1/1 embed(s) and 0/0 field(s) belonging to this TxsdPlatformTypeChoiceOxfordNanopore instance.
-func (me *TxsdPlatformTypeChoiceOxfordNanopore) Walk() (err error) {
-	if fn := WalkHandlers.TxsdPlatformTypeChoiceOxfordNanopore; me != nil {
+//	If the WalkHandlers.TxsdPlatformTypeChoiceCompleteGenomics function is not nil (ie. was set by outside code), calls it with this TxsdPlatformTypeChoiceCompleteGenomics instance as the single argument. Then calls the Walk() method on 1/1 embed(s) and 0/0 field(s) belonging to this TxsdPlatformTypeChoiceCompleteGenomics instance.
+func (me *TxsdPlatformTypeChoiceCompleteGenomics) Walk() (err error) {
+	if fn := WalkHandlers.TxsdPlatformTypeChoiceCompleteGenomics; me != nil {
 		if fn != nil {
 			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
 				return
 			}
 		}
-		if err = me.XsdGoPkgHasElem_InstrumentMODELsequenceOXFORDNANOPOREchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceOxfordNanoporeSequenceInstrumentModel_.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+		if err = me.XsdGoPkgHasElem_InstrumentMODELsequenceCOMPLETEGENOMICSchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceCompleteGenomicsSequenceInstrumentModel_.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
 			return
 		}
 		if fn != nil {
@@ -4580,6 +4412,32 @@ func (me *TxsdPlatformTypeChoiceOxfordNanopore) Walk() (err error) {
 	return
 }
 
+type XsdGoPkgHasElem_CompleteGENOMICSchoicePlatformTypeschema_CompleteGenomics_TxsdPlatformTypeChoiceCompleteGenomics_ struct {
+	//	CompleteGenomics platform type. At present there is no instrument model.
+	CompleteGenomics *TxsdPlatformTypeChoiceCompleteGenomics `xml:"COMPLETE_GENOMICS"`
+}
+
+//	If the WalkHandlers.XsdGoPkgHasElem_CompleteGENOMICSchoicePlatformTypeschema_CompleteGenomics_TxsdPlatformTypeChoiceCompleteGenomics_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElem_CompleteGENOMICSchoicePlatformTypeschema_CompleteGenomics_TxsdPlatformTypeChoiceCompleteGenomics_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 1/1 field(s) belonging to this XsdGoPkgHasElem_CompleteGENOMICSchoicePlatformTypeschema_CompleteGenomics_TxsdPlatformTypeChoiceCompleteGenomics_ instance.
+func (me *XsdGoPkgHasElem_CompleteGENOMICSchoicePlatformTypeschema_CompleteGenomics_TxsdPlatformTypeChoiceCompleteGenomics_) Walk() (err error) {
+	if fn := WalkHandlers.XsdGoPkgHasElem_CompleteGENOMICSchoicePlatformTypeschema_CompleteGenomics_TxsdPlatformTypeChoiceCompleteGenomics_; me != nil {
+		if fn != nil {
+			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+		if err = me.CompleteGenomics.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+			return
+		}
+		if fn != nil {
+			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+	}
+	return
+}
+
+//	Oxford Nanopore platform type. nanopore-based electronic single molecule analysis
 type XsdGoPkgHasElem_OxfordNANOPOREchoicePlatformTypeschema_OxfordNanopore_TxsdPlatformTypeChoiceOxfordNanopore_ struct {
 	//	Oxford Nanopore platform type. nanopore-based electronic single molecule analysis
 	OxfordNanopore *TxsdPlatformTypeChoiceOxfordNanopore `xml:"OXFORD_NANOPORE"`
@@ -4605,99 +4463,21 @@ func (me *XsdGoPkgHasElem_OxfordNANOPOREchoicePlatformTypeschema_OxfordNanopore_
 	return
 }
 
-//	Sequencers based on capillary electrophoresis technology manufactured by LifeTech (formerly Applied
-//	BioSciences).
-type TxsdPlatformTypeChoiceCapillarySequenceInstrumentModel xsdt.String
-
-//	Returns true if the value of this enumerated TxsdPlatformTypeChoiceCapillarySequenceInstrumentModel is "AB 3500xL Genetic Analyzer".
-func (me TxsdPlatformTypeChoiceCapillarySequenceInstrumentModel) IsAb3500XlGeneticAnalyzer() bool {
-	return me.String() == "AB 3500xL Genetic Analyzer"
+//	454 technology use 1-color sequential flows
+type XsdGoPkgHasElem_Ls454ChoicePlatformTypeschema_Ls454_TxsdPlatformTypeChoiceLs454_ struct {
+	//	454 technology use 1-color sequential flows
+	Ls454 *TxsdPlatformTypeChoiceLs454 `xml:"LS454"`
 }
 
-//	Returns true if the value of this enumerated TxsdPlatformTypeChoiceCapillarySequenceInstrumentModel is "AB 3130xL Genetic Analyzer".
-func (me TxsdPlatformTypeChoiceCapillarySequenceInstrumentModel) IsAb3130XlGeneticAnalyzer() bool {
-	return me.String() == "AB 3130xL Genetic Analyzer"
-}
-
-//	Returns true if the value of this enumerated TxsdPlatformTypeChoiceCapillarySequenceInstrumentModel is "AB 310 Genetic Analyzer".
-func (me TxsdPlatformTypeChoiceCapillarySequenceInstrumentModel) IsAb310GeneticAnalyzer() bool {
-	return me.String() == "AB 310 Genetic Analyzer"
-}
-
-//	Returns true if the value of this enumerated TxsdPlatformTypeChoiceCapillarySequenceInstrumentModel is "unspecified".
-func (me TxsdPlatformTypeChoiceCapillarySequenceInstrumentModel) IsUnspecified() bool {
-	return me.String() == "unspecified"
-}
-
-//	Returns true if the value of this enumerated TxsdPlatformTypeChoiceCapillarySequenceInstrumentModel is "AB 3730xL Genetic Analyzer".
-func (me TxsdPlatformTypeChoiceCapillarySequenceInstrumentModel) IsAb3730XlGeneticAnalyzer() bool {
-	return me.String() == "AB 3730xL Genetic Analyzer"
-}
-
-//	Since TxsdPlatformTypeChoiceCapillarySequenceInstrumentModel is just a simple String type, this merely returns the current string value.
-func (me TxsdPlatformTypeChoiceCapillarySequenceInstrumentModel) String() string {
-	return xsdt.String(me).String()
-}
-
-//	This convenience method just performs a simple type conversion to TxsdPlatformTypeChoiceCapillarySequenceInstrumentModel's alias type xsdt.String.
-func (me TxsdPlatformTypeChoiceCapillarySequenceInstrumentModel) ToXsdtString() xsdt.String {
-	return xsdt.String(me)
-}
-
-//	Returns true if the value of this enumerated TxsdPlatformTypeChoiceCapillarySequenceInstrumentModel is "AB 3730 Genetic Analyzer".
-func (me TxsdPlatformTypeChoiceCapillarySequenceInstrumentModel) IsAb3730GeneticAnalyzer() bool {
-	return me.String() == "AB 3730 Genetic Analyzer"
-}
-
-//	Returns true if the value of this enumerated TxsdPlatformTypeChoiceCapillarySequenceInstrumentModel is "AB 3500 Genetic Analyzer".
-func (me TxsdPlatformTypeChoiceCapillarySequenceInstrumentModel) IsAb3500GeneticAnalyzer() bool {
-	return me.String() == "AB 3500 Genetic Analyzer"
-}
-
-//	Returns true if the value of this enumerated TxsdPlatformTypeChoiceCapillarySequenceInstrumentModel is "AB 3130 Genetic Analyzer".
-func (me TxsdPlatformTypeChoiceCapillarySequenceInstrumentModel) IsAb3130GeneticAnalyzer() bool {
-	return me.String() == "AB 3130 Genetic Analyzer"
-}
-
-//	Since TxsdPlatformTypeChoiceCapillarySequenceInstrumentModel is just a simple String type, this merely sets the current value from the specified string.
-func (me *TxsdPlatformTypeChoiceCapillarySequenceInstrumentModel) Set(s string) {
-	(*xsdt.String)(me).Set(s)
-}
-
-type XsdGoPkgHasElem_InstrumentMODELsequenceCAPILLARYchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceCapillarySequenceInstrumentModel_ struct {
-	InstrumentModel TxsdPlatformTypeChoiceCapillarySequenceInstrumentModel `xml:"INSTRUMENT_MODEL"`
-}
-
-//	If the WalkHandlers.XsdGoPkgHasElem_InstrumentMODELsequenceCAPILLARYchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceCapillarySequenceInstrumentModel_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElem_InstrumentMODELsequenceCAPILLARYchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceCapillarySequenceInstrumentModel_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElem_InstrumentMODELsequenceCAPILLARYchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceCapillarySequenceInstrumentModel_ instance.
-func (me *XsdGoPkgHasElem_InstrumentMODELsequenceCAPILLARYchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceCapillarySequenceInstrumentModel_) Walk() (err error) {
-	if fn := WalkHandlers.XsdGoPkgHasElem_InstrumentMODELsequenceCAPILLARYchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceCapillarySequenceInstrumentModel_; me != nil {
+//	If the WalkHandlers.XsdGoPkgHasElem_Ls454ChoicePlatformTypeschema_Ls454_TxsdPlatformTypeChoiceLs454_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElem_Ls454ChoicePlatformTypeschema_Ls454_TxsdPlatformTypeChoiceLs454_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 1/1 field(s) belonging to this XsdGoPkgHasElem_Ls454ChoicePlatformTypeschema_Ls454_TxsdPlatformTypeChoiceLs454_ instance.
+func (me *XsdGoPkgHasElem_Ls454ChoicePlatformTypeschema_Ls454_TxsdPlatformTypeChoiceLs454_) Walk() (err error) {
+	if fn := WalkHandlers.XsdGoPkgHasElem_Ls454ChoicePlatformTypeschema_Ls454_TxsdPlatformTypeChoiceLs454_; me != nil {
 		if fn != nil {
 			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
 				return
 			}
 		}
-		if fn != nil {
-			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-	}
-	return
-}
-
-type TxsdPlatformTypeChoiceCapillary struct {
-	XsdGoPkgHasElem_InstrumentMODELsequenceCAPILLARYchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceCapillarySequenceInstrumentModel_
-}
-
-//	If the WalkHandlers.TxsdPlatformTypeChoiceCapillary function is not nil (ie. was set by outside code), calls it with this TxsdPlatformTypeChoiceCapillary instance as the single argument. Then calls the Walk() method on 1/1 embed(s) and 0/0 field(s) belonging to this TxsdPlatformTypeChoiceCapillary instance.
-func (me *TxsdPlatformTypeChoiceCapillary) Walk() (err error) {
-	if fn := WalkHandlers.TxsdPlatformTypeChoiceCapillary; me != nil {
-		if fn != nil {
-			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-		if err = me.XsdGoPkgHasElem_InstrumentMODELsequenceCAPILLARYchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceCapillarySequenceInstrumentModel_.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+		if err = me.Ls454.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
 			return
 		}
 		if fn != nil {
@@ -4709,21 +4489,21 @@ func (me *TxsdPlatformTypeChoiceCapillary) Walk() (err error) {
 	return
 }
 
-type XsdGoPkgHasElem_CAPILLARYchoicePlatformTypeschema_Capillary_TxsdPlatformTypeChoiceCapillary_ struct {
-	//	Sequencers based on capillary electrophoresis technology manufactured by LifeTech (formerly Applied
-	//	BioSciences).
-	Capillary *TxsdPlatformTypeChoiceCapillary `xml:"CAPILLARY"`
+//	PacificBiosciences platform type for the single molecule real time (SMRT) technology.
+type XsdGoPkgHasElem_PacbioSMRTchoicePlatformTypeschema_PacbioSmrt_TxsdPlatformTypeChoicePacbioSmrt_ struct {
+	//	PacificBiosciences platform type for the single molecule real time (SMRT) technology.
+	PacbioSmrt *TxsdPlatformTypeChoicePacbioSmrt `xml:"PACBIO_SMRT"`
 }
 
-//	If the WalkHandlers.XsdGoPkgHasElem_CAPILLARYchoicePlatformTypeschema_Capillary_TxsdPlatformTypeChoiceCapillary_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElem_CAPILLARYchoicePlatformTypeschema_Capillary_TxsdPlatformTypeChoiceCapillary_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 1/1 field(s) belonging to this XsdGoPkgHasElem_CAPILLARYchoicePlatformTypeschema_Capillary_TxsdPlatformTypeChoiceCapillary_ instance.
-func (me *XsdGoPkgHasElem_CAPILLARYchoicePlatformTypeschema_Capillary_TxsdPlatformTypeChoiceCapillary_) Walk() (err error) {
-	if fn := WalkHandlers.XsdGoPkgHasElem_CAPILLARYchoicePlatformTypeschema_Capillary_TxsdPlatformTypeChoiceCapillary_; me != nil {
+//	If the WalkHandlers.XsdGoPkgHasElem_PacbioSMRTchoicePlatformTypeschema_PacbioSmrt_TxsdPlatformTypeChoicePacbioSmrt_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElem_PacbioSMRTchoicePlatformTypeschema_PacbioSmrt_TxsdPlatformTypeChoicePacbioSmrt_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 1/1 field(s) belonging to this XsdGoPkgHasElem_PacbioSMRTchoicePlatformTypeschema_PacbioSmrt_TxsdPlatformTypeChoicePacbioSmrt_ instance.
+func (me *XsdGoPkgHasElem_PacbioSMRTchoicePlatformTypeschema_PacbioSmrt_TxsdPlatformTypeChoicePacbioSmrt_) Walk() (err error) {
+	if fn := WalkHandlers.XsdGoPkgHasElem_PacbioSMRTchoicePlatformTypeschema_PacbioSmrt_TxsdPlatformTypeChoicePacbioSmrt_; me != nil {
 		if fn != nil {
 			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
 				return
 			}
 		}
-		if err = me.Capillary.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+		if err = me.PacbioSmrt.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
 			return
 		}
 		if fn != nil {
@@ -4736,33 +4516,33 @@ func (me *XsdGoPkgHasElem_CAPILLARYchoicePlatformTypeschema_Capillary_TxsdPlatfo
 }
 
 type TPlatformType struct {
-	//	Ion Torrent Personal Genome Machine (PGM) from Life Technologies.
-	XsdGoPkgHasElem_IonTORRENTchoicePlatformTypeschema_IonTorrent_TxsdPlatformTypeChoiceIonTorrent_
-
-	//	Illumina is 4-channel flowgram with 1-to-1 mapping between basecalls and flows
-	XsdGoPkgHasElem_ILLUMINAchoicePlatformTypeschema_Illumina_TxsdPlatformTypeChoiceIllumina_
-
-	//	CompleteGenomics platform type. At present there is no instrument model.
-	XsdGoPkgHasElem_CompleteGENOMICSchoicePlatformTypeschema_CompleteGenomics_TxsdPlatformTypeChoiceCompleteGenomics_
-
-	//	ABI is 4-channel flowgram with 1-to-1 mapping between basecalls and flows
-	XsdGoPkgHasElem_AbiSOLIDchoicePlatformTypeschema_AbiSolid_TxsdPlatformTypeChoiceAbiSolid_
-
 	//	Oxford Nanopore platform type. nanopore-based electronic single molecule analysis
 	XsdGoPkgHasElem_OxfordNANOPOREchoicePlatformTypeschema_OxfordNanopore_TxsdPlatformTypeChoiceOxfordNanopore_
 
-	//	PacificBiosciences platform type for the single molecule real time (SMRT) technology.
-	XsdGoPkgHasElem_PacbioSMRTchoicePlatformTypeschema_PacbioSmrt_TxsdPlatformTypeChoicePacbioSmrt_
+	//	Ion Torrent Personal Genome Machine (PGM) from Life Technologies.
+	XsdGoPkgHasElem_IonTORRENTchoicePlatformTypeschema_IonTorrent_TxsdPlatformTypeChoiceIonTorrent_
 
 	//	Sequencers based on capillary electrophoresis technology manufactured by LifeTech (formerly Applied
 	//	BioSciences).
 	XsdGoPkgHasElem_CAPILLARYchoicePlatformTypeschema_Capillary_TxsdPlatformTypeChoiceCapillary_
 
-	//	454 technology use 1-color sequential flows
-	XsdGoPkgHasElem_Ls454ChoicePlatformTypeschema_Ls454_TxsdPlatformTypeChoiceLs454_
+	//	Illumina is 4-channel flowgram with 1-to-1 mapping between basecalls and flows
+	XsdGoPkgHasElem_ILLUMINAchoicePlatformTypeschema_Illumina_TxsdPlatformTypeChoiceIllumina_
 
 	//	Helicos is similar to 454 technology - uses 1-color sequential flows
 	XsdGoPkgHasElem_HELICOSchoicePlatformTypeschema_Helicos_TxsdPlatformTypeChoiceHelicos_
+
+	//	ABI is 4-channel flowgram with 1-to-1 mapping between basecalls and flows
+	XsdGoPkgHasElem_AbiSOLIDchoicePlatformTypeschema_AbiSolid_TxsdPlatformTypeChoiceAbiSolid_
+
+	//	CompleteGenomics platform type. At present there is no instrument model.
+	XsdGoPkgHasElem_CompleteGENOMICSchoicePlatformTypeschema_CompleteGenomics_TxsdPlatformTypeChoiceCompleteGenomics_
+
+	//	454 technology use 1-color sequential flows
+	XsdGoPkgHasElem_Ls454ChoicePlatformTypeschema_Ls454_TxsdPlatformTypeChoiceLs454_
+
+	//	PacificBiosciences platform type for the single molecule real time (SMRT) technology.
+	XsdGoPkgHasElem_PacbioSMRTchoicePlatformTypeschema_PacbioSmrt_TxsdPlatformTypeChoicePacbioSmrt_
 }
 
 //	If the WalkHandlers.TPlatformType function is not nil (ie. was set by outside code), calls it with this TPlatformType instance as the single argument. Then calls the Walk() method on 9/9 embed(s) and 0/0 field(s) belonging to this TPlatformType instance.
@@ -4773,16 +4553,16 @@ func (me *TPlatformType) Walk() (err error) {
 				return
 			}
 		}
-		if err = me.XsdGoPkgHasElem_ILLUMINAchoicePlatformTypeschema_Illumina_TxsdPlatformTypeChoiceIllumina_.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-			return
-		}
-		if err = me.XsdGoPkgHasElem_CompleteGENOMICSchoicePlatformTypeschema_CompleteGenomics_TxsdPlatformTypeChoiceCompleteGenomics_.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+		if err = me.XsdGoPkgHasElem_OxfordNANOPOREchoicePlatformTypeschema_OxfordNanopore_TxsdPlatformTypeChoiceOxfordNanopore_.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
 			return
 		}
 		if err = me.XsdGoPkgHasElem_IonTORRENTchoicePlatformTypeschema_IonTorrent_TxsdPlatformTypeChoiceIonTorrent_.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
 			return
 		}
-		if err = me.XsdGoPkgHasElem_Ls454ChoicePlatformTypeschema_Ls454_TxsdPlatformTypeChoiceLs454_.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+		if err = me.XsdGoPkgHasElem_CAPILLARYchoicePlatformTypeschema_Capillary_TxsdPlatformTypeChoiceCapillary_.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+			return
+		}
+		if err = me.XsdGoPkgHasElem_ILLUMINAchoicePlatformTypeschema_Illumina_TxsdPlatformTypeChoiceIllumina_.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
 			return
 		}
 		if err = me.XsdGoPkgHasElem_HELICOSchoicePlatformTypeschema_Helicos_TxsdPlatformTypeChoiceHelicos_.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
@@ -4791,15 +4571,15 @@ func (me *TPlatformType) Walk() (err error) {
 		if err = me.XsdGoPkgHasElem_AbiSOLIDchoicePlatformTypeschema_AbiSolid_TxsdPlatformTypeChoiceAbiSolid_.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
 			return
 		}
-		if err = me.XsdGoPkgHasElem_OxfordNANOPOREchoicePlatformTypeschema_OxfordNanopore_TxsdPlatformTypeChoiceOxfordNanopore_.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+		if err = me.XsdGoPkgHasElem_CompleteGENOMICSchoicePlatformTypeschema_CompleteGenomics_TxsdPlatformTypeChoiceCompleteGenomics_.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+			return
+		}
+		if err = me.XsdGoPkgHasElem_Ls454ChoicePlatformTypeschema_Ls454_TxsdPlatformTypeChoiceLs454_.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
 			return
 		}
 		if err = me.XsdGoPkgHasElem_PacbioSMRTchoicePlatformTypeschema_PacbioSmrt_TxsdPlatformTypeChoicePacbioSmrt_.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
 			return
 		}
-		if err = me.XsdGoPkgHasElem_CAPILLARYchoicePlatformTypeschema_Capillary_TxsdPlatformTypeChoiceCapillary_.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-			return
-		}
 		if fn != nil {
 			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
 				return
@@ -4809,15 +4589,17 @@ func (me *TPlatformType) Walk() (err error) {
 	return
 }
 
-//	Title of the study as would be used in a publication.
-type XsdGoPkgHasElems_StudyTITLEallDESCRIPTORsequenceStudyTypeschema_StudyTitle_XsdtString_ struct {
-	//	Title of the study as would be used in a publication.
-	StudyTitles []xsdt.String `xml:"STUDY_TITLE"`
+//	Name of the program or process for primary analysis. This may include a test or condition that leads to
+//	branching in the workflow.
+type XsdGoPkgHasElems_PROGRAMsequencePIPESECTIONsequencePipelineTypeschema_Program_XsdtString_ struct {
+	//	Name of the program or process for primary analysis. This may include a test or condition that leads to
+	//	branching in the workflow.
+	Programs []xsdt.String `xml:"PROGRAM"`
 }
 
-//	If the WalkHandlers.XsdGoPkgHasElems_StudyTITLEallDESCRIPTORsequenceStudyTypeschema_StudyTitle_XsdtString_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElems_StudyTITLEallDESCRIPTORsequenceStudyTypeschema_StudyTitle_XsdtString_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElems_StudyTITLEallDESCRIPTORsequenceStudyTypeschema_StudyTitle_XsdtString_ instance.
-func (me *XsdGoPkgHasElems_StudyTITLEallDESCRIPTORsequenceStudyTypeschema_StudyTitle_XsdtString_) Walk() (err error) {
-	if fn := WalkHandlers.XsdGoPkgHasElems_StudyTITLEallDESCRIPTORsequenceStudyTypeschema_StudyTitle_XsdtString_; me != nil {
+//	If the WalkHandlers.XsdGoPkgHasElems_PROGRAMsequencePIPESECTIONsequencePipelineTypeschema_Program_XsdtString_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElems_PROGRAMsequencePIPESECTIONsequencePipelineTypeschema_Program_XsdtString_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElems_PROGRAMsequencePIPESECTIONsequencePipelineTypeschema_Program_XsdtString_ instance.
+func (me *XsdGoPkgHasElems_PROGRAMsequencePIPESECTIONsequencePipelineTypeschema_Program_XsdtString_) Walk() (err error) {
+	if fn := WalkHandlers.XsdGoPkgHasElems_PROGRAMsequencePIPESECTIONsequencePipelineTypeschema_Program_XsdtString_; me != nil {
 		if fn != nil {
 			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
 				return
@@ -4832,19 +4614,44 @@ func (me *XsdGoPkgHasElems_StudyTITLEallDESCRIPTORsequenceStudyTypeschema_StudyT
 	return
 }
 
-type XsdGoPkgHasElems_UrlLINKchoiceLinkTypeschema_UrlLink_TxsdLinkTypeChoiceUrlLink_ struct {
-	UrlLinks []*TxsdLinkTypeChoiceUrlLink `xml:"URL_LINK"`
+//	STEP_INDEX of the previous step in the workflow. Set toNIL if the first pipe section.
+type XsdGoPkgHasElem_PrevStepINDEXsequencePIPESECTIONsequencePipelineTypeschema_PrevStepIndex_XsdtString_ struct {
+	//	STEP_INDEX of the previous step in the workflow. Set toNIL if the first pipe section.
+	PrevStepIndex xsdt.String `xml:"PREV_STEP_INDEX"`
 }
 
-//	If the WalkHandlers.XsdGoPkgHasElems_UrlLINKchoiceLinkTypeschema_UrlLink_TxsdLinkTypeChoiceUrlLink_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElems_UrlLINKchoiceLinkTypeschema_UrlLink_TxsdLinkTypeChoiceUrlLink_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElems_UrlLINKchoiceLinkTypeschema_UrlLink_TxsdLinkTypeChoiceUrlLink_ instance.
-func (me *XsdGoPkgHasElems_UrlLINKchoiceLinkTypeschema_UrlLink_TxsdLinkTypeChoiceUrlLink_) Walk() (err error) {
-	if fn := WalkHandlers.XsdGoPkgHasElems_UrlLINKchoiceLinkTypeschema_UrlLink_TxsdLinkTypeChoiceUrlLink_; me != nil {
+//	If the WalkHandlers.XsdGoPkgHasElem_PrevStepINDEXsequencePIPESECTIONsequencePipelineTypeschema_PrevStepIndex_XsdtString_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElem_PrevStepINDEXsequencePIPESECTIONsequencePipelineTypeschema_PrevStepIndex_XsdtString_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElem_PrevStepINDEXsequencePIPESECTIONsequencePipelineTypeschema_PrevStepIndex_XsdtString_ instance.
+func (me *XsdGoPkgHasElem_PrevStepINDEXsequencePIPESECTIONsequencePipelineTypeschema_PrevStepIndex_XsdtString_) Walk() (err error) {
+	if fn := WalkHandlers.XsdGoPkgHasElem_PrevStepINDEXsequencePIPESECTIONsequencePipelineTypeschema_PrevStepIndex_XsdtString_; me != nil {
 		if fn != nil {
 			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
 				return
 			}
 		}
-		for _, x := range me.UrlLinks {
+		if fn != nil {
+			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+	}
+	return
+}
+
+//	Helicos is similar to 454 technology - uses 1-color sequential flows
+type XsdGoPkgHasElems_HELICOSchoicePlatformTypeschema_Helicos_TxsdPlatformTypeChoiceHelicos_ struct {
+	//	Helicos is similar to 454 technology - uses 1-color sequential flows
+	Helicoses []*TxsdPlatformTypeChoiceHelicos `xml:"HELICOS"`
+}
+
+//	If the WalkHandlers.XsdGoPkgHasElems_HELICOSchoicePlatformTypeschema_Helicos_TxsdPlatformTypeChoiceHelicos_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElems_HELICOSchoicePlatformTypeschema_Helicos_TxsdPlatformTypeChoiceHelicos_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElems_HELICOSchoicePlatformTypeschema_Helicos_TxsdPlatformTypeChoiceHelicos_ instance.
+func (me *XsdGoPkgHasElems_HELICOSchoicePlatformTypeschema_Helicos_TxsdPlatformTypeChoiceHelicos_) Walk() (err error) {
+	if fn := WalkHandlers.XsdGoPkgHasElems_HELICOSchoicePlatformTypeschema_Helicos_TxsdPlatformTypeChoiceHelicos_; me != nil {
+		if fn != nil {
+			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+		for _, x := range me.Helicoses {
 			if err = x.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
 				return
 			}
@@ -4858,47 +4665,596 @@ func (me *XsdGoPkgHasElems_UrlLINKchoiceLinkTypeschema_UrlLink_TxsdLinkTypeChoic
 	return
 }
 
-//	Generic processing pipeline specification.
-type XsdGoPkgHasElems_PIPELINEsequenceProcessingTypeschema_Pipeline_TPipelineType_ struct {
+type XsdGoPkgHasElems_XrefLINKchoiceLinkTypeschema_XrefLink_TXRefType_ struct {
+	XrefLinks []*TXRefType `xml:"XREF_LINK"`
+}
+
+//	If the WalkHandlers.XsdGoPkgHasElems_XrefLINKchoiceLinkTypeschema_XrefLink_TXRefType_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElems_XrefLINKchoiceLinkTypeschema_XrefLink_TXRefType_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElems_XrefLINKchoiceLinkTypeschema_XrefLink_TXRefType_ instance.
+func (me *XsdGoPkgHasElems_XrefLINKchoiceLinkTypeschema_XrefLink_TXRefType_) Walk() (err error) {
+	if fn := WalkHandlers.XsdGoPkgHasElems_XrefLINKchoiceLinkTypeschema_XrefLink_TXRefType_; me != nil {
+		if fn != nil {
+			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+		for _, x := range me.XrefLinks {
+			if err = x.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+		if fn != nil {
+			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+	}
+	return
+}
+
+//	READ_LABEL is a name for this tag, and can be used to on output to determine read name, for example
+//	F or R.
+type XsdGoPkgHasElems_ReadLABELsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadLabel_XsdtString_ struct {
+	//	READ_LABEL is a name for this tag, and can be used to on output to determine read name, for example
+	//	F or R.
+	ReadLabels []xsdt.String `xml:"READ_LABEL"`
+}
+
+//	If the WalkHandlers.XsdGoPkgHasElems_ReadLABELsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadLabel_XsdtString_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElems_ReadLABELsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadLabel_XsdtString_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElems_ReadLABELsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadLabel_XsdtString_ instance.
+func (me *XsdGoPkgHasElems_ReadLABELsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadLabel_XsdtString_) Walk() (err error) {
+	if fn := WalkHandlers.XsdGoPkgHasElems_ReadLABELsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadLabel_XsdtString_; me != nil {
+		if fn != nil {
+			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+		if fn != nil {
+			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+	}
+	return
+}
+
+type XsdGoPkgHasElems_InstrumentMODELsequenceIONTORRENTchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceIonTorrentSequenceInstrumentModel_ struct {
+	InstrumentModels []TxsdPlatformTypeChoiceIonTorrentSequenceInstrumentModel `xml:"INSTRUMENT_MODEL"`
+}
+
+//	If the WalkHandlers.XsdGoPkgHasElems_InstrumentMODELsequenceIONTORRENTchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceIonTorrentSequenceInstrumentModel_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElems_InstrumentMODELsequenceIONTORRENTchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceIonTorrentSequenceInstrumentModel_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElems_InstrumentMODELsequenceIONTORRENTchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceIonTorrentSequenceInstrumentModel_ instance.
+func (me *XsdGoPkgHasElems_InstrumentMODELsequenceIONTORRENTchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceIonTorrentSequenceInstrumentModel_) Walk() (err error) {
+	if fn := WalkHandlers.XsdGoPkgHasElems_InstrumentMODELsequenceIONTORRENTchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceIonTorrentSequenceInstrumentModel_; me != nil {
+		if fn != nil {
+			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+		if fn != nil {
+			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+	}
+	return
+}
+
+type XsdGoPkgHasElem_PipeSECTIONsequencePipelineTypeschema_PipeSection_TxsdPipelineTypeSequencePipeSection_ struct {
+	PipeSection *TxsdPipelineTypeSequencePipeSection `xml:"PIPE_SECTION"`
+}
+
+//	If the WalkHandlers.XsdGoPkgHasElem_PipeSECTIONsequencePipelineTypeschema_PipeSection_TxsdPipelineTypeSequencePipeSection_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElem_PipeSECTIONsequencePipelineTypeschema_PipeSection_TxsdPipelineTypeSequencePipeSection_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 1/1 field(s) belonging to this XsdGoPkgHasElem_PipeSECTIONsequencePipelineTypeschema_PipeSection_TxsdPipelineTypeSequencePipeSection_ instance.
+func (me *XsdGoPkgHasElem_PipeSECTIONsequencePipelineTypeschema_PipeSection_TxsdPipelineTypeSequencePipeSection_) Walk() (err error) {
+	if fn := WalkHandlers.XsdGoPkgHasElem_PipeSECTIONsequencePipelineTypeschema_PipeSection_TxsdPipelineTypeSequencePipeSection_; me != nil {
+		if fn != nil {
+			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+		if err = me.PipeSection.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+			return
+		}
+		if fn != nil {
+			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+	}
+	return
+}
+
+type XsdGoPkgHasElems_InstrumentMODELsequenceCOMPLETEGENOMICSchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceCompleteGenomicsSequenceInstrumentModel_ struct {
+	InstrumentModels []TxsdPlatformTypeChoiceCompleteGenomicsSequenceInstrumentModel `xml:"INSTRUMENT_MODEL"`
+}
+
+//	If the WalkHandlers.XsdGoPkgHasElems_InstrumentMODELsequenceCOMPLETEGENOMICSchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceCompleteGenomicsSequenceInstrumentModel_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElems_InstrumentMODELsequenceCOMPLETEGENOMICSchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceCompleteGenomicsSequenceInstrumentModel_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElems_InstrumentMODELsequenceCOMPLETEGENOMICSchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceCompleteGenomicsSequenceInstrumentModel_ instance.
+func (me *XsdGoPkgHasElems_InstrumentMODELsequenceCOMPLETEGENOMICSchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceCompleteGenomicsSequenceInstrumentModel_) Walk() (err error) {
+	if fn := WalkHandlers.XsdGoPkgHasElems_InstrumentMODELsequenceCOMPLETEGENOMICSchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceCompleteGenomicsSequenceInstrumentModel_; me != nil {
+		if fn != nil {
+			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+		if fn != nil {
+			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+	}
+	return
+}
+
+//	Links to resources related to this study (publication, datasets, online databases).
+type XsdGoPkgHasElems_StudyLINKSsequenceStudyTypeschema_StudyLinks_TxsdStudyTypeSequenceStudyLinks_ struct {
+	//	Links to resources related to this study (publication, datasets, online databases).
+	StudyLinkses []*TxsdStudyTypeSequenceStudyLinks `xml:"STUDY_LINKS"`
+}
+
+//	If the WalkHandlers.XsdGoPkgHasElems_StudyLINKSsequenceStudyTypeschema_StudyLinks_TxsdStudyTypeSequenceStudyLinks_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElems_StudyLINKSsequenceStudyTypeschema_StudyLinks_TxsdStudyTypeSequenceStudyLinks_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElems_StudyLINKSsequenceStudyTypeschema_StudyLinks_TxsdStudyTypeSequenceStudyLinks_ instance.
+func (me *XsdGoPkgHasElems_StudyLINKSsequenceStudyTypeschema_StudyLinks_TxsdStudyTypeSequenceStudyLinks_) Walk() (err error) {
+	if fn := WalkHandlers.XsdGoPkgHasElems_StudyLINKSsequenceStudyTypeschema_StudyLinks_TxsdStudyTypeSequenceStudyLinks_; me != nil {
+		if fn != nil {
+			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+		for _, x := range me.StudyLinkses {
+			if err = x.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+		if fn != nil {
+			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+	}
+	return
+}
+
+//	Accession in the referenced database. For example, FBtr0080008 (in FLYBASE).
+type XsdGoPkgHasElems_IDallXRefTypeschema_Id_XsdtString_ struct {
+	//	Accession in the referenced database. For example, FBtr0080008 (in FLYBASE).
+	Ids []xsdt.String `xml:"ID"`
+}
+
+//	If the WalkHandlers.XsdGoPkgHasElems_IDallXRefTypeschema_Id_XsdtString_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElems_IDallXRefTypeschema_Id_XsdtString_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElems_IDallXRefTypeschema_Id_XsdtString_ instance.
+func (me *XsdGoPkgHasElems_IDallXRefTypeschema_Id_XsdtString_) Walk() (err error) {
+	if fn := WalkHandlers.XsdGoPkgHasElems_IDallXRefTypeschema_Id_XsdtString_; me != nil {
+		if fn != nil {
+			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+		if fn != nil {
+			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+	}
+	return
+}
+
+//	Submitter defined project name. This field is intended for backward tracking of the study record to the
+//	submitter's LIMS.
+type XsdGoPkgHasElems_CenterProjectNAMEallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_CenterProjectName_XsdtString_ struct {
+	//	Submitter defined project name. This field is intended for backward tracking of the study record to the
+	//	submitter's LIMS.
+	CenterProjectNames []xsdt.String `xml:"CENTER_PROJECT_NAME"`
+}
+
+//	If the WalkHandlers.XsdGoPkgHasElems_CenterProjectNAMEallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_CenterProjectName_XsdtString_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElems_CenterProjectNAMEallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_CenterProjectName_XsdtString_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElems_CenterProjectNAMEallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_CenterProjectName_XsdtString_ instance.
+func (me *XsdGoPkgHasElems_CenterProjectNAMEallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_CenterProjectName_XsdtString_) Walk() (err error) {
+	if fn := WalkHandlers.XsdGoPkgHasElems_CenterProjectNAMEallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_CenterProjectName_XsdtString_; me != nil {
+		if fn != nil {
+			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+		if fn != nil {
+			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+	}
+	return
+}
+
+//	Number of base/color calls, cycles, or flows per spot (raw sequence length or flow length including all
+//	application and technical tags and mate pairs, but not including gap lengths). This value will be platform dependent,
+//	library dependent, and possibly run dependent. Variable length platforms will still have a constant flow/cycle length.
+type XsdGoPkgHasElem_SpotLENGTHsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_SpotLength_XsdtNonNegativeInteger_ struct {
+	//	Number of base/color calls, cycles, or flows per spot (raw sequence length or flow length including all
+	//	application and technical tags and mate pairs, but not including gap lengths). This value will be platform dependent,
+	//	library dependent, and possibly run dependent. Variable length platforms will still have a constant flow/cycle length.
+	SpotLength xsdt.NonNegativeInteger `xml:"SPOT_LENGTH"`
+}
+
+//	If the WalkHandlers.XsdGoPkgHasElem_SpotLENGTHsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_SpotLength_XsdtNonNegativeInteger_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElem_SpotLENGTHsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_SpotLength_XsdtNonNegativeInteger_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElem_SpotLENGTHsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_SpotLength_XsdtNonNegativeInteger_ instance.
+func (me *XsdGoPkgHasElem_SpotLENGTHsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_SpotLength_XsdtNonNegativeInteger_) Walk() (err error) {
+	if fn := WalkHandlers.XsdGoPkgHasElem_SpotLENGTHsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_SpotLength_XsdtNonNegativeInteger_; me != nil {
+		if fn != nil {
+			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+		if fn != nil {
+			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+	}
+	return
+}
+
+type XsdGoPkgHasElems_ReadSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadSpec_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpec_ struct {
+	ReadSpecs []*TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpec `xml:"READ_SPEC"`
+}
+
+//	If the WalkHandlers.XsdGoPkgHasElems_ReadSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadSpec_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpec_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElems_ReadSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadSpec_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpec_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElems_ReadSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadSpec_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpec_ instance.
+func (me *XsdGoPkgHasElems_ReadSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadSpec_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpec_) Walk() (err error) {
+	if fn := WalkHandlers.XsdGoPkgHasElems_ReadSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadSpec_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpec_; me != nil {
+		if fn != nil {
+			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+		for _, x := range me.ReadSpecs {
+			if err = x.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+		if fn != nil {
+			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+	}
+	return
+}
+
+type TxsdSpotDescriptorTypeChoiceSpotDecodeSpec struct {
+	//	Number of base/color calls, cycles, or flows per spot (raw sequence length or flow length including all
+	//	application and technical tags and mate pairs, but not including gap lengths). This value will be platform dependent,
+	//	library dependent, and possibly run dependent. Variable length platforms will still have a constant flow/cycle length.
+	XsdGoPkgHasElem_SpotLENGTHsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_SpotLength_XsdtNonNegativeInteger_
+
+	XsdGoPkgHasElems_ReadSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadSpec_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpec_
+}
+
+//	If the WalkHandlers.TxsdSpotDescriptorTypeChoiceSpotDecodeSpec function is not nil (ie. was set by outside code), calls it with this TxsdSpotDescriptorTypeChoiceSpotDecodeSpec instance as the single argument. Then calls the Walk() method on 2/2 embed(s) and 0/0 field(s) belonging to this TxsdSpotDescriptorTypeChoiceSpotDecodeSpec instance.
+func (me *TxsdSpotDescriptorTypeChoiceSpotDecodeSpec) Walk() (err error) {
+	if fn := WalkHandlers.TxsdSpotDescriptorTypeChoiceSpotDecodeSpec; me != nil {
+		if fn != nil {
+			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+		if err = me.XsdGoPkgHasElem_SpotLENGTHsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_SpotLength_XsdtNonNegativeInteger_.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+			return
+		}
+		if err = me.XsdGoPkgHasElems_ReadSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadSpec_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpec_.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+			return
+		}
+		if fn != nil {
+			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+	}
+	return
+}
+
+type XsdGoPkgHasElem_SpotDecodeSPECchoiceSpotDescriptorTypeschema_SpotDecodeSpec_TxsdSpotDescriptorTypeChoiceSpotDecodeSpec_ struct {
+	SpotDecodeSpec *TxsdSpotDescriptorTypeChoiceSpotDecodeSpec `xml:"SPOT_DECODE_SPEC"`
+}
+
+//	If the WalkHandlers.XsdGoPkgHasElem_SpotDecodeSPECchoiceSpotDescriptorTypeschema_SpotDecodeSpec_TxsdSpotDescriptorTypeChoiceSpotDecodeSpec_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElem_SpotDecodeSPECchoiceSpotDescriptorTypeschema_SpotDecodeSpec_TxsdSpotDescriptorTypeChoiceSpotDecodeSpec_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 1/1 field(s) belonging to this XsdGoPkgHasElem_SpotDecodeSPECchoiceSpotDescriptorTypeschema_SpotDecodeSpec_TxsdSpotDescriptorTypeChoiceSpotDecodeSpec_ instance.
+func (me *XsdGoPkgHasElem_SpotDecodeSPECchoiceSpotDescriptorTypeschema_SpotDecodeSpec_TxsdSpotDescriptorTypeChoiceSpotDecodeSpec_) Walk() (err error) {
+	if fn := WalkHandlers.XsdGoPkgHasElem_SpotDecodeSPECchoiceSpotDescriptorTypeschema_SpotDecodeSpec_TxsdSpotDescriptorTypeChoiceSpotDecodeSpec_; me != nil {
+		if fn != nil {
+			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+		if err = me.SpotDecodeSpec.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+			return
+		}
+		if fn != nil {
+			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+	}
+	return
+}
+
+type XsdGoPkgHasElems_SpotDecodeSPECchoiceSpotDescriptorTypeschema_SpotDecodeSpec_TxsdSpotDescriptorTypeChoiceSpotDecodeSpec_ struct {
+	SpotDecodeSpecs []*TxsdSpotDescriptorTypeChoiceSpotDecodeSpec `xml:"SPOT_DECODE_SPEC"`
+}
+
+//	If the WalkHandlers.XsdGoPkgHasElems_SpotDecodeSPECchoiceSpotDescriptorTypeschema_SpotDecodeSpec_TxsdSpotDescriptorTypeChoiceSpotDecodeSpec_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElems_SpotDecodeSPECchoiceSpotDescriptorTypeschema_SpotDecodeSpec_TxsdSpotDescriptorTypeChoiceSpotDecodeSpec_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElems_SpotDecodeSPECchoiceSpotDescriptorTypeschema_SpotDecodeSpec_TxsdSpotDescriptorTypeChoiceSpotDecodeSpec_ instance.
+func (me *XsdGoPkgHasElems_SpotDecodeSPECchoiceSpotDescriptorTypeschema_SpotDecodeSpec_TxsdSpotDescriptorTypeChoiceSpotDecodeSpec_) Walk() (err error) {
+	if fn := WalkHandlers.XsdGoPkgHasElems_SpotDecodeSPECchoiceSpotDescriptorTypeschema_SpotDecodeSpec_TxsdSpotDescriptorTypeChoiceSpotDecodeSpec_; me != nil {
+		if fn != nil {
+			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+		for _, x := range me.SpotDecodeSpecs {
+			if err = x.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+		if fn != nil {
+			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+	}
+	return
+}
+
+type XsdGoPkgHasElems_InstrumentMODELsequenceOXFORDNANOPOREchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceOxfordNanoporeSequenceInstrumentModel_ struct {
+	InstrumentModels []TxsdPlatformTypeChoiceOxfordNanoporeSequenceInstrumentModel `xml:"INSTRUMENT_MODEL"`
+}
+
+//	If the WalkHandlers.XsdGoPkgHasElems_InstrumentMODELsequenceOXFORDNANOPOREchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceOxfordNanoporeSequenceInstrumentModel_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElems_InstrumentMODELsequenceOXFORDNANOPOREchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceOxfordNanoporeSequenceInstrumentModel_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElems_InstrumentMODELsequenceOXFORDNANOPOREchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceOxfordNanoporeSequenceInstrumentModel_ instance.
+func (me *XsdGoPkgHasElems_InstrumentMODELsequenceOXFORDNANOPOREchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceOxfordNanoporeSequenceInstrumentModel_) Walk() (err error) {
+	if fn := WalkHandlers.XsdGoPkgHasElems_InstrumentMODELsequenceOXFORDNANOPOREchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceOxfordNanoporeSequenceInstrumentModel_; me != nil {
+		if fn != nil {
+			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+		if fn != nil {
+			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+	}
+	return
+}
+
+//	Whether the reference alignment includes all reads regardless of whether they fail the instrument vendor's
+//	quality check.
+type XsdGoPkgHasElems_AlignmentIncludesFailedReadsallAlignmentDirectivesTypeschema_AlignmentIncludesFailedReads_XsdtBoolean_ struct {
+	//	Whether the reference alignment includes all reads regardless of whether they fail the instrument vendor's
+	//	quality check.
+	AlignmentIncludesFailedReadses []xsdt.Boolean `xml:"alignment_includes_failed_reads"`
+}
+
+//	If the WalkHandlers.XsdGoPkgHasElems_AlignmentIncludesFailedReadsallAlignmentDirectivesTypeschema_AlignmentIncludesFailedReads_XsdtBoolean_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElems_AlignmentIncludesFailedReadsallAlignmentDirectivesTypeschema_AlignmentIncludesFailedReads_XsdtBoolean_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElems_AlignmentIncludesFailedReadsallAlignmentDirectivesTypeschema_AlignmentIncludesFailedReads_XsdtBoolean_ instance.
+func (me *XsdGoPkgHasElems_AlignmentIncludesFailedReadsallAlignmentDirectivesTypeschema_AlignmentIncludesFailedReads_XsdtBoolean_) Walk() (err error) {
+	if fn := WalkHandlers.XsdGoPkgHasElems_AlignmentIncludesFailedReadsallAlignmentDirectivesTypeschema_AlignmentIncludesFailedReads_XsdtBoolean_; me != nil {
+		if fn != nil {
+			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+		if fn != nil {
+			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+	}
+	return
+}
+
+//	Value of the attribute.
+type XsdGoPkgHasElems_VALUEallAttributeTypeschema_Value_XsdtString_ struct {
+	//	Value of the attribute.
+	Values []xsdt.String `xml:"VALUE"`
+}
+
+//	If the WalkHandlers.XsdGoPkgHasElems_VALUEallAttributeTypeschema_Value_XsdtString_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElems_VALUEallAttributeTypeschema_Value_XsdtString_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElems_VALUEallAttributeTypeschema_Value_XsdtString_ instance.
+func (me *XsdGoPkgHasElems_VALUEallAttributeTypeschema_Value_XsdtString_) Walk() (err error) {
+	if fn := WalkHandlers.XsdGoPkgHasElems_VALUEallAttributeTypeschema_Value_XsdtString_; me != nil {
+		if fn != nil {
+			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+		if fn != nil {
+			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+	}
+	return
+}
+
+//	Lexically ordered value that allows for the pipe section to be hierarchically ordered. The float
+//	primitive data type is used to allow for pipe sections to be inserted later on.
+type XsdGoPkgHasElems_StepINDEXsequencePIPESECTIONsequencePipelineTypeschema_StepIndex_XsdtString_ struct {
+	//	Lexically ordered value that allows for the pipe section to be hierarchically ordered. The float
+	//	primitive data type is used to allow for pipe sections to be inserted later on.
+	StepIndexs []xsdt.String `xml:"STEP_INDEX"`
+}
+
+//	If the WalkHandlers.XsdGoPkgHasElems_StepINDEXsequencePIPESECTIONsequencePipelineTypeschema_StepIndex_XsdtString_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElems_StepINDEXsequencePIPESECTIONsequencePipelineTypeschema_StepIndex_XsdtString_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElems_StepINDEXsequencePIPESECTIONsequencePipelineTypeschema_StepIndex_XsdtString_ instance.
+func (me *XsdGoPkgHasElems_StepINDEXsequencePIPESECTIONsequencePipelineTypeschema_StepIndex_XsdtString_) Walk() (err error) {
+	if fn := WalkHandlers.XsdGoPkgHasElems_StepINDEXsequencePIPESECTIONsequencePipelineTypeschema_StepIndex_XsdtString_; me != nil {
+		if fn != nil {
+			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+		if fn != nil {
+			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+	}
+	return
+}
+
+type XsdGoPkgHasElem_RelatedSTUDYsequenceTxsdStudyTypeSequenceDescriptorAllRelatedStudiesRELATEDSTUDIESallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_RelatedStudy_TxsdStudyTypeSequenceDescriptorAllRelatedStudiesSequenceRelatedStudy_ struct {
+	RelatedStudy *TxsdStudyTypeSequenceDescriptorAllRelatedStudiesSequenceRelatedStudy `xml:"RELATED_STUDY"`
+}
+
+//	If the WalkHandlers.XsdGoPkgHasElem_RelatedSTUDYsequenceTxsdStudyTypeSequenceDescriptorAllRelatedStudiesRELATEDSTUDIESallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_RelatedStudy_TxsdStudyTypeSequenceDescriptorAllRelatedStudiesSequenceRelatedStudy_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElem_RelatedSTUDYsequenceTxsdStudyTypeSequenceDescriptorAllRelatedStudiesRELATEDSTUDIESallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_RelatedStudy_TxsdStudyTypeSequenceDescriptorAllRelatedStudiesSequenceRelatedStudy_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 1/1 field(s) belonging to this XsdGoPkgHasElem_RelatedSTUDYsequenceTxsdStudyTypeSequenceDescriptorAllRelatedStudiesRELATEDSTUDIESallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_RelatedStudy_TxsdStudyTypeSequenceDescriptorAllRelatedStudiesSequenceRelatedStudy_ instance.
+func (me *XsdGoPkgHasElem_RelatedSTUDYsequenceTxsdStudyTypeSequenceDescriptorAllRelatedStudiesRELATEDSTUDIESallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_RelatedStudy_TxsdStudyTypeSequenceDescriptorAllRelatedStudiesSequenceRelatedStudy_) Walk() (err error) {
+	if fn := WalkHandlers.XsdGoPkgHasElem_RelatedSTUDYsequenceTxsdStudyTypeSequenceDescriptorAllRelatedStudiesRELATEDSTUDIESallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_RelatedStudy_TxsdStudyTypeSequenceDescriptorAllRelatedStudiesSequenceRelatedStudy_; me != nil {
+		if fn != nil {
+			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+		if err = me.RelatedStudy.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+			return
+		}
+		if fn != nil {
+			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+	}
+	return
+}
+
+//	Numeric record id meaningful to the NCBI Entrez system.
+type XsdGoPkgHasElems_IDchoicesequenceENTREZLINKchoiceLinkTypeschema_Id_XsdtNonNegativeInteger_ struct {
+	//	Numeric record id meaningful to the NCBI Entrez system.
+	Ids []*xsdt.NonNegativeInteger `xml:"ID"`
+}
+
+//	If the WalkHandlers.XsdGoPkgHasElems_IDchoicesequenceENTREZLINKchoiceLinkTypeschema_Id_XsdtNonNegativeInteger_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElems_IDchoicesequenceENTREZLINKchoiceLinkTypeschema_Id_XsdtNonNegativeInteger_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElems_IDchoicesequenceENTREZLINKchoiceLinkTypeschema_Id_XsdtNonNegativeInteger_ instance.
+func (me *XsdGoPkgHasElems_IDchoicesequenceENTREZLINKchoiceLinkTypeschema_Id_XsdtNonNegativeInteger_) Walk() (err error) {
+	if fn := WalkHandlers.XsdGoPkgHasElems_IDchoicesequenceENTREZLINKchoiceLinkTypeschema_Id_XsdtNonNegativeInteger_; me != nil {
+		if fn != nil {
+			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+		if fn != nil {
+			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+	}
+	return
+}
+
+//	Whether the reference alignment identifies reads that appear to be duplicates.
+type XsdGoPkgHasElems_AlignmentMarksDuplicateReadsallAlignmentDirectivesTypeschema_AlignmentMarksDuplicateReads_XsdtBoolean_ struct {
+	//	Whether the reference alignment identifies reads that appear to be duplicates.
+	AlignmentMarksDuplicateReadses []xsdt.Boolean `xml:"alignment_marks_duplicate_reads"`
+}
+
+//	If the WalkHandlers.XsdGoPkgHasElems_AlignmentMarksDuplicateReadsallAlignmentDirectivesTypeschema_AlignmentMarksDuplicateReads_XsdtBoolean_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElems_AlignmentMarksDuplicateReadsallAlignmentDirectivesTypeschema_AlignmentMarksDuplicateReads_XsdtBoolean_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElems_AlignmentMarksDuplicateReadsallAlignmentDirectivesTypeschema_AlignmentMarksDuplicateReads_XsdtBoolean_ instance.
+func (me *XsdGoPkgHasElems_AlignmentMarksDuplicateReadsallAlignmentDirectivesTypeschema_AlignmentMarksDuplicateReads_XsdtBoolean_) Walk() (err error) {
+	if fn := WalkHandlers.XsdGoPkgHasElems_AlignmentMarksDuplicateReadsallAlignmentDirectivesTypeschema_AlignmentMarksDuplicateReads_XsdtBoolean_; me != nil {
+		if fn != nil {
+			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+		if fn != nil {
+			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+	}
+	return
+}
+
+type XsdGoPkgHasElems_InstrumentMODELallHELICOSchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceHelicosAllInstrumentModel_ struct {
+	InstrumentModels []TxsdPlatformTypeChoiceHelicosAllInstrumentModel `xml:"INSTRUMENT_MODEL"`
+}
+
+//	If the WalkHandlers.XsdGoPkgHasElems_InstrumentMODELallHELICOSchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceHelicosAllInstrumentModel_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElems_InstrumentMODELallHELICOSchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceHelicosAllInstrumentModel_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElems_InstrumentMODELallHELICOSchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceHelicosAllInstrumentModel_ instance.
+func (me *XsdGoPkgHasElems_InstrumentMODELallHELICOSchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceHelicosAllInstrumentModel_) Walk() (err error) {
+	if fn := WalkHandlers.XsdGoPkgHasElems_InstrumentMODELallHELICOSchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceHelicosAllInstrumentModel_; me != nil {
+		if fn != nil {
+			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+		if fn != nil {
+			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+	}
+	return
+}
+
+//	ABI is 4-channel flowgram with 1-to-1 mapping between basecalls and flows
+type XsdGoPkgHasElems_AbiSOLIDchoicePlatformTypeschema_AbiSolid_TxsdPlatformTypeChoiceAbiSolid_ struct {
+	//	ABI is 4-channel flowgram with 1-to-1 mapping between basecalls and flows
+	AbiSolids []*TxsdPlatformTypeChoiceAbiSolid `xml:"ABI_SOLID"`
+}
+
+//	If the WalkHandlers.XsdGoPkgHasElems_AbiSOLIDchoicePlatformTypeschema_AbiSolid_TxsdPlatformTypeChoiceAbiSolid_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElems_AbiSOLIDchoicePlatformTypeschema_AbiSolid_TxsdPlatformTypeChoiceAbiSolid_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElems_AbiSOLIDchoicePlatformTypeschema_AbiSolid_TxsdPlatformTypeChoiceAbiSolid_ instance.
+func (me *XsdGoPkgHasElems_AbiSOLIDchoicePlatformTypeschema_AbiSolid_TxsdPlatformTypeChoiceAbiSolid_) Walk() (err error) {
+	if fn := WalkHandlers.XsdGoPkgHasElems_AbiSOLIDchoicePlatformTypeschema_AbiSolid_TxsdPlatformTypeChoiceAbiSolid_; me != nil {
+		if fn != nil {
+			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+		for _, x := range me.AbiSolids {
+			if err = x.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+		if fn != nil {
+			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+	}
+	return
+}
+
+//	Processing directives tell the Sequence Read Archive how to treat the input data, if any treatment is
+//	requested.
+type XsdGoPkgHasElem_DIRECTIVESsequenceProcessingTypeschema_Directives_TSequencingDirectivesType_ struct {
+	//	Processing directives tell the Sequence Read Archive how to treat the input data, if any treatment is
+	//	requested.
+	Directives *TSequencingDirectivesType `xml:"DIRECTIVES"`
+}
+
+//	If the WalkHandlers.XsdGoPkgHasElem_DIRECTIVESsequenceProcessingTypeschema_Directives_TSequencingDirectivesType_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElem_DIRECTIVESsequenceProcessingTypeschema_Directives_TSequencingDirectivesType_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 1/1 field(s) belonging to this XsdGoPkgHasElem_DIRECTIVESsequenceProcessingTypeschema_Directives_TSequencingDirectivesType_ instance.
+func (me *XsdGoPkgHasElem_DIRECTIVESsequenceProcessingTypeschema_Directives_TSequencingDirectivesType_) Walk() (err error) {
+	if fn := WalkHandlers.XsdGoPkgHasElem_DIRECTIVESsequenceProcessingTypeschema_Directives_TSequencingDirectivesType_; me != nil {
+		if fn != nil {
+			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+		if err = me.Directives.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+			return
+		}
+		if fn != nil {
+			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+	}
+	return
+}
+
+type TProcessingType struct {
 	//	Generic processing pipeline specification.
-	Pipelines []*TPipelineType `xml:"PIPELINE"`
+	XsdGoPkgHasElem_PIPELINEsequenceProcessingTypeschema_Pipeline_TPipelineType_
+
+	//	Processing directives tell the Sequence Read Archive how to treat the input data, if any treatment is
+	//	requested.
+	XsdGoPkgHasElem_DIRECTIVESsequenceProcessingTypeschema_Directives_TSequencingDirectivesType_
 }
 
-//	If the WalkHandlers.XsdGoPkgHasElems_PIPELINEsequenceProcessingTypeschema_Pipeline_TPipelineType_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElems_PIPELINEsequenceProcessingTypeschema_Pipeline_TPipelineType_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElems_PIPELINEsequenceProcessingTypeschema_Pipeline_TPipelineType_ instance.
-func (me *XsdGoPkgHasElems_PIPELINEsequenceProcessingTypeschema_Pipeline_TPipelineType_) Walk() (err error) {
-	if fn := WalkHandlers.XsdGoPkgHasElems_PIPELINEsequenceProcessingTypeschema_Pipeline_TPipelineType_; me != nil {
+//	If the WalkHandlers.TProcessingType function is not nil (ie. was set by outside code), calls it with this TProcessingType instance as the single argument. Then calls the Walk() method on 2/2 embed(s) and 0/0 field(s) belonging to this TProcessingType instance.
+func (me *TProcessingType) Walk() (err error) {
+	if fn := WalkHandlers.TProcessingType; me != nil {
 		if fn != nil {
 			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
 				return
 			}
 		}
-		for _, x := range me.Pipelines {
-			if err = x.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
+		if err = me.XsdGoPkgHasElem_PIPELINEsequenceProcessingTypeschema_Pipeline_TPipelineType_.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+			return
 		}
-		if fn != nil {
-			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-	}
-	return
-}
-
-type XsdGoPkgHasElem_StudyLINKsequenceSTUDYLINKSsequenceStudyTypeschema_StudyLink_TLinkType_ struct {
-	StudyLink *TLinkType `xml:"STUDY_LINK"`
-}
-
-//	If the WalkHandlers.XsdGoPkgHasElem_StudyLINKsequenceSTUDYLINKSsequenceStudyTypeschema_StudyLink_TLinkType_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElem_StudyLINKsequenceSTUDYLINKSsequenceStudyTypeschema_StudyLink_TLinkType_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 1/1 field(s) belonging to this XsdGoPkgHasElem_StudyLINKsequenceSTUDYLINKSsequenceStudyTypeschema_StudyLink_TLinkType_ instance.
-func (me *XsdGoPkgHasElem_StudyLINKsequenceSTUDYLINKSsequenceStudyTypeschema_StudyLink_TLinkType_) Walk() (err error) {
-	if fn := WalkHandlers.XsdGoPkgHasElem_StudyLINKsequenceSTUDYLINKSsequenceStudyTypeschema_StudyLink_TLinkType_; me != nil {
-		if fn != nil {
-			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-		if err = me.StudyLink.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+		if err = me.XsdGoPkgHasElem_DIRECTIVESsequenceProcessingTypeschema_Directives_TSequencingDirectivesType_.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
 			return
 		}
 		if fn != nil {
@@ -4910,15 +5266,227 @@ func (me *XsdGoPkgHasElem_StudyLINKsequenceSTUDYLINKSsequenceStudyTypeschema_Stu
 	return
 }
 
-type XsdGoPkgHasElems_InstrumentMODELsequenceILLUMINAchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceIlluminaSequenceInstrumentModel_ struct {
-	InstrumentModels []TxsdPlatformTypeChoiceIlluminaSequenceInstrumentModel `xml:"INSTRUMENT_MODEL"`
+//	The internet service link (file:, http:, ftp:, etc).
+type XsdGoPkgHasElems_URLallURLLINKchoiceLinkTypeschema_Url_XsdtAnyURI_ struct {
+	//	The internet service link (file:, http:, ftp:, etc).
+	Urls []xsdt.AnyURI `xml:"URL"`
 }
 
-//	If the WalkHandlers.XsdGoPkgHasElems_InstrumentMODELsequenceILLUMINAchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceIlluminaSequenceInstrumentModel_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElems_InstrumentMODELsequenceILLUMINAchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceIlluminaSequenceInstrumentModel_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElems_InstrumentMODELsequenceILLUMINAchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceIlluminaSequenceInstrumentModel_ instance.
-func (me *XsdGoPkgHasElems_InstrumentMODELsequenceILLUMINAchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceIlluminaSequenceInstrumentModel_) Walk() (err error) {
-	if fn := WalkHandlers.XsdGoPkgHasElems_InstrumentMODELsequenceILLUMINAchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceIlluminaSequenceInstrumentModel_; me != nil {
+//	If the WalkHandlers.XsdGoPkgHasElems_URLallURLLINKchoiceLinkTypeschema_Url_XsdtAnyURI_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElems_URLallURLLINKchoiceLinkTypeschema_Url_XsdtAnyURI_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElems_URLallURLLINKchoiceLinkTypeschema_Url_XsdtAnyURI_ instance.
+func (me *XsdGoPkgHasElems_URLallURLLINKchoiceLinkTypeschema_Url_XsdtAnyURI_) Walk() (err error) {
+	if fn := WalkHandlers.XsdGoPkgHasElems_URLallURLLINKchoiceLinkTypeschema_Url_XsdtAnyURI_; me != nil {
 		if fn != nil {
 			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+		if fn != nil {
+			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+	}
+	return
+}
+
+type XsdGoPkgHasElems_ReadCLASSsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadClass_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadClass_ struct {
+	ReadClasses []TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadClass `xml:"READ_CLASS"`
+}
+
+//	If the WalkHandlers.XsdGoPkgHasElems_ReadCLASSsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadClass_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadClass_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElems_ReadCLASSsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadClass_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadClass_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElems_ReadCLASSsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadClass_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadClass_ instance.
+func (me *XsdGoPkgHasElems_ReadCLASSsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadClass_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadClass_) Walk() (err error) {
+	if fn := WalkHandlers.XsdGoPkgHasElems_ReadCLASSsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadClass_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadClass_; me != nil {
+		if fn != nil {
+			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+		if fn != nil {
+			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+	}
+	return
+}
+
+//	A secondary or defunct primary key in an INSDC primary data database.
+type XsdGoPkgHasElem_SecondaryIDsequenceIdentifierTypeschema_SecondaryId_TNameAndLabelType_ struct {
+	//	A secondary or defunct primary key in an INSDC primary data database.
+	SecondaryId *TNameAndLabelType `xml:"SECONDARY_ID"`
+}
+
+//	If the WalkHandlers.XsdGoPkgHasElem_SecondaryIDsequenceIdentifierTypeschema_SecondaryId_TNameAndLabelType_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElem_SecondaryIDsequenceIdentifierTypeschema_SecondaryId_TNameAndLabelType_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 1/1 field(s) belonging to this XsdGoPkgHasElem_SecondaryIDsequenceIdentifierTypeschema_SecondaryId_TNameAndLabelType_ instance.
+func (me *XsdGoPkgHasElem_SecondaryIDsequenceIdentifierTypeschema_SecondaryId_TNameAndLabelType_) Walk() (err error) {
+	if fn := WalkHandlers.XsdGoPkgHasElem_SecondaryIDsequenceIdentifierTypeschema_SecondaryId_TNameAndLabelType_; me != nil {
+		if fn != nil {
+			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+		if err = me.SecondaryId.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+			return
+		}
+		if fn != nil {
+			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+	}
+	return
+}
+
+//	Optional scientific units.
+type XsdGoPkgHasElems_UNITSallAttributeTypeschema_Units_XsdtString_ struct {
+	//	Optional scientific units.
+	Unitses []xsdt.String `xml:"UNITS"`
+}
+
+//	If the WalkHandlers.XsdGoPkgHasElems_UNITSallAttributeTypeschema_Units_XsdtString_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElems_UNITSallAttributeTypeschema_Units_XsdtString_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElems_UNITSallAttributeTypeschema_Units_XsdtString_ instance.
+func (me *XsdGoPkgHasElems_UNITSallAttributeTypeschema_Units_XsdtString_) Walk() (err error) {
+	if fn := WalkHandlers.XsdGoPkgHasElems_UNITSallAttributeTypeschema_Units_XsdtString_; me != nil {
+		if fn != nil {
+			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+		if fn != nil {
+			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+	}
+	return
+}
+
+//	Accession string meaningful to the NCBI Entrez system.
+type XsdGoPkgHasElems_QUERYchoicesequenceENTREZLINKchoiceLinkTypeschema_Query_XsdtString_ struct {
+	//	Accession string meaningful to the NCBI Entrez system.
+	Queries []xsdt.String `xml:"QUERY"`
+}
+
+//	If the WalkHandlers.XsdGoPkgHasElems_QUERYchoicesequenceENTREZLINKchoiceLinkTypeschema_Query_XsdtString_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElems_QUERYchoicesequenceENTREZLINKchoiceLinkTypeschema_Query_XsdtString_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElems_QUERYchoicesequenceENTREZLINKchoiceLinkTypeschema_Query_XsdtString_ instance.
+func (me *XsdGoPkgHasElems_QUERYchoicesequenceENTREZLINKchoiceLinkTypeschema_Query_XsdtString_) Walk() (err error) {
+	if fn := WalkHandlers.XsdGoPkgHasElems_QUERYchoicesequenceENTREZLINKchoiceLinkTypeschema_Query_XsdtString_; me != nil {
+		if fn != nil {
+			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+		if fn != nil {
+			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+	}
+	return
+}
+
+type XsdGoPkgHasElems_ReadTYPEsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadType_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadType_Forward struct {
+	ReadTypes []TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadType `xml:"READ_TYPE"`
+}
+
+//	Returns the default value for ReadType -- "Forward"
+func (me XsdGoPkgHasElems_ReadTYPEsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadType_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadType_Forward) ReadTypeDefault() TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadType {
+	return TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadType("Forward")
+}
+
+//	If the WalkHandlers.XsdGoPkgHasElems_ReadTYPEsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadType_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadType_Forward function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElems_ReadTYPEsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadType_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadType_Forward instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElems_ReadTYPEsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadType_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadType_Forward instance.
+func (me *XsdGoPkgHasElems_ReadTYPEsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadType_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadType_Forward) Walk() (err error) {
+	if fn := WalkHandlers.XsdGoPkgHasElems_ReadTYPEsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadType_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadType_Forward; me != nil {
+		if fn != nil {
+			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+		if fn != nil {
+			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+	}
+	return
+}
+
+type XsdGoPkgHasElems_InstrumentMODELsequenceABISOLIDchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceAbiSolidSequenceInstrumentModel_ struct {
+	InstrumentModels []TxsdPlatformTypeChoiceAbiSolidSequenceInstrumentModel `xml:"INSTRUMENT_MODEL"`
+}
+
+//	If the WalkHandlers.XsdGoPkgHasElems_InstrumentMODELsequenceABISOLIDchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceAbiSolidSequenceInstrumentModel_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElems_InstrumentMODELsequenceABISOLIDchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceAbiSolidSequenceInstrumentModel_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElems_InstrumentMODELsequenceABISOLIDchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceAbiSolidSequenceInstrumentModel_ instance.
+func (me *XsdGoPkgHasElems_InstrumentMODELsequenceABISOLIDchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceAbiSolidSequenceInstrumentModel_) Walk() (err error) {
+	if fn := WalkHandlers.XsdGoPkgHasElems_InstrumentMODELsequenceABISOLIDchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceAbiSolidSequenceInstrumentModel_; me != nil {
+		if fn != nil {
+			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+		if fn != nil {
+			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+	}
+	return
+}
+
+type XsdGoPkgHasCdata struct {
+	XsdGoPkgCDATA string `xml:",chardata"`
+}
+
+//	If the WalkHandlers.XsdGoPkgHasCdata function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasCdata instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasCdata instance.
+func (me *XsdGoPkgHasCdata) Walk() (err error) {
+	if fn := WalkHandlers.XsdGoPkgHasCdata; me != nil {
+		if fn != nil {
+			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+		if fn != nil {
+			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+	}
+	return
+}
+
+type XsdGoPkgHasElems_InstrumentMODELallLS454ChoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceLs454AllInstrumentModel_ struct {
+	InstrumentModels []TxsdPlatformTypeChoiceLs454AllInstrumentModel `xml:"INSTRUMENT_MODEL"`
+}
+
+//	If the WalkHandlers.XsdGoPkgHasElems_InstrumentMODELallLS454ChoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceLs454AllInstrumentModel_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElems_InstrumentMODELallLS454ChoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceLs454AllInstrumentModel_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElems_InstrumentMODELallLS454ChoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceLs454AllInstrumentModel_ instance.
+func (me *XsdGoPkgHasElems_InstrumentMODELallLS454ChoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceLs454AllInstrumentModel_) Walk() (err error) {
+	if fn := WalkHandlers.XsdGoPkgHasElems_InstrumentMODELallLS454ChoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceLs454AllInstrumentModel_; me != nil {
+		if fn != nil {
+			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+		if fn != nil {
+			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+	}
+	return
+}
+
+//	Illumina is 4-channel flowgram with 1-to-1 mapping between basecalls and flows
+type XsdGoPkgHasElems_ILLUMINAchoicePlatformTypeschema_Illumina_TxsdPlatformTypeChoiceIllumina_ struct {
+	//	Illumina is 4-channel flowgram with 1-to-1 mapping between basecalls and flows
+	Illuminas []*TxsdPlatformTypeChoiceIllumina `xml:"ILLUMINA"`
+}
+
+//	If the WalkHandlers.XsdGoPkgHasElems_ILLUMINAchoicePlatformTypeschema_Illumina_TxsdPlatformTypeChoiceIllumina_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElems_ILLUMINAchoicePlatformTypeschema_Illumina_TxsdPlatformTypeChoiceIllumina_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElems_ILLUMINAchoicePlatformTypeschema_Illumina_TxsdPlatformTypeChoiceIllumina_ instance.
+func (me *XsdGoPkgHasElems_ILLUMINAchoicePlatformTypeschema_Illumina_TxsdPlatformTypeChoiceIllumina_) Walk() (err error) {
+	if fn := WalkHandlers.XsdGoPkgHasElems_ILLUMINAchoicePlatformTypeschema_Illumina_TxsdPlatformTypeChoiceIllumina_; me != nil {
+		if fn != nil {
+			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+		for _, x := range me.Illuminas {
+			if err = x.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
 				return
 			}
 		}
@@ -4957,15 +5525,71 @@ func (me *XsdGoPkgHasElem_UUIDsequenceIdentifierTypeschema_Uuid_TNameAndLabelTyp
 	return
 }
 
-//	The internet service link (file:, http:, ftp:, etc).
-type XsdGoPkgHasElems_URLallURLLINKchoiceLinkTypeschema_Url_XsdtAnyURI_ struct {
-	//	The internet service link (file:, http:, ftp:, etc).
-	Urls []xsdt.AnyURI `xml:"URL"`
+//	The read is located beginning at the offset or cycle relative to another read. This choice is
+//	appropriate for example when specifying a read that follows a variable length expected sequence(s).
+type XsdGoPkgHasElems_RelativeORDERchoicesequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_RelativeOrder_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceRelativeOrder_ struct {
+	//	The read is located beginning at the offset or cycle relative to another read. This choice is
+	//	appropriate for example when specifying a read that follows a variable length expected sequence(s).
+	RelativeOrders []*TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceRelativeOrder `xml:"RELATIVE_ORDER"`
 }
 
-//	If the WalkHandlers.XsdGoPkgHasElems_URLallURLLINKchoiceLinkTypeschema_Url_XsdtAnyURI_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElems_URLallURLLINKchoiceLinkTypeschema_Url_XsdtAnyURI_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElems_URLallURLLINKchoiceLinkTypeschema_Url_XsdtAnyURI_ instance.
-func (me *XsdGoPkgHasElems_URLallURLLINKchoiceLinkTypeschema_Url_XsdtAnyURI_) Walk() (err error) {
-	if fn := WalkHandlers.XsdGoPkgHasElems_URLallURLLINKchoiceLinkTypeschema_Url_XsdtAnyURI_; me != nil {
+//	If the WalkHandlers.XsdGoPkgHasElems_RelativeORDERchoicesequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_RelativeOrder_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceRelativeOrder_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElems_RelativeORDERchoicesequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_RelativeOrder_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceRelativeOrder_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElems_RelativeORDERchoicesequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_RelativeOrder_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceRelativeOrder_ instance.
+func (me *XsdGoPkgHasElems_RelativeORDERchoicesequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_RelativeOrder_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceRelativeOrder_) Walk() (err error) {
+	if fn := WalkHandlers.XsdGoPkgHasElems_RelativeORDERchoicesequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_RelativeOrder_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceRelativeOrder_; me != nil {
+		if fn != nil {
+			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+		for _, x := range me.RelativeOrders {
+			if err = x.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+		if fn != nil {
+			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+	}
+	return
+}
+
+//	List of primary and alternate identifiers including those records replacing or replaced by this record.
+type XsdGoPkgHasElems_IDENTIFIERSsequenceStudyTypeschema_Identifiers_TIdentifierType_ struct {
+	//	List of primary and alternate identifiers including those records replacing or replaced by this record.
+	Identifierses []*TIdentifierType `xml:"IDENTIFIERS"`
+}
+
+//	If the WalkHandlers.XsdGoPkgHasElems_IDENTIFIERSsequenceStudyTypeschema_Identifiers_TIdentifierType_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElems_IDENTIFIERSsequenceStudyTypeschema_Identifiers_TIdentifierType_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElems_IDENTIFIERSsequenceStudyTypeschema_Identifiers_TIdentifierType_ instance.
+func (me *XsdGoPkgHasElems_IDENTIFIERSsequenceStudyTypeschema_Identifiers_TIdentifierType_) Walk() (err error) {
+	if fn := WalkHandlers.XsdGoPkgHasElems_IDENTIFIERSsequenceStudyTypeschema_Identifiers_TIdentifierType_; me != nil {
+		if fn != nil {
+			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+		for _, x := range me.Identifierses {
+			if err = x.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+		if fn != nil {
+			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+	}
+	return
+}
+
+type XsdGoPkgHasElems_InstrumentMODELsequenceILLUMINAchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceIlluminaSequenceInstrumentModel_ struct {
+	InstrumentModels []TxsdPlatformTypeChoiceIlluminaSequenceInstrumentModel `xml:"INSTRUMENT_MODEL"`
+}
+
+//	If the WalkHandlers.XsdGoPkgHasElems_InstrumentMODELsequenceILLUMINAchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceIlluminaSequenceInstrumentModel_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElems_InstrumentMODELsequenceILLUMINAchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceIlluminaSequenceInstrumentModel_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElems_InstrumentMODELsequenceILLUMINAchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceIlluminaSequenceInstrumentModel_ instance.
+func (me *XsdGoPkgHasElems_InstrumentMODELsequenceILLUMINAchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceIlluminaSequenceInstrumentModel_) Walk() (err error) {
+	if fn := WalkHandlers.XsdGoPkgHasElems_InstrumentMODELsequenceILLUMINAchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceIlluminaSequenceInstrumentModel_; me != nil {
 		if fn != nil {
 			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
 				return
@@ -4980,17 +5604,66 @@ func (me *XsdGoPkgHasElems_URLallURLLINKchoiceLinkTypeschema_Url_XsdtAnyURI_) Wa
 	return
 }
 
-//	READ_LABEL is a name for this tag, and can be used to on output to determine read name, for example
-//	F or R.
-type XsdGoPkgHasElems_ReadLABELsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadLabel_XsdtString_ struct {
-	//	READ_LABEL is a name for this tag, and can be used to on output to determine read name, for example
-	//	F or R.
-	ReadLabels []xsdt.String `xml:"READ_LABEL"`
+//	Whether the reference alignment includes unaligned reads.
+type XsdGoPkgHasElems_AlignmentIncludesUnalignedReadsallAlignmentDirectivesTypeschema_AlignmentIncludesUnalignedReads_XsdtBoolean_ struct {
+	//	Whether the reference alignment includes unaligned reads.
+	AlignmentIncludesUnalignedReadses []xsdt.Boolean `xml:"alignment_includes_unaligned_reads"`
 }
 
-//	If the WalkHandlers.XsdGoPkgHasElems_ReadLABELsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadLabel_XsdtString_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElems_ReadLABELsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadLabel_XsdtString_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElems_ReadLABELsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadLabel_XsdtString_ instance.
-func (me *XsdGoPkgHasElems_ReadLABELsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadLabel_XsdtString_) Walk() (err error) {
-	if fn := WalkHandlers.XsdGoPkgHasElems_ReadLABELsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadLabel_XsdtString_; me != nil {
+//	If the WalkHandlers.XsdGoPkgHasElems_AlignmentIncludesUnalignedReadsallAlignmentDirectivesTypeschema_AlignmentIncludesUnalignedReads_XsdtBoolean_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElems_AlignmentIncludesUnalignedReadsallAlignmentDirectivesTypeschema_AlignmentIncludesUnalignedReads_XsdtBoolean_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElems_AlignmentIncludesUnalignedReadsallAlignmentDirectivesTypeschema_AlignmentIncludesUnalignedReads_XsdtBoolean_ instance.
+func (me *XsdGoPkgHasElems_AlignmentIncludesUnalignedReadsallAlignmentDirectivesTypeschema_AlignmentIncludesUnalignedReads_XsdtBoolean_) Walk() (err error) {
+	if fn := WalkHandlers.XsdGoPkgHasElems_AlignmentIncludesUnalignedReadsallAlignmentDirectivesTypeschema_AlignmentIncludesUnalignedReads_XsdtBoolean_; me != nil {
+		if fn != nil {
+			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+		if fn != nil {
+			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+	}
+	return
+}
+
+//	An identifier from a public non-SRA resource. @namespace would be an official short name of that
+//	resource.
+type XsdGoPkgHasElem_ExternalIDsequenceIdentifierTypeschema_ExternalId_TQualifiedNameType_ struct {
+	//	An identifier from a public non-SRA resource. @namespace would be an official short name of that
+	//	resource.
+	ExternalId *TQualifiedNameType `xml:"EXTERNAL_ID"`
+}
+
+//	If the WalkHandlers.XsdGoPkgHasElem_ExternalIDsequenceIdentifierTypeschema_ExternalId_TQualifiedNameType_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElem_ExternalIDsequenceIdentifierTypeschema_ExternalId_TQualifiedNameType_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 1/1 field(s) belonging to this XsdGoPkgHasElem_ExternalIDsequenceIdentifierTypeschema_ExternalId_TQualifiedNameType_ instance.
+func (me *XsdGoPkgHasElem_ExternalIDsequenceIdentifierTypeschema_ExternalId_TQualifiedNameType_) Walk() (err error) {
+	if fn := WalkHandlers.XsdGoPkgHasElem_ExternalIDsequenceIdentifierTypeschema_ExternalId_TQualifiedNameType_; me != nil {
+		if fn != nil {
+			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+		if err = me.ExternalId.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+			return
+		}
+		if fn != nil {
+			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
+				return
+			}
+		}
+	}
+	return
+}
+
+//	The location of the read start in terms of base count (1 is beginning of spot).
+type XsdGoPkgHasElems_BaseCOORDchoicesequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_BaseCoord_XsdtInteger_ struct {
+	//	The location of the read start in terms of base count (1 is beginning of spot).
+	BaseCoords []*xsdt.Integer `xml:"BASE_COORD"`
+}
+
+//	If the WalkHandlers.XsdGoPkgHasElems_BaseCOORDchoicesequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_BaseCoord_XsdtInteger_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElems_BaseCOORDchoicesequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_BaseCoord_XsdtInteger_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElems_BaseCOORDchoicesequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_BaseCoord_XsdtInteger_ instance.
+func (me *XsdGoPkgHasElems_BaseCOORDchoicesequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_BaseCoord_XsdtInteger_) Walk() (err error) {
+	if fn := WalkHandlers.XsdGoPkgHasElems_BaseCOORDchoicesequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_BaseCoord_XsdtInteger_; me != nil {
 		if fn != nil {
 			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
 				return
@@ -5032,50 +5705,15 @@ func (me *TSpotDescriptorType) Walk() (err error) {
 	return
 }
 
-//	Related study or project record from a list of supported databases. The study's information
-//	is derived from this project record rather than stored as first class information.
-type XsdGoPkgHasElems_RelatedLINKsequenceRELATEDSTUDYsequenceRELATEDSTUDIESallDESCRIPTORsequenceStudyTypeschema_RelatedLink_TXRefType_ struct {
-	//	Related study or project record from a list of supported databases. The study's information
-	//	is derived from this project record rather than stored as first class information.
-	RelatedLinks []*TXRefType `xml:"RELATED_LINK"`
+type XsdGoPkgHasElems_InstrumentMODELsequenceCAPILLARYchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceCapillarySequenceInstrumentModel_ struct {
+	InstrumentModels []TxsdPlatformTypeChoiceCapillarySequenceInstrumentModel `xml:"INSTRUMENT_MODEL"`
 }
 
-//	If the WalkHandlers.XsdGoPkgHasElems_RelatedLINKsequenceRELATEDSTUDYsequenceRELATEDSTUDIESallDESCRIPTORsequenceStudyTypeschema_RelatedLink_TXRefType_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElems_RelatedLINKsequenceRELATEDSTUDYsequenceRELATEDSTUDIESallDESCRIPTORsequenceStudyTypeschema_RelatedLink_TXRefType_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElems_RelatedLINKsequenceRELATEDSTUDYsequenceRELATEDSTUDIESallDESCRIPTORsequenceStudyTypeschema_RelatedLink_TXRefType_ instance.
-func (me *XsdGoPkgHasElems_RelatedLINKsequenceRELATEDSTUDYsequenceRELATEDSTUDIESallDESCRIPTORsequenceStudyTypeschema_RelatedLink_TXRefType_) Walk() (err error) {
-	if fn := WalkHandlers.XsdGoPkgHasElems_RelatedLINKsequenceRELATEDSTUDYsequenceRELATEDSTUDIESallDESCRIPTORsequenceStudyTypeschema_RelatedLink_TXRefType_; me != nil {
+//	If the WalkHandlers.XsdGoPkgHasElems_InstrumentMODELsequenceCAPILLARYchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceCapillarySequenceInstrumentModel_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElems_InstrumentMODELsequenceCAPILLARYchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceCapillarySequenceInstrumentModel_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElems_InstrumentMODELsequenceCAPILLARYchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceCapillarySequenceInstrumentModel_ instance.
+func (me *XsdGoPkgHasElems_InstrumentMODELsequenceCAPILLARYchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceCapillarySequenceInstrumentModel_) Walk() (err error) {
+	if fn := WalkHandlers.XsdGoPkgHasElems_InstrumentMODELsequenceCAPILLARYchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceCapillarySequenceInstrumentModel_; me != nil {
 		if fn != nil {
 			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-		for _, x := range me.RelatedLinks {
-			if err = x.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-		if fn != nil {
-			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-	}
-	return
-}
-
-type XsdGoPkgHasElems_RelatedSTUDIESallDESCRIPTORsequenceStudyTypeschema_RelatedStudies_TxsdStudyTypeSequenceDescriptorAllRelatedStudies_ struct {
-	RelatedStudieses []*TxsdStudyTypeSequenceDescriptorAllRelatedStudies `xml:"RELATED_STUDIES"`
-}
-
-//	If the WalkHandlers.XsdGoPkgHasElems_RelatedSTUDIESallDESCRIPTORsequenceStudyTypeschema_RelatedStudies_TxsdStudyTypeSequenceDescriptorAllRelatedStudies_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElems_RelatedSTUDIESallDESCRIPTORsequenceStudyTypeschema_RelatedStudies_TxsdStudyTypeSequenceDescriptorAllRelatedStudies_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElems_RelatedSTUDIESallDESCRIPTORsequenceStudyTypeschema_RelatedStudies_TxsdStudyTypeSequenceDescriptorAllRelatedStudies_ instance.
-func (me *XsdGoPkgHasElems_RelatedSTUDIESallDESCRIPTORsequenceStudyTypeschema_RelatedStudies_TxsdStudyTypeSequenceDescriptorAllRelatedStudies_) Walk() (err error) {
-	if fn := WalkHandlers.XsdGoPkgHasElems_RelatedSTUDIESallDESCRIPTORsequenceStudyTypeschema_RelatedStudies_TxsdStudyTypeSequenceDescriptorAllRelatedStudies_; me != nil {
-		if fn != nil {
-			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-		for _, x := range me.RelatedStudieses {
-			if err = x.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
 				return
 			}
 		}
@@ -5118,21 +5756,23 @@ func (me *XsdGoPkgHasElems_StudyATTRIBUTESsequenceStudyTypeschema_StudyAttribute
 	return
 }
 
-//	Illumina is 4-channel flowgram with 1-to-1 mapping between basecalls and flows
-type XsdGoPkgHasElems_ILLUMINAchoicePlatformTypeschema_Illumina_TxsdPlatformTypeChoiceIllumina_ struct {
-	//	Illumina is 4-channel flowgram with 1-to-1 mapping between basecalls and flows
-	Illuminas []*TxsdPlatformTypeChoiceIllumina `xml:"ILLUMINA"`
+//	A set of choices of expected basecalls for a current read. Read will be zero-length if none is
+//	found.
+type XsdGoPkgHasElems_ExpectedBasecallTABLEchoicesequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ExpectedBasecallTable_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTable_ struct {
+	//	A set of choices of expected basecalls for a current read. Read will be zero-length if none is
+	//	found.
+	ExpectedBasecallTables []*TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTable `xml:"EXPECTED_BASECALL_TABLE"`
 }
 
-//	If the WalkHandlers.XsdGoPkgHasElems_ILLUMINAchoicePlatformTypeschema_Illumina_TxsdPlatformTypeChoiceIllumina_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElems_ILLUMINAchoicePlatformTypeschema_Illumina_TxsdPlatformTypeChoiceIllumina_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElems_ILLUMINAchoicePlatformTypeschema_Illumina_TxsdPlatformTypeChoiceIllumina_ instance.
-func (me *XsdGoPkgHasElems_ILLUMINAchoicePlatformTypeschema_Illumina_TxsdPlatformTypeChoiceIllumina_) Walk() (err error) {
-	if fn := WalkHandlers.XsdGoPkgHasElems_ILLUMINAchoicePlatformTypeschema_Illumina_TxsdPlatformTypeChoiceIllumina_; me != nil {
+//	If the WalkHandlers.XsdGoPkgHasElems_ExpectedBasecallTABLEchoicesequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ExpectedBasecallTable_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTable_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElems_ExpectedBasecallTABLEchoicesequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ExpectedBasecallTable_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTable_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElems_ExpectedBasecallTABLEchoicesequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ExpectedBasecallTable_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTable_ instance.
+func (me *XsdGoPkgHasElems_ExpectedBasecallTABLEchoicesequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ExpectedBasecallTable_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTable_) Walk() (err error) {
+	if fn := WalkHandlers.XsdGoPkgHasElems_ExpectedBasecallTABLEchoicesequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ExpectedBasecallTable_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTable_; me != nil {
 		if fn != nil {
 			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
 				return
 			}
 		}
-		for _, x := range me.Illuminas {
+		for _, x := range me.ExpectedBasecallTables {
 			if err = x.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
 				return
 			}
@@ -5146,21 +5786,21 @@ func (me *XsdGoPkgHasElems_ILLUMINAchoicePlatformTypeschema_Illumina_TxsdPlatfor
 	return
 }
 
-//	Oxford Nanopore platform type. nanopore-based electronic single molecule analysis
-type XsdGoPkgHasElems_OxfordNANOPOREchoicePlatformTypeschema_OxfordNanopore_TxsdPlatformTypeChoiceOxfordNanopore_ struct {
-	//	Oxford Nanopore platform type. nanopore-based electronic single molecule analysis
-	OxfordNanopores []*TxsdPlatformTypeChoiceOxfordNanopore `xml:"OXFORD_NANOPORE"`
+//	CompleteGenomics platform type. At present there is no instrument model.
+type XsdGoPkgHasElems_CompleteGENOMICSchoicePlatformTypeschema_CompleteGenomics_TxsdPlatformTypeChoiceCompleteGenomics_ struct {
+	//	CompleteGenomics platform type. At present there is no instrument model.
+	CompleteGenomicses []*TxsdPlatformTypeChoiceCompleteGenomics `xml:"COMPLETE_GENOMICS"`
 }
 
-//	If the WalkHandlers.XsdGoPkgHasElems_OxfordNANOPOREchoicePlatformTypeschema_OxfordNanopore_TxsdPlatformTypeChoiceOxfordNanopore_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElems_OxfordNANOPOREchoicePlatformTypeschema_OxfordNanopore_TxsdPlatformTypeChoiceOxfordNanopore_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElems_OxfordNANOPOREchoicePlatformTypeschema_OxfordNanopore_TxsdPlatformTypeChoiceOxfordNanopore_ instance.
-func (me *XsdGoPkgHasElems_OxfordNANOPOREchoicePlatformTypeschema_OxfordNanopore_TxsdPlatformTypeChoiceOxfordNanopore_) Walk() (err error) {
-	if fn := WalkHandlers.XsdGoPkgHasElems_OxfordNANOPOREchoicePlatformTypeschema_OxfordNanopore_TxsdPlatformTypeChoiceOxfordNanopore_; me != nil {
+//	If the WalkHandlers.XsdGoPkgHasElems_CompleteGENOMICSchoicePlatformTypeschema_CompleteGenomics_TxsdPlatformTypeChoiceCompleteGenomics_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElems_CompleteGENOMICSchoicePlatformTypeschema_CompleteGenomics_TxsdPlatformTypeChoiceCompleteGenomics_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElems_CompleteGENOMICSchoicePlatformTypeschema_CompleteGenomics_TxsdPlatformTypeChoiceCompleteGenomics_ instance.
+func (me *XsdGoPkgHasElems_CompleteGENOMICSchoicePlatformTypeschema_CompleteGenomics_TxsdPlatformTypeChoiceCompleteGenomics_) Walk() (err error) {
+	if fn := WalkHandlers.XsdGoPkgHasElems_CompleteGENOMICSchoicePlatformTypeschema_CompleteGenomics_TxsdPlatformTypeChoiceCompleteGenomics_; me != nil {
 		if fn != nil {
 			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
 				return
 			}
 		}
-		for _, x := range me.OxfordNanopores {
+		for _, x := range me.CompleteGenomicses {
 			if err = x.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
 				return
 			}
@@ -5174,660 +5814,20 @@ func (me *XsdGoPkgHasElems_OxfordNANOPOREchoicePlatformTypeschema_OxfordNanopore
 	return
 }
 
-//	PacificBiosciences platform type for the single molecule real time (SMRT) technology.
-type XsdGoPkgHasElems_PacbioSMRTchoicePlatformTypeschema_PacbioSmrt_TxsdPlatformTypeChoicePacbioSmrt_ struct {
-	//	PacificBiosciences platform type for the single molecule real time (SMRT) technology.
-	PacbioSmrts []*TxsdPlatformTypeChoicePacbioSmrt `xml:"PACBIO_SMRT"`
+type XsdGoPkgHasElems_EntrezLINKchoiceLinkTypeschema_EntrezLink_TxsdLinkTypeChoiceEntrezLink_ struct {
+	EntrezLinks []*TxsdLinkTypeChoiceEntrezLink `xml:"ENTREZ_LINK"`
 }
 
-//	If the WalkHandlers.XsdGoPkgHasElems_PacbioSMRTchoicePlatformTypeschema_PacbioSmrt_TxsdPlatformTypeChoicePacbioSmrt_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElems_PacbioSMRTchoicePlatformTypeschema_PacbioSmrt_TxsdPlatformTypeChoicePacbioSmrt_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElems_PacbioSMRTchoicePlatformTypeschema_PacbioSmrt_TxsdPlatformTypeChoicePacbioSmrt_ instance.
-func (me *XsdGoPkgHasElems_PacbioSMRTchoicePlatformTypeschema_PacbioSmrt_TxsdPlatformTypeChoicePacbioSmrt_) Walk() (err error) {
-	if fn := WalkHandlers.XsdGoPkgHasElems_PacbioSMRTchoicePlatformTypeschema_PacbioSmrt_TxsdPlatformTypeChoicePacbioSmrt_; me != nil {
+//	If the WalkHandlers.XsdGoPkgHasElems_EntrezLINKchoiceLinkTypeschema_EntrezLink_TxsdLinkTypeChoiceEntrezLink_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElems_EntrezLINKchoiceLinkTypeschema_EntrezLink_TxsdLinkTypeChoiceEntrezLink_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElems_EntrezLINKchoiceLinkTypeschema_EntrezLink_TxsdLinkTypeChoiceEntrezLink_ instance.
+func (me *XsdGoPkgHasElems_EntrezLINKchoiceLinkTypeschema_EntrezLink_TxsdLinkTypeChoiceEntrezLink_) Walk() (err error) {
+	if fn := WalkHandlers.XsdGoPkgHasElems_EntrezLINKchoiceLinkTypeschema_EntrezLink_TxsdLinkTypeChoiceEntrezLink_; me != nil {
 		if fn != nil {
 			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
 				return
 			}
 		}
-		for _, x := range me.PacbioSmrts {
+		for _, x := range me.EntrezLinks {
 			if err = x.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-		if fn != nil {
-			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-	}
-	return
-}
-
-//	primary accession of the record in one of INSDC SRA archives.
-type XsdGoPkgHasElems_PrimaryIDsequenceIdentifierTypeschema_PrimaryId_TNameAndLabelType_ struct {
-	//	primary accession of the record in one of INSDC SRA archives.
-	PrimaryIds []*TNameAndLabelType `xml:"PRIMARY_ID"`
-}
-
-//	If the WalkHandlers.XsdGoPkgHasElems_PrimaryIDsequenceIdentifierTypeschema_PrimaryId_TNameAndLabelType_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElems_PrimaryIDsequenceIdentifierTypeschema_PrimaryId_TNameAndLabelType_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElems_PrimaryIDsequenceIdentifierTypeschema_PrimaryId_TNameAndLabelType_ instance.
-func (me *XsdGoPkgHasElems_PrimaryIDsequenceIdentifierTypeschema_PrimaryId_TNameAndLabelType_) Walk() (err error) {
-	if fn := WalkHandlers.XsdGoPkgHasElems_PrimaryIDsequenceIdentifierTypeschema_PrimaryId_TNameAndLabelType_; me != nil {
-		if fn != nil {
-			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-		for _, x := range me.PrimaryIds {
-			if err = x.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-		if fn != nil {
-			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-	}
-	return
-}
-
-//	Number of base/color calls, cycles, or flows per spot (raw sequence length or flow length including all
-//	application and technical tags and mate pairs, but not including gap lengths). This value will be platform dependent,
-//	library dependent, and possibly run dependent. Variable length platforms will still have a constant flow/cycle length.
-type XsdGoPkgHasElems_SpotLENGTHsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_SpotLength_XsdtNonNegativeInteger_ struct {
-	//	Number of base/color calls, cycles, or flows per spot (raw sequence length or flow length including all
-	//	application and technical tags and mate pairs, but not including gap lengths). This value will be platform dependent,
-	//	library dependent, and possibly run dependent. Variable length platforms will still have a constant flow/cycle length.
-	SpotLengths []xsdt.NonNegativeInteger `xml:"SPOT_LENGTH"`
-}
-
-//	If the WalkHandlers.XsdGoPkgHasElems_SpotLENGTHsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_SpotLength_XsdtNonNegativeInteger_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElems_SpotLENGTHsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_SpotLength_XsdtNonNegativeInteger_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElems_SpotLENGTHsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_SpotLength_XsdtNonNegativeInteger_ instance.
-func (me *XsdGoPkgHasElems_SpotLENGTHsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_SpotLength_XsdtNonNegativeInteger_) Walk() (err error) {
-	if fn := WalkHandlers.XsdGoPkgHasElems_SpotLENGTHsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_SpotLength_XsdtNonNegativeInteger_; me != nil {
-		if fn != nil {
-			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-		if fn != nil {
-			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-	}
-	return
-}
-
-//	Whether this study object is designated as the primary source of the study or project
-//	information.
-type XsdGoPkgHasElems_IsPRIMARYsequenceRELATEDSTUDYsequenceRELATEDSTUDIESallDESCRIPTORsequenceStudyTypeschema_IsPrimary_XsdtBoolean_ struct {
-	//	Whether this study object is designated as the primary source of the study or project
-	//	information.
-	IsPrimaries []xsdt.Boolean `xml:"IS_PRIMARY"`
-}
-
-//	If the WalkHandlers.XsdGoPkgHasElems_IsPRIMARYsequenceRELATEDSTUDYsequenceRELATEDSTUDIESallDESCRIPTORsequenceStudyTypeschema_IsPrimary_XsdtBoolean_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElems_IsPRIMARYsequenceRELATEDSTUDYsequenceRELATEDSTUDIESallDESCRIPTORsequenceStudyTypeschema_IsPrimary_XsdtBoolean_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElems_IsPRIMARYsequenceRELATEDSTUDYsequenceRELATEDSTUDIESallDESCRIPTORsequenceStudyTypeschema_IsPrimary_XsdtBoolean_ instance.
-func (me *XsdGoPkgHasElems_IsPRIMARYsequenceRELATEDSTUDYsequenceRELATEDSTUDIESallDESCRIPTORsequenceStudyTypeschema_IsPrimary_XsdtBoolean_) Walk() (err error) {
-	if fn := WalkHandlers.XsdGoPkgHasElems_IsPRIMARYsequenceRELATEDSTUDYsequenceRELATEDSTUDIESallDESCRIPTORsequenceStudyTypeschema_IsPrimary_XsdtBoolean_; me != nil {
-		if fn != nil {
-			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-		if fn != nil {
-			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-	}
-	return
-}
-
-//	Processing directives tell the Sequence Read Archive how to treat the input data, if any treatment is
-//	requested.
-type XsdGoPkgHasElems_DIRECTIVESsequenceProcessingTypeschema_Directives_TSequencingDirectivesType_ struct {
-	//	Processing directives tell the Sequence Read Archive how to treat the input data, if any treatment is
-	//	requested.
-	Directiveses []*TSequencingDirectivesType `xml:"DIRECTIVES"`
-}
-
-//	If the WalkHandlers.XsdGoPkgHasElems_DIRECTIVESsequenceProcessingTypeschema_Directives_TSequencingDirectivesType_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElems_DIRECTIVESsequenceProcessingTypeschema_Directives_TSequencingDirectivesType_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElems_DIRECTIVESsequenceProcessingTypeschema_Directives_TSequencingDirectivesType_ instance.
-func (me *XsdGoPkgHasElems_DIRECTIVESsequenceProcessingTypeschema_Directives_TSequencingDirectivesType_) Walk() (err error) {
-	if fn := WalkHandlers.XsdGoPkgHasElems_DIRECTIVESsequenceProcessingTypeschema_Directives_TSequencingDirectivesType_; me != nil {
-		if fn != nil {
-			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-		for _, x := range me.Directiveses {
-			if err = x.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-		if fn != nil {
-			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-	}
-	return
-}
-
-//	Accession string meaningful to the NCBI Entrez system.
-type XsdGoPkgHasElems_QUERYchoicesequenceENTREZLINKchoiceLinkTypeschema_Query_XsdtString_ struct {
-	//	Accession string meaningful to the NCBI Entrez system.
-	Queries []xsdt.String `xml:"QUERY"`
-}
-
-//	If the WalkHandlers.XsdGoPkgHasElems_QUERYchoicesequenceENTREZLINKchoiceLinkTypeschema_Query_XsdtString_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElems_QUERYchoicesequenceENTREZLINKchoiceLinkTypeschema_Query_XsdtString_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElems_QUERYchoicesequenceENTREZLINKchoiceLinkTypeschema_Query_XsdtString_ instance.
-func (me *XsdGoPkgHasElems_QUERYchoicesequenceENTREZLINKchoiceLinkTypeschema_Query_XsdtString_) Walk() (err error) {
-	if fn := WalkHandlers.XsdGoPkgHasElems_QUERYchoicesequenceENTREZLINKchoiceLinkTypeschema_Query_XsdtString_; me != nil {
-		if fn != nil {
-			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-		if fn != nil {
-			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-	}
-	return
-}
-
-//	Whether the reference alignment includes all reads regardless of whether they fail the instrument vendor's
-//	quality check.
-type XsdGoPkgHasElems_AlignmentIncludesFailedReadsallAlignmentDirectivesTypeschema_AlignmentIncludesFailedReads_XsdtBoolean_ struct {
-	//	Whether the reference alignment includes all reads regardless of whether they fail the instrument vendor's
-	//	quality check.
-	AlignmentIncludesFailedReadses []xsdt.Boolean `xml:"alignment_includes_failed_reads"`
-}
-
-//	If the WalkHandlers.XsdGoPkgHasElems_AlignmentIncludesFailedReadsallAlignmentDirectivesTypeschema_AlignmentIncludesFailedReads_XsdtBoolean_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElems_AlignmentIncludesFailedReadsallAlignmentDirectivesTypeschema_AlignmentIncludesFailedReads_XsdtBoolean_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElems_AlignmentIncludesFailedReadsallAlignmentDirectivesTypeschema_AlignmentIncludesFailedReads_XsdtBoolean_ instance.
-func (me *XsdGoPkgHasElems_AlignmentIncludesFailedReadsallAlignmentDirectivesTypeschema_AlignmentIncludesFailedReads_XsdtBoolean_) Walk() (err error) {
-	if fn := WalkHandlers.XsdGoPkgHasElems_AlignmentIncludesFailedReadsallAlignmentDirectivesTypeschema_AlignmentIncludesFailedReads_XsdtBoolean_; me != nil {
-		if fn != nil {
-			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-		if fn != nil {
-			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-	}
-	return
-}
-
-type XsdGoPkgHasElems_InstrumentMODELsequencePACBIOSMRTchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoicePacbioSmrtSequenceInstrumentModel_ struct {
-	InstrumentModels []TxsdPlatformTypeChoicePacbioSmrtSequenceInstrumentModel `xml:"INSTRUMENT_MODEL"`
-}
-
-//	If the WalkHandlers.XsdGoPkgHasElems_InstrumentMODELsequencePACBIOSMRTchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoicePacbioSmrtSequenceInstrumentModel_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElems_InstrumentMODELsequencePACBIOSMRTchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoicePacbioSmrtSequenceInstrumentModel_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElems_InstrumentMODELsequencePACBIOSMRTchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoicePacbioSmrtSequenceInstrumentModel_ instance.
-func (me *XsdGoPkgHasElems_InstrumentMODELsequencePACBIOSMRTchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoicePacbioSmrtSequenceInstrumentModel_) Walk() (err error) {
-	if fn := WalkHandlers.XsdGoPkgHasElems_InstrumentMODELsequencePACBIOSMRTchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoicePacbioSmrtSequenceInstrumentModel_; me != nil {
-		if fn != nil {
-			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-		if fn != nil {
-			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-	}
-	return
-}
-
-//	Briefly describes the goals, purpose, and scope of the Study. This need not be listed if it can be
-//	inherited from a referenced publication.
-type XsdGoPkgHasElems_StudyABSTRACTallDESCRIPTORsequenceStudyTypeschema_StudyAbstract_XsdtString_ struct {
-	//	Briefly describes the goals, purpose, and scope of the Study. This need not be listed if it can be
-	//	inherited from a referenced publication.
-	StudyAbstracts []xsdt.String `xml:"STUDY_ABSTRACT"`
-}
-
-//	If the WalkHandlers.XsdGoPkgHasElems_StudyABSTRACTallDESCRIPTORsequenceStudyTypeschema_StudyAbstract_XsdtString_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElems_StudyABSTRACTallDESCRIPTORsequenceStudyTypeschema_StudyAbstract_XsdtString_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElems_StudyABSTRACTallDESCRIPTORsequenceStudyTypeschema_StudyAbstract_XsdtString_ instance.
-func (me *XsdGoPkgHasElems_StudyABSTRACTallDESCRIPTORsequenceStudyTypeschema_StudyAbstract_XsdtString_) Walk() (err error) {
-	if fn := WalkHandlers.XsdGoPkgHasElems_StudyABSTRACTallDESCRIPTORsequenceStudyTypeschema_StudyAbstract_XsdtString_; me != nil {
-		if fn != nil {
-			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-		if fn != nil {
-			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-	}
-	return
-}
-
-type XsdGoPkgHasElem_RelatedSTUDYsequenceRELATEDSTUDIESallDESCRIPTORsequenceStudyTypeschema_RelatedStudy_TxsdStudyTypeSequenceDescriptorAllRelatedStudiesSequenceRelatedStudy_ struct {
-	RelatedStudy *TxsdStudyTypeSequenceDescriptorAllRelatedStudiesSequenceRelatedStudy `xml:"RELATED_STUDY"`
-}
-
-//	If the WalkHandlers.XsdGoPkgHasElem_RelatedSTUDYsequenceRELATEDSTUDIESallDESCRIPTORsequenceStudyTypeschema_RelatedStudy_TxsdStudyTypeSequenceDescriptorAllRelatedStudiesSequenceRelatedStudy_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElem_RelatedSTUDYsequenceRELATEDSTUDIESallDESCRIPTORsequenceStudyTypeschema_RelatedStudy_TxsdStudyTypeSequenceDescriptorAllRelatedStudiesSequenceRelatedStudy_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 1/1 field(s) belonging to this XsdGoPkgHasElem_RelatedSTUDYsequenceRELATEDSTUDIESallDESCRIPTORsequenceStudyTypeschema_RelatedStudy_TxsdStudyTypeSequenceDescriptorAllRelatedStudiesSequenceRelatedStudy_ instance.
-func (me *XsdGoPkgHasElem_RelatedSTUDYsequenceRELATEDSTUDIESallDESCRIPTORsequenceStudyTypeschema_RelatedStudy_TxsdStudyTypeSequenceDescriptorAllRelatedStudiesSequenceRelatedStudy_) Walk() (err error) {
-	if fn := WalkHandlers.XsdGoPkgHasElem_RelatedSTUDYsequenceRELATEDSTUDIESallDESCRIPTORsequenceStudyTypeschema_RelatedStudy_TxsdStudyTypeSequenceDescriptorAllRelatedStudiesSequenceRelatedStudy_; me != nil {
-		if fn != nil {
-			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-		if err = me.RelatedStudy.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-			return
-		}
-		if fn != nil {
-			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-	}
-	return
-}
-
-//	Version of the program or process for primary analysis.
-type XsdGoPkgHasElems_VERSIONsequencePIPESECTIONsequencePipelineTypeschema_Version_XsdtString_ struct {
-	//	Version of the program or process for primary analysis.
-	Versions []xsdt.String `xml:"VERSION"`
-}
-
-//	If the WalkHandlers.XsdGoPkgHasElems_VERSIONsequencePIPESECTIONsequencePipelineTypeschema_Version_XsdtString_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElems_VERSIONsequencePIPESECTIONsequencePipelineTypeschema_Version_XsdtString_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElems_VERSIONsequencePIPESECTIONsequencePipelineTypeschema_Version_XsdtString_ instance.
-func (me *XsdGoPkgHasElems_VERSIONsequencePIPESECTIONsequencePipelineTypeschema_Version_XsdtString_) Walk() (err error) {
-	if fn := WalkHandlers.XsdGoPkgHasElems_VERSIONsequencePIPESECTIONsequencePipelineTypeschema_Version_XsdtString_; me != nil {
-		if fn != nil {
-			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-		if fn != nil {
-			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-	}
-	return
-}
-
-type XsdGoPkgHasElems_InstrumentMODELsequenceOXFORDNANOPOREchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceOxfordNanoporeSequenceInstrumentModel_ struct {
-	InstrumentModels []TxsdPlatformTypeChoiceOxfordNanoporeSequenceInstrumentModel `xml:"INSTRUMENT_MODEL"`
-}
-
-//	If the WalkHandlers.XsdGoPkgHasElems_InstrumentMODELsequenceOXFORDNANOPOREchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceOxfordNanoporeSequenceInstrumentModel_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElems_InstrumentMODELsequenceOXFORDNANOPOREchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceOxfordNanoporeSequenceInstrumentModel_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElems_InstrumentMODELsequenceOXFORDNANOPOREchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceOxfordNanoporeSequenceInstrumentModel_ instance.
-func (me *XsdGoPkgHasElems_InstrumentMODELsequenceOXFORDNANOPOREchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceOxfordNanoporeSequenceInstrumentModel_) Walk() (err error) {
-	if fn := WalkHandlers.XsdGoPkgHasElems_InstrumentMODELsequenceOXFORDNANOPOREchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceOxfordNanoporeSequenceInstrumentModel_; me != nil {
-		if fn != nil {
-			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-		if fn != nil {
-			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-	}
-	return
-}
-
-//	Sequencers based on capillary electrophoresis technology manufactured by LifeTech (formerly Applied
-//	BioSciences).
-type XsdGoPkgHasElems_CAPILLARYchoicePlatformTypeschema_Capillary_TxsdPlatformTypeChoiceCapillary_ struct {
-	//	Sequencers based on capillary electrophoresis technology manufactured by LifeTech (formerly Applied
-	//	BioSciences).
-	Capillaries []*TxsdPlatformTypeChoiceCapillary `xml:"CAPILLARY"`
-}
-
-//	If the WalkHandlers.XsdGoPkgHasElems_CAPILLARYchoicePlatformTypeschema_Capillary_TxsdPlatformTypeChoiceCapillary_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElems_CAPILLARYchoicePlatformTypeschema_Capillary_TxsdPlatformTypeChoiceCapillary_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElems_CAPILLARYchoicePlatformTypeschema_Capillary_TxsdPlatformTypeChoiceCapillary_ instance.
-func (me *XsdGoPkgHasElems_CAPILLARYchoicePlatformTypeschema_Capillary_TxsdPlatformTypeChoiceCapillary_) Walk() (err error) {
-	if fn := WalkHandlers.XsdGoPkgHasElems_CAPILLARYchoicePlatformTypeschema_Capillary_TxsdPlatformTypeChoiceCapillary_; me != nil {
-		if fn != nil {
-			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-		for _, x := range me.Capillaries {
-			if err = x.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-		if fn != nil {
-			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-	}
-	return
-}
-
-//	Notes about the program or process for primary analysis.
-type XsdGoPkgHasElems_NOTESsequencePIPESECTIONsequencePipelineTypeschema_Notes_XsdtString_ struct {
-	//	Notes about the program or process for primary analysis.
-	Noteses []xsdt.String `xml:"NOTES"`
-}
-
-//	If the WalkHandlers.XsdGoPkgHasElems_NOTESsequencePIPESECTIONsequencePipelineTypeschema_Notes_XsdtString_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElems_NOTESsequencePIPESECTIONsequencePipelineTypeschema_Notes_XsdtString_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElems_NOTESsequencePIPESECTIONsequencePipelineTypeschema_Notes_XsdtString_ instance.
-func (me *XsdGoPkgHasElems_NOTESsequencePIPESECTIONsequencePipelineTypeschema_Notes_XsdtString_) Walk() (err error) {
-	if fn := WalkHandlers.XsdGoPkgHasElems_NOTESsequencePIPESECTIONsequencePipelineTypeschema_Notes_XsdtString_; me != nil {
-		if fn != nil {
-			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-		if fn != nil {
-			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-	}
-	return
-}
-
-//	A secondary or defunct primary key in an INSDC primary data database.
-type XsdGoPkgHasElem_SecondaryIDsequenceIdentifierTypeschema_SecondaryId_TNameAndLabelType_ struct {
-	//	A secondary or defunct primary key in an INSDC primary data database.
-	SecondaryId *TNameAndLabelType `xml:"SECONDARY_ID"`
-}
-
-//	If the WalkHandlers.XsdGoPkgHasElem_SecondaryIDsequenceIdentifierTypeschema_SecondaryId_TNameAndLabelType_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElem_SecondaryIDsequenceIdentifierTypeschema_SecondaryId_TNameAndLabelType_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 1/1 field(s) belonging to this XsdGoPkgHasElem_SecondaryIDsequenceIdentifierTypeschema_SecondaryId_TNameAndLabelType_ instance.
-func (me *XsdGoPkgHasElem_SecondaryIDsequenceIdentifierTypeschema_SecondaryId_TNameAndLabelType_) Walk() (err error) {
-	if fn := WalkHandlers.XsdGoPkgHasElem_SecondaryIDsequenceIdentifierTypeschema_SecondaryId_TNameAndLabelType_; me != nil {
-		if fn != nil {
-			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-		if err = me.SecondaryId.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-			return
-		}
-		if fn != nil {
-			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-	}
-	return
-}
-
-//	The read is located beginning at the offset or cycle relative to another read. This choice is
-//	appropriate for example when specifying a read that follows a variable length expected sequence(s).
-type XsdGoPkgHasElems_RelativeORDERchoicesequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_RelativeOrder_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceRelativeOrder_ struct {
-	//	The read is located beginning at the offset or cycle relative to another read. This choice is
-	//	appropriate for example when specifying a read that follows a variable length expected sequence(s).
-	RelativeOrders []*TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceRelativeOrder `xml:"RELATIVE_ORDER"`
-}
-
-//	If the WalkHandlers.XsdGoPkgHasElems_RelativeORDERchoicesequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_RelativeOrder_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceRelativeOrder_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElems_RelativeORDERchoicesequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_RelativeOrder_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceRelativeOrder_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElems_RelativeORDERchoicesequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_RelativeOrder_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceRelativeOrder_ instance.
-func (me *XsdGoPkgHasElems_RelativeORDERchoicesequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_RelativeOrder_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceRelativeOrder_) Walk() (err error) {
-	if fn := WalkHandlers.XsdGoPkgHasElems_RelativeORDERchoicesequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_RelativeOrder_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceRelativeOrder_; me != nil {
-		if fn != nil {
-			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-		for _, x := range me.RelativeOrders {
-			if err = x.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-		if fn != nil {
-			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-	}
-	return
-}
-
-type XsdGoPkgHasElems_ReadCLASSsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadClass_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadClass_ struct {
-	ReadClasses []TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadClass `xml:"READ_CLASS"`
-}
-
-//	If the WalkHandlers.XsdGoPkgHasElems_ReadCLASSsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadClass_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadClass_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElems_ReadCLASSsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadClass_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadClass_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElems_ReadCLASSsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadClass_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadClass_ instance.
-func (me *XsdGoPkgHasElems_ReadCLASSsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadClass_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadClass_) Walk() (err error) {
-	if fn := WalkHandlers.XsdGoPkgHasElems_ReadCLASSsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadClass_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadClass_; me != nil {
-		if fn != nil {
-			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-		if fn != nil {
-			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-	}
-	return
-}
-
-//	The STUDY_TYPE presents a controlled vocabulary for expressing the overall purpose of the
-//	study.
-type XsdGoPkgHasElems_StudyTYPEallDESCRIPTORsequenceStudyTypeschema_StudyType_TxsdStudyTypeSequenceDescriptorAllStudyType_ struct {
-	//	The STUDY_TYPE presents a controlled vocabulary for expressing the overall purpose of the
-	//	study.
-	StudyTypes []*TxsdStudyTypeSequenceDescriptorAllStudyType `xml:"STUDY_TYPE"`
-}
-
-//	If the WalkHandlers.XsdGoPkgHasElems_StudyTYPEallDESCRIPTORsequenceStudyTypeschema_StudyType_TxsdStudyTypeSequenceDescriptorAllStudyType_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElems_StudyTYPEallDESCRIPTORsequenceStudyTypeschema_StudyType_TxsdStudyTypeSequenceDescriptorAllStudyType_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElems_StudyTYPEallDESCRIPTORsequenceStudyTypeschema_StudyType_TxsdStudyTypeSequenceDescriptorAllStudyType_ instance.
-func (me *XsdGoPkgHasElems_StudyTYPEallDESCRIPTORsequenceStudyTypeschema_StudyType_TxsdStudyTypeSequenceDescriptorAllStudyType_) Walk() (err error) {
-	if fn := WalkHandlers.XsdGoPkgHasElems_StudyTYPEallDESCRIPTORsequenceStudyTypeschema_StudyType_TxsdStudyTypeSequenceDescriptorAllStudyType_; me != nil {
-		if fn != nil {
-			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-		for _, x := range me.StudyTypes {
-			if err = x.Walk(); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-		if fn != nil {
-			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-	}
-	return
-}
-
-type XsdGoPkgHasElems_InstrumentMODELallHELICOSchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceHelicosAllInstrumentModel_ struct {
-	InstrumentModels []TxsdPlatformTypeChoiceHelicosAllInstrumentModel `xml:"INSTRUMENT_MODEL"`
-}
-
-//	If the WalkHandlers.XsdGoPkgHasElems_InstrumentMODELallHELICOSchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceHelicosAllInstrumentModel_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElems_InstrumentMODELallHELICOSchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceHelicosAllInstrumentModel_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElems_InstrumentMODELallHELICOSchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceHelicosAllInstrumentModel_ instance.
-func (me *XsdGoPkgHasElems_InstrumentMODELallHELICOSchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceHelicosAllInstrumentModel_) Walk() (err error) {
-	if fn := WalkHandlers.XsdGoPkgHasElems_InstrumentMODELallHELICOSchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceHelicosAllInstrumentModel_; me != nil {
-		if fn != nil {
-			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-		if fn != nil {
-			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-	}
-	return
-}
-
-type XsdGoPkgHasElems_ReadTYPEsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadType_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadType_Forward struct {
-	ReadTypes []TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadType `xml:"READ_TYPE"`
-}
-
-//	Returns the default value for ReadType -- "Forward"
-func (me XsdGoPkgHasElems_ReadTYPEsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadType_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadType_Forward) ReadTypeDefault() TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadType {
-	return TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadType("Forward")
-}
-
-//	If the WalkHandlers.XsdGoPkgHasElems_ReadTYPEsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadType_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadType_Forward function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElems_ReadTYPEsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadType_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadType_Forward instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElems_ReadTYPEsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadType_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadType_Forward instance.
-func (me *XsdGoPkgHasElems_ReadTYPEsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadType_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadType_Forward) Walk() (err error) {
-	if fn := WalkHandlers.XsdGoPkgHasElems_ReadTYPEsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadType_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadType_Forward; me != nil {
-		if fn != nil {
-			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-		if fn != nil {
-			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-	}
-	return
-}
-
-//	STEP_INDEX of the previous step in the workflow. Set toNIL if the first pipe section.
-type XsdGoPkgHasElem_PrevStepINDEXsequencePIPESECTIONsequencePipelineTypeschema_PrevStepIndex_XsdtString_ struct {
-	//	STEP_INDEX of the previous step in the workflow. Set toNIL if the first pipe section.
-	PrevStepIndex xsdt.String `xml:"PREV_STEP_INDEX"`
-}
-
-//	If the WalkHandlers.XsdGoPkgHasElem_PrevStepINDEXsequencePIPESECTIONsequencePipelineTypeschema_PrevStepIndex_XsdtString_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElem_PrevStepINDEXsequencePIPESECTIONsequencePipelineTypeschema_PrevStepIndex_XsdtString_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElem_PrevStepINDEXsequencePIPESECTIONsequencePipelineTypeschema_PrevStepIndex_XsdtString_ instance.
-func (me *XsdGoPkgHasElem_PrevStepINDEXsequencePIPESECTIONsequencePipelineTypeschema_PrevStepIndex_XsdtString_) Walk() (err error) {
-	if fn := WalkHandlers.XsdGoPkgHasElem_PrevStepINDEXsequencePIPESECTIONsequencePipelineTypeschema_PrevStepIndex_XsdtString_; me != nil {
-		if fn != nil {
-			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-		if fn != nil {
-			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-	}
-	return
-}
-
-//	READ_INDEX starts at 0 and is incrementally increased for each sequential READ_SPEC within a
-//	SPOT_DECODE_SPEC
-type XsdGoPkgHasElems_ReadINDEXsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadIndex_XsdtNonNegativeInteger_ struct {
-	//	READ_INDEX starts at 0 and is incrementally increased for each sequential READ_SPEC within a
-	//	SPOT_DECODE_SPEC
-	ReadIndexs []xsdt.NonNegativeInteger `xml:"READ_INDEX"`
-}
-
-//	If the WalkHandlers.XsdGoPkgHasElems_ReadINDEXsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadIndex_XsdtNonNegativeInteger_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElems_ReadINDEXsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadIndex_XsdtNonNegativeInteger_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElems_ReadINDEXsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadIndex_XsdtNonNegativeInteger_ instance.
-func (me *XsdGoPkgHasElems_ReadINDEXsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadIndex_XsdtNonNegativeInteger_) Walk() (err error) {
-	if fn := WalkHandlers.XsdGoPkgHasElems_ReadINDEXsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadIndex_XsdtNonNegativeInteger_; me != nil {
-		if fn != nil {
-			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-		if fn != nil {
-			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-	}
-	return
-}
-
-//	Optional scientific units.
-type XsdGoPkgHasElems_UNITSallAttributeTypeschema_Units_XsdtString_ struct {
-	//	Optional scientific units.
-	Unitses []xsdt.String `xml:"UNITS"`
-}
-
-//	If the WalkHandlers.XsdGoPkgHasElems_UNITSallAttributeTypeschema_Units_XsdtString_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElems_UNITSallAttributeTypeschema_Units_XsdtString_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElems_UNITSallAttributeTypeschema_Units_XsdtString_ instance.
-func (me *XsdGoPkgHasElems_UNITSallAttributeTypeschema_Units_XsdtString_) Walk() (err error) {
-	if fn := WalkHandlers.XsdGoPkgHasElems_UNITSallAttributeTypeschema_Units_XsdtString_; me != nil {
-		if fn != nil {
-			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-		if fn != nil {
-			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-	}
-	return
-}
-
-//	Accession in the referenced database. For example, FBtr0080008 (in FLYBASE).
-type XsdGoPkgHasElems_IDallXRefTypeschema_Id_XsdtString_ struct {
-	//	Accession in the referenced database. For example, FBtr0080008 (in FLYBASE).
-	Ids []xsdt.String `xml:"ID"`
-}
-
-//	If the WalkHandlers.XsdGoPkgHasElems_IDallXRefTypeschema_Id_XsdtString_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElems_IDallXRefTypeschema_Id_XsdtString_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElems_IDallXRefTypeschema_Id_XsdtString_ instance.
-func (me *XsdGoPkgHasElems_IDallXRefTypeschema_Id_XsdtString_) Walk() (err error) {
-	if fn := WalkHandlers.XsdGoPkgHasElems_IDallXRefTypeschema_Id_XsdtString_; me != nil {
-		if fn != nil {
-			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-		if fn != nil {
-			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-	}
-	return
-}
-
-type XsdGoPkgHasElems_InstrumentMODELsequenceABISOLIDchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceAbiSolidSequenceInstrumentModel_ struct {
-	InstrumentModels []TxsdPlatformTypeChoiceAbiSolidSequenceInstrumentModel `xml:"INSTRUMENT_MODEL"`
-}
-
-//	If the WalkHandlers.XsdGoPkgHasElems_InstrumentMODELsequenceABISOLIDchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceAbiSolidSequenceInstrumentModel_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElems_InstrumentMODELsequenceABISOLIDchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceAbiSolidSequenceInstrumentModel_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElems_InstrumentMODELsequenceABISOLIDchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceAbiSolidSequenceInstrumentModel_ instance.
-func (me *XsdGoPkgHasElems_InstrumentMODELsequenceABISOLIDchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceAbiSolidSequenceInstrumentModel_) Walk() (err error) {
-	if fn := WalkHandlers.XsdGoPkgHasElems_InstrumentMODELsequenceABISOLIDchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceAbiSolidSequenceInstrumentModel_; me != nil {
-		if fn != nil {
-			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-		if fn != nil {
-			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-	}
-	return
-}
-
-//	Tells the Archive who will execute the sample demultiplexing operation..
-type XsdGoPkgHasElems_SampleDemuxDIRECTIVEallSequencingDirectivesTypeschema_SampleDemuxDirective_TxsdSequencingDirectivesTypeAllSampleDemuxDirective_ struct {
-	//	Tells the Archive who will execute the sample demultiplexing operation..
-	SampleDemuxDirectives []TxsdSequencingDirectivesTypeAllSampleDemuxDirective `xml:"SAMPLE_DEMUX_DIRECTIVE"`
-}
-
-//	If the WalkHandlers.XsdGoPkgHasElems_SampleDemuxDIRECTIVEallSequencingDirectivesTypeschema_SampleDemuxDirective_TxsdSequencingDirectivesTypeAllSampleDemuxDirective_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElems_SampleDemuxDIRECTIVEallSequencingDirectivesTypeschema_SampleDemuxDirective_TxsdSequencingDirectivesTypeAllSampleDemuxDirective_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElems_SampleDemuxDIRECTIVEallSequencingDirectivesTypeschema_SampleDemuxDirective_TxsdSequencingDirectivesTypeAllSampleDemuxDirective_ instance.
-func (me *XsdGoPkgHasElems_SampleDemuxDIRECTIVEallSequencingDirectivesTypeschema_SampleDemuxDirective_TxsdSequencingDirectivesTypeAllSampleDemuxDirective_) Walk() (err error) {
-	if fn := WalkHandlers.XsdGoPkgHasElems_SampleDemuxDIRECTIVEallSequencingDirectivesTypeschema_SampleDemuxDirective_TxsdSequencingDirectivesTypeAllSampleDemuxDirective_; me != nil {
-		if fn != nil {
-			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-		if fn != nil {
-			if err = fn(me, false); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
-				return
-			}
-		}
-	}
-	return
-}
-
-type XsdGoPkgHasElems_InstrumentMODELsequenceCAPILLARYchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceCapillarySequenceInstrumentModel_ struct {
-	InstrumentModels []TxsdPlatformTypeChoiceCapillarySequenceInstrumentModel `xml:"INSTRUMENT_MODEL"`
-}
-
-//	If the WalkHandlers.XsdGoPkgHasElems_InstrumentMODELsequenceCAPILLARYchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceCapillarySequenceInstrumentModel_ function is not nil (ie. was set by outside code), calls it with this XsdGoPkgHasElems_InstrumentMODELsequenceCAPILLARYchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceCapillarySequenceInstrumentModel_ instance as the single argument. Then calls the Walk() method on 0/0 embed(s) and 0/1 field(s) belonging to this XsdGoPkgHasElems_InstrumentMODELsequenceCAPILLARYchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceCapillarySequenceInstrumentModel_ instance.
-func (me *XsdGoPkgHasElems_InstrumentMODELsequenceCAPILLARYchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceCapillarySequenceInstrumentModel_) Walk() (err error) {
-	if fn := WalkHandlers.XsdGoPkgHasElems_InstrumentMODELsequenceCAPILLARYchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceCapillarySequenceInstrumentModel_; me != nil {
-		if fn != nil {
-			if err = fn(me, true); xsdt.OnWalkError(&err, &WalkErrors, WalkContinueOnError, WalkOnError) {
 				return
 			}
 		}
@@ -5856,194 +5856,194 @@ var (
 //	Provides 190 strong-typed hooks for your own custom handler functions to be invoked when the Walk() method is called on any instance of any (non-attribute-related) struct type defined in this package.
 //	If your custom handler does get called at all for a given struct instance, then it always gets called twice, first with the 'enter' bool argument set to true, then (after having Walk()ed all subordinate struct instances, if any) once again with it set to false.
 type XsdGoPkgWalkHandlers struct {
-	XsdGoPkgHasElems_VALUEallAttributeTypeschema_Value_XsdtString_                                                                                                                                                                                                                      func(*XsdGoPkgHasElems_VALUEallAttributeTypeschema_Value_XsdtString_, bool) error
-	XsdGoPkgHasElems_StudyABSTRACTallDESCRIPTORsequenceStudyTypeschema_StudyAbstract_XsdtString_                                                                                                                                                                                        func(*XsdGoPkgHasElems_StudyABSTRACTallDESCRIPTORsequenceStudyTypeschema_StudyAbstract_XsdtString_, bool) error
-	XsdGoPkgHasElems_RelativeORDERchoicesequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_RelativeOrder_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceRelativeOrder_                                                                       func(*XsdGoPkgHasElems_RelativeORDERchoicesequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_RelativeOrder_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceRelativeOrder_, bool) error
-	XsdGoPkgHasElem_ReadINDEXsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadIndex_XsdtNonNegativeInteger_                                                                                                                                                     func(*XsdGoPkgHasElem_ReadINDEXsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadIndex_XsdtNonNegativeInteger_, bool) error
-	XsdGoPkgHasElems_PipeSECTIONsequencePipelineTypeschema_PipeSection_TxsdPipelineTypeSequencePipeSection_                                                                                                                                                                             func(*XsdGoPkgHasElems_PipeSECTIONsequencePipelineTypeschema_PipeSection_TxsdPipelineTypeSequencePipeSection_, bool) error
-	TxsdPlatformTypeChoicePacbioSmrt                                                                                                                                                                                                                                                    func(*TxsdPlatformTypeChoicePacbioSmrt, bool) error
-	XsdGoPkgHasElem_Ls454ChoicePlatformTypeschema_Ls454_TxsdPlatformTypeChoiceLs454_                                                                                                                                                                                                    func(*XsdGoPkgHasElem_Ls454ChoicePlatformTypeschema_Ls454_TxsdPlatformTypeChoiceLs454_, bool) error
-	XsdGoPkgHasElem_PrimaryIDsequenceIdentifierTypeschema_PrimaryId_TNameAndLabelType_                                                                                                                                                                                                  func(*XsdGoPkgHasElem_PrimaryIDsequenceIdentifierTypeschema_PrimaryId_TNameAndLabelType_, bool) error
-	XsdGoPkgHasElem_IsPRIMARYsequenceTxsdStudyTypeSequenceDescriptorAllRelatedStudiesSequenceRelatedStudyRELATEDSTUDYsequenceTxsdStudyTypeSequenceDescriptorAllRelatedStudiesRELATEDSTUDIESallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_IsPrimary_XsdtBoolean_   func(*XsdGoPkgHasElem_IsPRIMARYsequenceTxsdStudyTypeSequenceDescriptorAllRelatedStudiesSequenceRelatedStudyRELATEDSTUDYsequenceTxsdStudyTypeSequenceDescriptorAllRelatedStudiesRELATEDSTUDIESallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_IsPrimary_XsdtBoolean_, bool) error
-	XsdGoPkgHasElem_TAGallAttributeTypeschema_Tag_XsdtString_                                                                                                                                                                                                                           func(*XsdGoPkgHasElem_TAGallAttributeTypeschema_Tag_XsdtString_, bool) error
-	TSpotDescriptorType                                                                                                                                                                                                                                                                 func(*TSpotDescriptorType, bool) error
-	XsdGoPkgHasElem_InstrumentMODELsequenceCOMPLETEGENOMICSchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceCompleteGenomicsSequenceInstrumentModel_                                                                                                                      func(*XsdGoPkgHasElem_InstrumentMODELsequenceCOMPLETEGENOMICSchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceCompleteGenomicsSequenceInstrumentModel_, bool) error
-	TxsdStudyTypeSequenceStudyAttributes                                                                                                                                                                                                                                                func(*TxsdStudyTypeSequenceStudyAttributes, bool) error
-	XsdGoPkgHasElem_PROGRAMsequencePIPESECTIONsequencePipelineTypeschema_Program_XsdtString_                                                                                                                                                                                            func(*XsdGoPkgHasElem_PROGRAMsequencePIPESECTIONsequencePipelineTypeschema_Program_XsdtString_, bool) error
-	XsdGoPkgHasElem_SampleDemuxDIRECTIVEallSequencingDirectivesTypeschema_SampleDemuxDirective_TxsdSequencingDirectivesTypeAllSampleDemuxDirective_                                                                                                                                     func(*XsdGoPkgHasElem_SampleDemuxDIRECTIVEallSequencingDirectivesTypeschema_SampleDemuxDirective_TxsdSequencingDirectivesTypeAllSampleDemuxDirective_, bool) error
-	TxsdPlatformTypeChoiceIllumina                                                                                                                                                                                                                                                      func(*TxsdPlatformTypeChoiceIllumina, bool) error
-	XsdGoPkgHasElem_UUIDsequenceIdentifierTypeschema_Uuid_TNameAndLabelType_                                                                                                                                                                                                            func(*XsdGoPkgHasElem_UUIDsequenceIdentifierTypeschema_Uuid_TNameAndLabelType_, bool) error
-	XsdGoPkgHasElems_CAPILLARYchoicePlatformTypeschema_Capillary_TxsdPlatformTypeChoiceCapillary_                                                                                                                                                                                       func(*XsdGoPkgHasElems_CAPILLARYchoicePlatformTypeschema_Capillary_TxsdPlatformTypeChoiceCapillary_, bool) error
-	XsdGoPkgHasElems_InstrumentMODELsequenceCAPILLARYchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceCapillarySequenceInstrumentModel_                                                                                                                                   func(*XsdGoPkgHasElems_InstrumentMODELsequenceCAPILLARYchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceCapillarySequenceInstrumentModel_, bool) error
-	XsdGoPkgHasElem_CenterProjectNAMEallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_CenterProjectName_XsdtString_                                                                                                                                                  func(*XsdGoPkgHasElem_CenterProjectNAMEallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_CenterProjectName_XsdtString_, bool) error
-	XsdGoPkgHasElems_HELICOSchoicePlatformTypeschema_Helicos_TxsdPlatformTypeChoiceHelicos_                                                                                                                                                                                             func(*XsdGoPkgHasElems_HELICOSchoicePlatformTypeschema_Helicos_TxsdPlatformTypeChoiceHelicos_, bool) error
-	XsdGoPkgHasElem_AlignmentMarksDuplicateReadsallAlignmentDirectivesTypeschema_AlignmentMarksDuplicateReads_XsdtBoolean_                                                                                                                                                              func(*XsdGoPkgHasElem_AlignmentMarksDuplicateReadsallAlignmentDirectivesTypeschema_AlignmentMarksDuplicateReads_XsdtBoolean_, bool) error
-	XsdGoPkgHasElems_InstrumentMODELsequencePACBIOSMRTchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoicePacbioSmrtSequenceInstrumentModel_                                                                                                                                 func(*XsdGoPkgHasElems_InstrumentMODELsequencePACBIOSMRTchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoicePacbioSmrtSequenceInstrumentModel_, bool) error
-	XsdGoPkgHasElem_SecondaryIDsequenceIdentifierTypeschema_SecondaryId_TNameAndLabelType_                                                                                                                                                                                              func(*XsdGoPkgHasElem_SecondaryIDsequenceIdentifierTypeschema_SecondaryId_TNameAndLabelType_, bool) error
-	XsdGoPkgHasElems_ReadTYPEsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadType_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadType_Forward                                                                                           func(*XsdGoPkgHasElems_ReadTYPEsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadType_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadType_Forward, bool) error
-	XsdGoPkgHasElem_StudyDESCRIPTIONallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_StudyDescription_XsdtString_                                                                                                                                                    func(*XsdGoPkgHasElem_StudyDESCRIPTIONallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_StudyDescription_XsdtString_, bool) error
-	XsdGoPkgHasElems_EntrezLINKchoiceLinkTypeschema_EntrezLink_TxsdLinkTypeChoiceEntrezLink_                                                                                                                                                                                            func(*XsdGoPkgHasElems_EntrezLINKchoiceLinkTypeschema_EntrezLink_TxsdLinkTypeChoiceEntrezLink_, bool) error
-	XsdGoPkgHasElem_URLallURLLINKchoiceLinkTypeschema_Url_XsdtAnyURI_                                                                                                                                                                                                                   func(*XsdGoPkgHasElem_URLallURLLINKchoiceLinkTypeschema_Url_XsdtAnyURI_, bool) error
-	XsdGoPkgHasElem_PipeSECTIONsequencePipelineTypeschema_PipeSection_TxsdPipelineTypeSequencePipeSection_                                                                                                                                                                              func(*XsdGoPkgHasElem_PipeSECTIONsequencePipelineTypeschema_PipeSection_TxsdPipelineTypeSequencePipeSection_, bool) error
-	XsdGoPkgHasElems_CompleteGENOMICSchoicePlatformTypeschema_CompleteGenomics_TxsdPlatformTypeChoiceCompleteGenomics_                                                                                                                                                                  func(*XsdGoPkgHasElems_CompleteGENOMICSchoicePlatformTypeschema_CompleteGenomics_TxsdPlatformTypeChoiceCompleteGenomics_, bool) error
-	TAlignmentDirectivesType                                                                                                                                                                                                                                                            func(*TAlignmentDirectivesType, bool) error
-	XsdGoPkgHasElems_OxfordNANOPOREchoicePlatformTypeschema_OxfordNanopore_TxsdPlatformTypeChoiceOxfordNanopore_                                                                                                                                                                        func(*XsdGoPkgHasElems_OxfordNANOPOREchoicePlatformTypeschema_OxfordNanopore_TxsdPlatformTypeChoiceOxfordNanopore_, bool) error
-	XsdGoPkgHasElem_PrevStepINDEXsequencePIPESECTIONsequencePipelineTypeschema_PrevStepIndex_XsdtString_                                                                                                                                                                                func(*XsdGoPkgHasElem_PrevStepINDEXsequencePIPESECTIONsequencePipelineTypeschema_PrevStepIndex_XsdtString_, bool) error
-	TIdentifierType                                                                                                                                                                                                                                                                     func(*TIdentifierType, bool) error
-	XsdGoPkgHasElem_RelatedLINKsequenceTxsdStudyTypeSequenceDescriptorAllRelatedStudiesSequenceRelatedStudyRELATEDSTUDYsequenceTxsdStudyTypeSequenceDescriptorAllRelatedStudiesRELATEDSTUDIESallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_RelatedLink_TXRefType_ func(*XsdGoPkgHasElem_RelatedLINKsequenceTxsdStudyTypeSequenceDescriptorAllRelatedStudiesSequenceRelatedStudyRELATEDSTUDYsequenceTxsdStudyTypeSequenceDescriptorAllRelatedStudiesRELATEDSTUDIESallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_RelatedLink_TXRefType_, bool) error
-	TSequencingDirectivesType                                                                                                                                                                                                                                                           func(*TSequencingDirectivesType, bool) error
-	XsdGoPkgHasElem_BASECALLsequenceEXPECTEDBasecallTABLEchoicesequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_Basecall_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTableSequenceBasecall_                             func(*XsdGoPkgHasElem_BASECALLsequenceEXPECTEDBasecallTABLEchoicesequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_Basecall_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTableSequenceBasecall_, bool) error
-	XsdGoPkgHasElems_IDENTIFIERSsequenceStudyTypeschema_Identifiers_TIdentifierType_                                                                                                                                                                                                    func(*XsdGoPkgHasElems_IDENTIFIERSsequenceStudyTypeschema_Identifiers_TIdentifierType_, bool) error
-	XsdGoPkgHasElems_DBsequenceENTREZLINKchoiceLinkTypeschema_Db_XsdtString_                                                                                                                                                                                                            func(*XsdGoPkgHasElems_DBsequenceENTREZLINKchoiceLinkTypeschema_Db_XsdtString_, bool) error
-	XsdGoPkgHasElem_StepINDEXsequencePIPESECTIONsequencePipelineTypeschema_StepIndex_XsdtString_                                                                                                                                                                                        func(*XsdGoPkgHasElem_StepINDEXsequencePIPESECTIONsequencePipelineTypeschema_StepIndex_XsdtString_, bool) error
-	TxsdPipelineTypeSequencePipeSection                                                                                                                                                                                                                                                 func(*TxsdPipelineTypeSequencePipeSection, bool) error
-	XsdGoPkgHasElems_StudyTYPEallDESCRIPTORsequenceStudyTypeschema_StudyType_TxsdStudyTypeSequenceDescriptorAllStudyType_                                                                                                                                                               func(*XsdGoPkgHasElems_StudyTYPEallDESCRIPTORsequenceStudyTypeschema_StudyType_TxsdStudyTypeSequenceDescriptorAllStudyType_, bool) error
-	XsdGoPkgHasElem_ExternalIDsequenceIdentifierTypeschema_ExternalId_TQualifiedNameType_                                                                                                                                                                                               func(*XsdGoPkgHasElem_ExternalIDsequenceIdentifierTypeschema_ExternalId_TQualifiedNameType_, bool) error
-	XsdGoPkgHasElem_AbiSOLIDchoicePlatformTypeschema_AbiSolid_TxsdPlatformTypeChoiceAbiSolid_                                                                                                                                                                                           func(*XsdGoPkgHasElem_AbiSOLIDchoicePlatformTypeschema_AbiSolid_TxsdPlatformTypeChoiceAbiSolid_, bool) error
-	XsdGoPkgHasElems_StudyATTRIBUTEsequenceTxsdStudyTypeSequenceStudyAttributesSTUDYATTRIBUTESsequenceStudyTypeschema_StudyAttribute_TAttributeType_                                                                                                                                    func(*XsdGoPkgHasElems_StudyATTRIBUTEsequenceTxsdStudyTypeSequenceStudyAttributesSTUDYATTRIBUTESsequenceStudyTypeschema_StudyAttribute_TAttributeType_, bool) error
-	XsdGoPkgHasElems_StudySet                                                                                                                                                                                                                                                           func(*XsdGoPkgHasElems_StudySet, bool) error
-	XsdGoPkgHasElem_RelativeORDERchoicesequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_RelativeOrder_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceRelativeOrder_                                                                        func(*XsdGoPkgHasElem_RelativeORDERchoicesequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_RelativeOrder_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceRelativeOrder_, bool) error
-	TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTableSequenceBasecall                                                                                                                                                                       func(*TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTableSequenceBasecall, bool) error
-	XsdGoPkgHasElem_StudyATTRIBUTEsequenceTxsdStudyTypeSequenceStudyAttributesSTUDYATTRIBUTESsequenceStudyTypeschema_StudyAttribute_TAttributeType_                                                                                                                                     func(*XsdGoPkgHasElem_StudyATTRIBUTEsequenceTxsdStudyTypeSequenceStudyAttributesSTUDYATTRIBUTESsequenceStudyTypeschema_StudyAttribute_TAttributeType_, bool) error
-	TProcessingType                                                                                                                                                                                                                                                                     func(*TProcessingType, bool) error
-	XsdGoPkgHasElems_SecondaryIDsequenceIdentifierTypeschema_SecondaryId_TNameAndLabelType_                                                                                                                                                                                             func(*XsdGoPkgHasElems_SecondaryIDsequenceIdentifierTypeschema_SecondaryId_TNameAndLabelType_, bool) error
-	TxsdStudyTypeSequenceDescriptorAllRelatedStudies                                                                                                                                                                                                                                    func(*TxsdStudyTypeSequenceDescriptorAllRelatedStudies, bool) error
-	XsdGoPkgHasElems_ReadLABELsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadLabel_XsdtString_                                                                                                                                                                func(*XsdGoPkgHasElems_ReadLABELsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadLabel_XsdtString_, bool) error
-	XsdGoPkgHasElems_RelatedLINKsequenceRELATEDSTUDYsequenceRELATEDSTUDIESallDESCRIPTORsequenceStudyTypeschema_RelatedLink_TXRefType_                                                                                                                                                   func(*XsdGoPkgHasElems_RelatedLINKsequenceRELATEDSTUDYsequenceRELATEDSTUDIESallDESCRIPTORsequenceStudyTypeschema_RelatedLink_TXRefType_, bool) error
-	XsdGoPkgHasElems_StudyATTRIBUTESsequenceStudyTypeschema_StudyAttributes_TxsdStudyTypeSequenceStudyAttributes_                                                                                                                                                                       func(*XsdGoPkgHasElems_StudyATTRIBUTESsequenceStudyTypeschema_StudyAttributes_TxsdStudyTypeSequenceStudyAttributes_, bool) error
-	XsdGoPkgHasElems_AlignmentIncludesFailedReadsallAlignmentDirectivesTypeschema_AlignmentIncludesFailedReads_XsdtBoolean_                                                                                                                                                             func(*XsdGoPkgHasElems_AlignmentIncludesFailedReadsallAlignmentDirectivesTypeschema_AlignmentIncludesFailedReads_XsdtBoolean_, bool) error
-	XsdGoPkgHasElems_IDallXRefTypeschema_Id_XsdtString_                                                                                                                                                                                                                                 func(*XsdGoPkgHasElems_IDallXRefTypeschema_Id_XsdtString_, bool) error
-	XsdGoPkgHasElem_InstrumentMODELsequencePACBIOSMRTchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoicePacbioSmrtSequenceInstrumentModel_                                                                                                                                  func(*XsdGoPkgHasElem_InstrumentMODELsequencePACBIOSMRTchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoicePacbioSmrtSequenceInstrumentModel_, bool) error
-	XsdGoPkgHasElem_ReadSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadSpec_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpec_                                                                                                                                   func(*XsdGoPkgHasElem_ReadSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadSpec_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpec_, bool) error
-	XsdGoPkgHasElems_CenterNAMEallDESCRIPTORsequenceStudyTypeschema_CenterName_XsdtString_                                                                                                                                                                                              func(*XsdGoPkgHasElems_CenterNAMEallDESCRIPTORsequenceStudyTypeschema_CenterName_XsdtString_, bool) error
-	XsdGoPkgHasElems_InstrumentMODELallLS454ChoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceLs454AllInstrumentModel_                                                                                                                                                     func(*XsdGoPkgHasElems_InstrumentMODELallLS454ChoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceLs454AllInstrumentModel_, bool) error
-	XsdGoPkgHasElem_InstrumentMODELallLS454ChoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceLs454AllInstrumentModel_                                                                                                                                                      func(*XsdGoPkgHasElem_InstrumentMODELallLS454ChoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceLs454AllInstrumentModel_, bool) error
-	TPlatformType                                                                                                                                                                                                                                                                       func(*TPlatformType, bool) error
-	XsdGoPkgHasElems_PIPELINEsequenceProcessingTypeschema_Pipeline_TPipelineType_                                                                                                                                                                                                       func(*XsdGoPkgHasElems_PIPELINEsequenceProcessingTypeschema_Pipeline_TPipelineType_, bool) error
-	XsdGoPkgHasElems_InstrumentMODELsequenceILLUMINAchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceIlluminaSequenceInstrumentModel_                                                                                                                                     func(*XsdGoPkgHasElems_InstrumentMODELsequenceILLUMINAchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceIlluminaSequenceInstrumentModel_, bool) error
-	XsdGoPkgHasElem_RelatedSTUDIESallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_RelatedStudies_TxsdStudyTypeSequenceDescriptorAllRelatedStudies_                                                                                                                  func(*XsdGoPkgHasElem_RelatedSTUDIESallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_RelatedStudies_TxsdStudyTypeSequenceDescriptorAllRelatedStudies_, bool) error
-	TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTable                                                                                                                                                                                       func(*TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTable, bool) error
-	XsdGoPkgHasElems_UNITSallAttributeTypeschema_Units_XsdtString_                                                                                                                                                                                                                      func(*XsdGoPkgHasElems_UNITSallAttributeTypeschema_Units_XsdtString_, bool) error
-	XsdGoPkgHasElem_XrefLINKchoiceLinkTypeschema_XrefLink_TXRefType_                                                                                                                                                                                                                    func(*XsdGoPkgHasElem_XrefLINKchoiceLinkTypeschema_XrefLink_TXRefType_, bool) error
-	XsdGoPkgHasElem_IDchoicesequenceENTREZLINKchoiceLinkTypeschema_Id_XsdtNonNegativeInteger_                                                                                                                                                                                           func(*XsdGoPkgHasElem_IDchoicesequenceENTREZLINKchoiceLinkTypeschema_Id_XsdtNonNegativeInteger_, bool) error
-	XsdGoPkgHasElem_OxfordNANOPOREchoicePlatformTypeschema_OxfordNanopore_TxsdPlatformTypeChoiceOxfordNanopore_                                                                                                                                                                         func(*XsdGoPkgHasElem_OxfordNANOPOREchoicePlatformTypeschema_OxfordNanopore_TxsdPlatformTypeChoiceOxfordNanopore_, bool) error
-	XsdGoPkgHasElems_RelatedSTUDIESallDESCRIPTORsequenceStudyTypeschema_RelatedStudies_TxsdStudyTypeSequenceDescriptorAllRelatedStudies_                                                                                                                                                func(*XsdGoPkgHasElems_RelatedSTUDIESallDESCRIPTORsequenceStudyTypeschema_RelatedStudies_TxsdStudyTypeSequenceDescriptorAllRelatedStudies_, bool) error
-	XsdGoPkgHasElems_ReadCLASSsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadClass_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadClass_                                                                                               func(*XsdGoPkgHasElems_ReadCLASSsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadClass_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadClass_, bool) error
-	XsdGoPkgHasElem_CenterNAMEallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_CenterName_XsdtString_                                                                                                                                                                func(*XsdGoPkgHasElem_CenterNAMEallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_CenterName_XsdtString_, bool) error
-	XsdGoPkgHasElem_LABELallXRefTypeschema_Label_XsdtString_                                                                                                                                                                                                                            func(*XsdGoPkgHasElem_LABELallXRefTypeschema_Label_XsdtString_, bool) error
-	XsdGoPkgHasElem_ReadLABELsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadLabel_XsdtString_                                                                                                                                                                 func(*XsdGoPkgHasElem_ReadLABELsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadLabel_XsdtString_, bool) error
-	XsdGoPkgHasElem_ReadTYPEsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadType_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadType_Forward                                                                                            func(*XsdGoPkgHasElem_ReadTYPEsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadType_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadType_Forward, bool) error
-	XsdGoPkgHasElem_InstrumentMODELsequenceILLUMINAchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceIlluminaSequenceInstrumentModel_                                                                                                                                      func(*XsdGoPkgHasElem_InstrumentMODELsequenceILLUMINAchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceIlluminaSequenceInstrumentModel_, bool) error
-	XsdGoPkgHasElems_DESCRIPTORsequenceStudyTypeschema_Descriptor_TxsdStudyTypeSequenceDescriptor_                                                                                                                                                                                      func(*XsdGoPkgHasElems_DESCRIPTORsequenceStudyTypeschema_Descriptor_TxsdStudyTypeSequenceDescriptor_, bool) error
-	XsdGoPkgHasElems_RelatedSTUDYsequenceTxsdStudyTypeSequenceDescriptorAllRelatedStudiesRELATEDSTUDIESallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_RelatedStudy_TxsdStudyTypeSequenceDescriptorAllRelatedStudiesSequenceRelatedStudy_                           func(*XsdGoPkgHasElems_RelatedSTUDYsequenceTxsdStudyTypeSequenceDescriptorAllRelatedStudiesRELATEDSTUDIESallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_RelatedStudy_TxsdStudyTypeSequenceDescriptorAllRelatedStudiesSequenceRelatedStudy_, bool) error
-	TLinkType                                                                                                                                                                                                                                                                           func(*TLinkType, bool) error
-	XsdGoPkgHasElem_DIRECTIVESsequenceProcessingTypeschema_Directives_TSequencingDirectivesType_                                                                                                                                                                                        func(*XsdGoPkgHasElem_DIRECTIVESsequenceProcessingTypeschema_Directives_TSequencingDirectivesType_, bool) error
-	XsdGoPkgHasElem_InstrumentMODELsequenceOXFORDNANOPOREchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceOxfordNanoporeSequenceInstrumentModel_                                                                                                                          func(*XsdGoPkgHasElem_InstrumentMODELsequenceOXFORDNANOPOREchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceOxfordNanoporeSequenceInstrumentModel_, bool) error
-	XsdGoPkgHasElems_VERSIONsequencePIPESECTIONsequencePipelineTypeschema_Version_XsdtString_                                                                                                                                                                                           func(*XsdGoPkgHasElems_VERSIONsequencePIPESECTIONsequencePipelineTypeschema_Version_XsdtString_, bool) error
-	XsdGoPkgHasElems_ReadINDEXsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadIndex_XsdtNonNegativeInteger_                                                                                                                                                    func(*XsdGoPkgHasElems_ReadINDEXsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadIndex_XsdtNonNegativeInteger_, bool) error
-	TQualifiedNameType                                                                                                                                                                                                                                                                  func(*TQualifiedNameType, bool) error
-	TxsdSpotDescriptorTypeChoiceSpotDecodeSpec                                                                                                                                                                                                                                          func(*TxsdSpotDescriptorTypeChoiceSpotDecodeSpec, bool) error
-	XsdGoPkgHasElem_SpotLENGTHsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_SpotLength_XsdtNonNegativeInteger_                                                                                                                                                                   func(*XsdGoPkgHasElem_SpotLENGTHsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_SpotLength_XsdtNonNegativeInteger_, bool) error
-	XsdGoPkgHasElems_InstrumentMODELsequenceOXFORDNANOPOREchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceOxfordNanoporeSequenceInstrumentModel_                                                                                                                         func(*XsdGoPkgHasElems_InstrumentMODELsequenceOXFORDNANOPOREchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceOxfordNanoporeSequenceInstrumentModel_, bool) error
-	TNameAndLabelType                                                                                                                                                                                                                                                                   func(*TNameAndLabelType, bool) error
-	XsdGoPkgHasElem_ReadCLASSsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadClass_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadClass_                                                                                                func(*XsdGoPkgHasElem_ReadCLASSsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadClass_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadClass_, bool) error
-	XsdGoPkgHasElems_BaseCOORDchoicesequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_BaseCoord_XsdtInteger_                                                                                                                                                         func(*XsdGoPkgHasElems_BaseCOORDchoicesequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_BaseCoord_XsdtInteger_, bool) error
-	XsdGoPkgHasElems_InstrumentMODELsequenceCOMPLETEGENOMICSchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceCompleteGenomicsSequenceInstrumentModel_                                                                                                                     func(*XsdGoPkgHasElems_InstrumentMODELsequenceCOMPLETEGENOMICSchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceCompleteGenomicsSequenceInstrumentModel_, bool) error
-	TxsdPlatformTypeChoiceAbiSolid                                                                                                                                                                                                                                                      func(*TxsdPlatformTypeChoiceAbiSolid, bool) error
-	XsdGoPkgHasElem_IonTORRENTchoicePlatformTypeschema_IonTorrent_TxsdPlatformTypeChoiceIonTorrent_                                                                                                                                                                                     func(*XsdGoPkgHasElem_IonTORRENTchoicePlatformTypeschema_IonTorrent_TxsdPlatformTypeChoiceIonTorrent_, bool) error
-	XsdGoPkgHasElems_SampleDemuxDIRECTIVEallSequencingDirectivesTypeschema_SampleDemuxDirective_TxsdSequencingDirectivesTypeAllSampleDemuxDirective_                                                                                                                                    func(*XsdGoPkgHasElems_SampleDemuxDIRECTIVEallSequencingDirectivesTypeschema_SampleDemuxDirective_TxsdSequencingDirectivesTypeAllSampleDemuxDirective_, bool) error
-	XsdGoPkgHasElem_UNITSallAttributeTypeschema_Units_XsdtString_                                                                                                                                                                                                                       func(*XsdGoPkgHasElem_UNITSallAttributeTypeschema_Units_XsdtString_, bool) error
-	XsdGoPkgHasElems_LABELallXRefTypeschema_Label_XsdtString_                                                                                                                                                                                                                           func(*XsdGoPkgHasElems_LABELallXRefTypeschema_Label_XsdtString_, bool) error
-	XsdGoPkgHasElem_HELICOSchoicePlatformTypeschema_Helicos_TxsdPlatformTypeChoiceHelicos_                                                                                                                                                                                              func(*XsdGoPkgHasElem_HELICOSchoicePlatformTypeschema_Helicos_TxsdPlatformTypeChoiceHelicos_, bool) error
-	TxsdPlatformTypeChoiceCapillary                                                                                                                                                                                                                                                     func(*TxsdPlatformTypeChoiceCapillary, bool) error
-	XsdGoPkgHasElems_InstrumentMODELallHELICOSchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceHelicosAllInstrumentModel_                                                                                                                                                 func(*XsdGoPkgHasElems_InstrumentMODELallHELICOSchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceHelicosAllInstrumentModel_, bool) error
-	XsdGoPkgHasElems_PrevStepINDEXsequencePIPESECTIONsequencePipelineTypeschema_PrevStepIndex_XsdtString_                                                                                                                                                                               func(*XsdGoPkgHasElems_PrevStepINDEXsequencePIPESECTIONsequencePipelineTypeschema_PrevStepIndex_XsdtString_, bool) error
-	XsdGoPkgHasElems_ExpectedBasecallTABLEchoicesequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ExpectedBasecallTable_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTable_                                               func(*XsdGoPkgHasElems_ExpectedBasecallTABLEchoicesequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ExpectedBasecallTable_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTable_, bool) error
-	XsdGoPkgHasElems_BASECALLsequenceEXPECTEDBasecallTABLEchoicesequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_Basecall_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTableSequenceBasecall_                            func(*XsdGoPkgHasElems_BASECALLsequenceEXPECTEDBasecallTABLEchoicesequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_Basecall_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTableSequenceBasecall_, bool) error
-	XsdGoPkgHasElems_XrefLINKchoiceLinkTypeschema_XrefLink_TXRefType_                                                                                                                                                                                                                   func(*XsdGoPkgHasElems_XrefLINKchoiceLinkTypeschema_XrefLink_TXRefType_, bool) error
-	XsdGoPkgHasElems_PROGRAMsequencePIPESECTIONsequencePipelineTypeschema_Program_XsdtString_                                                                                                                                                                                           func(*XsdGoPkgHasElems_PROGRAMsequencePIPESECTIONsequencePipelineTypeschema_Program_XsdtString_, bool) error
-	TxsdLinkTypeChoiceUrlLink                                                                                                                                                                                                                                                           func(*TxsdLinkTypeChoiceUrlLink, bool) error
-	XsdGoPkgHasElems_InstrumentMODELsequenceIONTORRENTchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceIonTorrentSequenceInstrumentModel_                                                                                                                                 func(*XsdGoPkgHasElems_InstrumentMODELsequenceIONTORRENTchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceIonTorrentSequenceInstrumentModel_, bool) error
-	TXRefType                                                                                                                                                                                                                                                                           func(*TXRefType, bool) error
-	XsdGoPkgHasElem_Study                                                                                                                                                                                                                                                               func(*XsdGoPkgHasElem_Study, bool) error
-	XsdGoPkgHasElems_SpotDecodeSPECchoiceSpotDescriptorTypeschema_SpotDecodeSpec_TxsdSpotDescriptorTypeChoiceSpotDecodeSpec_                                                                                                                                                            func(*XsdGoPkgHasElems_SpotDecodeSPECchoiceSpotDescriptorTypeschema_SpotDecodeSpec_TxsdSpotDescriptorTypeChoiceSpotDecodeSpec_, bool) error
-	XsdGoPkgHasElems_StepINDEXsequencePIPESECTIONsequencePipelineTypeschema_StepIndex_XsdtString_                                                                                                                                                                                       func(*XsdGoPkgHasElems_StepINDEXsequencePIPESECTIONsequencePipelineTypeschema_StepIndex_XsdtString_, bool) error
-	XsdGoPkgHasElems_AbiSOLIDchoicePlatformTypeschema_AbiSolid_TxsdPlatformTypeChoiceAbiSolid_                                                                                                                                                                                          func(*XsdGoPkgHasElems_AbiSOLIDchoicePlatformTypeschema_AbiSolid_TxsdPlatformTypeChoiceAbiSolid_, bool) error
-	XsdGoPkgHasElems_SpotLENGTHsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_SpotLength_XsdtNonNegativeInteger_                                                                                                                                                                  func(*XsdGoPkgHasElems_SpotLENGTHsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_SpotLength_XsdtNonNegativeInteger_, bool) error
-	XsdGoPkgHasElems_SubmitterIDsequenceIdentifierTypeschema_SubmitterId_TQualifiedNameType_                                                                                                                                                                                            func(*XsdGoPkgHasElems_SubmitterIDsequenceIdentifierTypeschema_SubmitterId_TQualifiedNameType_, bool) error
-	XsdGoPkgHasElem_IDallXRefTypeschema_Id_XsdtString_                                                                                                                                                                                                                                  func(*XsdGoPkgHasElem_IDallXRefTypeschema_Id_XsdtString_, bool) error
-	XsdGoPkgHasElems_InstrumentMODELsequenceABISOLIDchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceAbiSolidSequenceInstrumentModel_                                                                                                                                     func(*XsdGoPkgHasElems_InstrumentMODELsequenceABISOLIDchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceAbiSolidSequenceInstrumentModel_, bool) error
-	XsdGoPkgHasElem_DBallXRefTypeschema_Db_XsdtString_                                                                                                                                                                                                                                  func(*XsdGoPkgHasElem_DBallXRefTypeschema_Db_XsdtString_, bool) error
-	XsdGoPkgHasElems_ReadSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadSpec_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpec_                                                                                                                                  func(*XsdGoPkgHasElems_ReadSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadSpec_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpec_, bool) error
-	XsdGoPkgHasElem_InstrumentMODELallHELICOSchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceHelicosAllInstrumentModel_                                                                                                                                                  func(*XsdGoPkgHasElem_InstrumentMODELallHELICOSchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceHelicosAllInstrumentModel_, bool) error
-	XsdGoPkgHasElems_IonTORRENTchoicePlatformTypeschema_IonTorrent_TxsdPlatformTypeChoiceIonTorrent_                                                                                                                                                                                    func(*XsdGoPkgHasElems_IonTORRENTchoicePlatformTypeschema_IonTorrent_TxsdPlatformTypeChoiceIonTorrent_, bool) error
-	XsdGoPkgHasElems_UUIDsequenceIdentifierTypeschema_Uuid_TNameAndLabelType_                                                                                                                                                                                                           func(*XsdGoPkgHasElems_UUIDsequenceIdentifierTypeschema_Uuid_TNameAndLabelType_, bool) error
-	XsdGoPkgHasElem_IDENTIFIERSsequenceStudyTypeschema_Identifiers_TIdentifierType_                                                                                                                                                                                                     func(*XsdGoPkgHasElem_IDENTIFIERSsequenceStudyTypeschema_Identifiers_TIdentifierType_, bool) error
-	TPipelineType                                                                                                                                                                                                                                                                       func(*TPipelineType, bool) error
-	XsdGoPkgHasElem_PIPELINEsequenceProcessingTypeschema_Pipeline_TPipelineType_                                                                                                                                                                                                        func(*XsdGoPkgHasElem_PIPELINEsequenceProcessingTypeschema_Pipeline_TPipelineType_, bool) error
-	XsdGoPkgHasElems_IDchoicesequenceENTREZLINKchoiceLinkTypeschema_Id_XsdtNonNegativeInteger_                                                                                                                                                                                          func(*XsdGoPkgHasElems_IDchoicesequenceENTREZLINKchoiceLinkTypeschema_Id_XsdtNonNegativeInteger_, bool) error
-	XsdGoPkgHasElem_SubmitterIDsequenceIdentifierTypeschema_SubmitterId_TQualifiedNameType_                                                                                                                                                                                             func(*XsdGoPkgHasElem_SubmitterIDsequenceIdentifierTypeschema_SubmitterId_TQualifiedNameType_, bool) error
-	XsdGoPkgHasElems_CenterProjectNAMEallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_CenterProjectName_XsdtString_                                                                                                                                                 func(*XsdGoPkgHasElems_CenterProjectNAMEallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_CenterProjectName_XsdtString_, bool) error
-	XsdGoPkgHasElem_ILLUMINAchoicePlatformTypeschema_Illumina_TxsdPlatformTypeChoiceIllumina_                                                                                                                                                                                           func(*XsdGoPkgHasElem_ILLUMINAchoicePlatformTypeschema_Illumina_TxsdPlatformTypeChoiceIllumina_, bool) error
-	TxsdStudyTypeSequenceDescriptorAllRelatedStudiesSequenceRelatedStudy                                                                                                                                                                                                                func(*TxsdStudyTypeSequenceDescriptorAllRelatedStudiesSequenceRelatedStudy, bool) error
-	XsdGoPkgHasElem_StudyTITLEallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_StudyTitle_XsdtString_                                                                                                                                                                func(*XsdGoPkgHasElem_StudyTITLEallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_StudyTitle_XsdtString_, bool) error
-	XsdGoPkgHasElems_URLallURLLINKchoiceLinkTypeschema_Url_XsdtAnyURI_                                                                                                                                                                                                                  func(*XsdGoPkgHasElems_URLallURLLINKchoiceLinkTypeschema_Url_XsdtAnyURI_, bool) error
-	XsdGoPkgHasElem_RelatedSTUDYsequenceRELATEDSTUDIESallDESCRIPTORsequenceStudyTypeschema_RelatedStudy_TxsdStudyTypeSequenceDescriptorAllRelatedStudiesSequenceRelatedStudy_                                                                                                           func(*XsdGoPkgHasElem_RelatedSTUDYsequenceRELATEDSTUDIESallDESCRIPTORsequenceStudyTypeschema_RelatedStudy_TxsdStudyTypeSequenceDescriptorAllRelatedStudiesSequenceRelatedStudy_, bool) error
-	XsdGoPkgHasElems_StudyTITLEallDESCRIPTORsequenceStudyTypeschema_StudyTitle_XsdtString_                                                                                                                                                                                              func(*XsdGoPkgHasElems_StudyTITLEallDESCRIPTORsequenceStudyTypeschema_StudyTitle_XsdtString_, bool) error
-	XsdGoPkgHasElems_UrlLINKchoiceLinkTypeschema_UrlLink_TxsdLinkTypeChoiceUrlLink_                                                                                                                                                                                                     func(*XsdGoPkgHasElems_UrlLINKchoiceLinkTypeschema_UrlLink_TxsdLinkTypeChoiceUrlLink_, bool) error
-	TxsdStudyTypeSequenceDescriptor                                                                                                                                                                                                                                                     func(*TxsdStudyTypeSequenceDescriptor, bool) error
-	TAttributeType                                                                                                                                                                                                                                                                      func(*TAttributeType, bool) error
-	XsdGoPkgHasElems_NOTESsequencePIPESECTIONsequencePipelineTypeschema_Notes_XsdtString_                                                                                                                                                                                               func(*XsdGoPkgHasElems_NOTESsequencePIPESECTIONsequencePipelineTypeschema_Notes_XsdtString_, bool) error
-	XsdGoPkgHasElems_ExternalIDsequenceIdentifierTypeschema_ExternalId_TQualifiedNameType_                                                                                                                                                                                              func(*XsdGoPkgHasElems_ExternalIDsequenceIdentifierTypeschema_ExternalId_TQualifiedNameType_, bool) error
-	XsdGoPkgHasElem_StudyTYPEallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_StudyType_TxsdStudyTypeSequenceDescriptorAllStudyType_                                                                                                                                 func(*XsdGoPkgHasElem_StudyTYPEallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_StudyType_TxsdStudyTypeSequenceDescriptorAllStudyType_, bool) error
-	XsdGoPkgHasElem_VERSIONsequencePIPESECTIONsequencePipelineTypeschema_Version_XsdtString_                                                                                                                                                                                            func(*XsdGoPkgHasElem_VERSIONsequencePIPESECTIONsequencePipelineTypeschema_Version_XsdtString_, bool) error
-	XsdGoPkgHasElems_Ls454ChoicePlatformTypeschema_Ls454_TxsdPlatformTypeChoiceLs454_                                                                                                                                                                                                   func(*XsdGoPkgHasElems_Ls454ChoicePlatformTypeschema_Ls454_TxsdPlatformTypeChoiceLs454_, bool) error
-	XsdGoPkgHasElem_EntrezLINKchoiceLinkTypeschema_EntrezLink_TxsdLinkTypeChoiceEntrezLink_                                                                                                                                                                                             func(*XsdGoPkgHasElem_EntrezLINKchoiceLinkTypeschema_EntrezLink_TxsdLinkTypeChoiceEntrezLink_, bool) error
-	TStudyType                                                                                                                                                                                                                                                                          func(*TStudyType, bool) error
-	TStudySetType                                                                                                                                                                                                                                                                       func(*TStudySetType, bool) error
-	TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceRelativeOrder                                                                                                                                                                                               func(*TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceRelativeOrder, bool) error
-	XsdGoPkgHasElem_PacbioSMRTchoicePlatformTypeschema_PacbioSmrt_TxsdPlatformTypeChoicePacbioSmrt_                                                                                                                                                                                     func(*XsdGoPkgHasElem_PacbioSMRTchoicePlatformTypeschema_PacbioSmrt_TxsdPlatformTypeChoicePacbioSmrt_, bool) error
-	XsdGoPkgHasElem_InstrumentMODELsequenceABISOLIDchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceAbiSolidSequenceInstrumentModel_                                                                                                                                      func(*XsdGoPkgHasElem_InstrumentMODELsequenceABISOLIDchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceAbiSolidSequenceInstrumentModel_, bool) error
-	XsdGoPkgHasElem_UrlLINKchoiceLinkTypeschema_UrlLink_TxsdLinkTypeChoiceUrlLink_                                                                                                                                                                                                      func(*XsdGoPkgHasElem_UrlLINKchoiceLinkTypeschema_UrlLink_TxsdLinkTypeChoiceUrlLink_, bool) error
-	XsdGoPkgHasElem_QUERYchoicesequenceENTREZLINKchoiceLinkTypeschema_Query_XsdtString_                                                                                                                                                                                                 func(*XsdGoPkgHasElem_QUERYchoicesequenceENTREZLINKchoiceLinkTypeschema_Query_XsdtString_, bool) error
-	XsdGoPkgHasElem_StudyLINKsequenceSTUDYLINKSsequenceStudyTypeschema_StudyLink_TLinkType_                                                                                                                                                                                             func(*XsdGoPkgHasElem_StudyLINKsequenceSTUDYLINKSsequenceStudyTypeschema_StudyLink_TLinkType_, bool) error
-	XsdGoPkgHasElem_NOTESsequencePIPESECTIONsequencePipelineTypeschema_Notes_XsdtString_                                                                                                                                                                                                func(*XsdGoPkgHasElem_NOTESsequencePIPESECTIONsequencePipelineTypeschema_Notes_XsdtString_, bool) error
-	XsdGoPkgHasCdata                                                                                                                                                                                                                                                                    func(*XsdGoPkgHasCdata, bool) error
-	XsdGoPkgHasElems_DIRECTIVESsequenceProcessingTypeschema_Directives_TSequencingDirectivesType_                                                                                                                                                                                       func(*XsdGoPkgHasElems_DIRECTIVESsequenceProcessingTypeschema_Directives_TSequencingDirectivesType_, bool) error
-	TxsdLinkTypeChoiceEntrezLink                                                                                                                                                                                                                                                        func(*TxsdLinkTypeChoiceEntrezLink, bool) error
-	XsdGoPkgHasElems_StudyLINKsequenceTxsdStudyTypeSequenceStudyLinksSTUDYLINKSsequenceStudyTypeschema_StudyLink_TLinkType_                                                                                                                                                             func(*XsdGoPkgHasElems_StudyLINKsequenceTxsdStudyTypeSequenceStudyLinksSTUDYLINKSsequenceStudyTypeschema_StudyLink_TLinkType_, bool) error
-	XsdGoPkgHasElem_StudyATTRIBUTESsequenceStudyTypeschema_StudyAttributes_TxsdStudyTypeSequenceStudyAttributes_                                                                                                                                                                        func(*XsdGoPkgHasElem_StudyATTRIBUTESsequenceStudyTypeschema_StudyAttributes_TxsdStudyTypeSequenceStudyAttributes_, bool) error
-	XsdGoPkgHasElem_ExpectedBasecallTABLEchoicesequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ExpectedBasecallTable_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTable_                                                func(*XsdGoPkgHasElem_ExpectedBasecallTABLEchoicesequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ExpectedBasecallTable_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTable_, bool) error
-	XsdGoPkgHasElems_StudyDESCRIPTIONallDESCRIPTORsequenceStudyTypeschema_StudyDescription_XsdtString_                                                                                                                                                                                  func(*XsdGoPkgHasElems_StudyDESCRIPTIONallDESCRIPTORsequenceStudyTypeschema_StudyDescription_XsdtString_, bool) error
-	XsdGoPkgHasElems_TAGallAttributeTypeschema_Tag_XsdtString_                                                                                                                                                                                                                          func(*XsdGoPkgHasElems_TAGallAttributeTypeschema_Tag_XsdtString_, bool) error
-	TxsdPlatformTypeChoiceOxfordNanopore                                                                                                                                                                                                                                                func(*TxsdPlatformTypeChoiceOxfordNanopore, bool) error
-	XsdGoPkgHasElem_StudyABSTRACTallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_StudyAbstract_XsdtString_                                                                                                                                                          func(*XsdGoPkgHasElem_StudyABSTRACTallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_StudyAbstract_XsdtString_, bool) error
-	XsdGoPkgHasElem_DESCRIPTORsequenceStudyTypeschema_Descriptor_TxsdStudyTypeSequenceDescriptor_                                                                                                                                                                                       func(*XsdGoPkgHasElem_DESCRIPTORsequenceStudyTypeschema_Descriptor_TxsdStudyTypeSequenceDescriptor_, bool) error
-	XsdGoPkgHasElems_AlignmentMarksDuplicateReadsallAlignmentDirectivesTypeschema_AlignmentMarksDuplicateReads_XsdtBoolean_                                                                                                                                                             func(*XsdGoPkgHasElems_AlignmentMarksDuplicateReadsallAlignmentDirectivesTypeschema_AlignmentMarksDuplicateReads_XsdtBoolean_, bool) error
-	XsdGoPkgHasElem_AlignmentIncludesFailedReadsallAlignmentDirectivesTypeschema_AlignmentIncludesFailedReads_XsdtBoolean_                                                                                                                                                              func(*XsdGoPkgHasElem_AlignmentIncludesFailedReadsallAlignmentDirectivesTypeschema_AlignmentIncludesFailedReads_XsdtBoolean_, bool) error
-	XsdGoPkgHasElem_InstrumentMODELsequenceCAPILLARYchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceCapillarySequenceInstrumentModel_                                                                                                                                    func(*XsdGoPkgHasElem_InstrumentMODELsequenceCAPILLARYchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceCapillarySequenceInstrumentModel_, bool) error
-	XsdGoPkgHasElems_ILLUMINAchoicePlatformTypeschema_Illumina_TxsdPlatformTypeChoiceIllumina_                                                                                                                                                                                          func(*XsdGoPkgHasElems_ILLUMINAchoicePlatformTypeschema_Illumina_TxsdPlatformTypeChoiceIllumina_, bool) error
-	XsdGoPkgHasElems_QUERYchoicesequenceENTREZLINKchoiceLinkTypeschema_Query_XsdtString_                                                                                                                                                                                                func(*XsdGoPkgHasElems_QUERYchoicesequenceENTREZLINKchoiceLinkTypeschema_Query_XsdtString_, bool) error
-	XsdGoPkgHasElem_StudyLINKSsequenceStudyTypeschema_StudyLinks_TxsdStudyTypeSequenceStudyLinks_                                                                                                                                                                                       func(*XsdGoPkgHasElem_StudyLINKSsequenceStudyTypeschema_StudyLinks_TxsdStudyTypeSequenceStudyLinks_, bool) error
-	TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpec                                                                                                                                                                                                                          func(*TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpec, bool) error
-	XsdGoPkgHasElems_StudyLINKSsequenceStudyTypeschema_StudyLinks_TxsdStudyTypeSequenceStudyLinks_                                                                                                                                                                                      func(*XsdGoPkgHasElems_StudyLINKSsequenceStudyTypeschema_StudyLinks_TxsdStudyTypeSequenceStudyLinks_, bool) error
-	XsdGoPkgHasElems_PacbioSMRTchoicePlatformTypeschema_PacbioSmrt_TxsdPlatformTypeChoicePacbioSmrt_                                                                                                                                                                                    func(*XsdGoPkgHasElems_PacbioSMRTchoicePlatformTypeschema_PacbioSmrt_TxsdPlatformTypeChoicePacbioSmrt_, bool) error
-	TxsdStudyTypeSequenceStudyLinks                                                                                                                                                                                                                                                     func(*TxsdStudyTypeSequenceStudyLinks, bool) error
-	XsdGoPkgHasElems_STUDYsequenceStudySetTypeschema_Study_TStudyType_                                                                                                                                                                                                                  func(*XsdGoPkgHasElems_STUDYsequenceStudySetTypeschema_Study_TStudyType_, bool) error
-	XsdGoPkgHasElem_AlignmentIncludesUnalignedReadsallAlignmentDirectivesTypeschema_AlignmentIncludesUnalignedReads_XsdtBoolean_                                                                                                                                                        func(*XsdGoPkgHasElem_AlignmentIncludesUnalignedReadsallAlignmentDirectivesTypeschema_AlignmentIncludesUnalignedReads_XsdtBoolean_, bool) error
-	TxsdPlatformTypeChoiceLs454                                                                                                                                                                                                                                                         func(*TxsdPlatformTypeChoiceLs454, bool) error
-	XsdGoPkgHasElem_CAPILLARYchoicePlatformTypeschema_Capillary_TxsdPlatformTypeChoiceCapillary_                                                                                                                                                                                        func(*XsdGoPkgHasElem_CAPILLARYchoicePlatformTypeschema_Capillary_TxsdPlatformTypeChoiceCapillary_, bool) error
-	XsdGoPkgHasElem_BaseCOORDchoicesequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_BaseCoord_XsdtInteger_                                                                                                                                                          func(*XsdGoPkgHasElem_BaseCOORDchoicesequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_BaseCoord_XsdtInteger_, bool) error
-	XsdGoPkgHasElem_SpotDecodeSPECchoiceSpotDescriptorTypeschema_SpotDecodeSpec_TxsdSpotDescriptorTypeChoiceSpotDecodeSpec_                                                                                                                                                             func(*XsdGoPkgHasElem_SpotDecodeSPECchoiceSpotDescriptorTypeschema_SpotDecodeSpec_TxsdSpotDescriptorTypeChoiceSpotDecodeSpec_, bool) error
-	TxsdPlatformTypeChoiceCompleteGenomics                                                                                                                                                                                                                                              func(*TxsdPlatformTypeChoiceCompleteGenomics, bool) error
-	XsdGoPkgHasElem_InstrumentMODELsequenceIONTORRENTchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceIonTorrentSequenceInstrumentModel_                                                                                                                                  func(*XsdGoPkgHasElem_InstrumentMODELsequenceIONTORRENTchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceIonTorrentSequenceInstrumentModel_, bool) error
-	TxsdPlatformTypeChoiceIonTorrent                                                                                                                                                                                                                                                    func(*TxsdPlatformTypeChoiceIonTorrent, bool) error
-	XsdGoPkgHasElems_AlignmentIncludesUnalignedReadsallAlignmentDirectivesTypeschema_AlignmentIncludesUnalignedReads_XsdtBoolean_                                                                                                                                                       func(*XsdGoPkgHasElems_AlignmentIncludesUnalignedReadsallAlignmentDirectivesTypeschema_AlignmentIncludesUnalignedReads_XsdtBoolean_, bool) error
-	XsdGoPkgHasElems_IsPRIMARYsequenceRELATEDSTUDYsequenceRELATEDSTUDIESallDESCRIPTORsequenceStudyTypeschema_IsPrimary_XsdtBoolean_                                                                                                                                                     func(*XsdGoPkgHasElems_IsPRIMARYsequenceRELATEDSTUDYsequenceRELATEDSTUDIESallDESCRIPTORsequenceStudyTypeschema_IsPrimary_XsdtBoolean_, bool) error
-	XsdGoPkgHasElem_VALUEallAttributeTypeschema_Value_XsdtString_                                                                                                                                                                                                                       func(*XsdGoPkgHasElem_VALUEallAttributeTypeschema_Value_XsdtString_, bool) error
-	XsdGoPkgHasElem_StudySet                                                                                                                                                                                                                                                            func(*XsdGoPkgHasElem_StudySet, bool) error
-	XsdGoPkgHasElem_CompleteGENOMICSchoicePlatformTypeschema_CompleteGenomics_TxsdPlatformTypeChoiceCompleteGenomics_                                                                                                                                                                   func(*XsdGoPkgHasElem_CompleteGENOMICSchoicePlatformTypeschema_CompleteGenomics_TxsdPlatformTypeChoiceCompleteGenomics_, bool) error
-	XsdGoPkgHasElems_PrimaryIDsequenceIdentifierTypeschema_PrimaryId_TNameAndLabelType_                                                                                                                                                                                                 func(*XsdGoPkgHasElems_PrimaryIDsequenceIdentifierTypeschema_PrimaryId_TNameAndLabelType_, bool) error
-	TxsdStudyTypeSequenceDescriptorAllStudyType                                                                                                                                                                                                                                         func(*TxsdStudyTypeSequenceDescriptorAllStudyType, bool) error
-	TxsdPlatformTypeChoiceHelicos                                                                                                                                                                                                                                                       func(*TxsdPlatformTypeChoiceHelicos, bool) error
+	XsdGoPkgHasElem_StudySet                                                                                                                                                                                                                                                             func(*XsdGoPkgHasElem_StudySet, bool) error
+	XsdGoPkgHasElems_ReadTYPEsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadType_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadType_Forward                                                                                            func(*XsdGoPkgHasElems_ReadTYPEsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadType_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadType_Forward, bool) error
+	XsdGoPkgHasElems_ExpectedBasecallTABLEchoicesequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ExpectedBasecallTable_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTable_                                                func(*XsdGoPkgHasElems_ExpectedBasecallTABLEchoicesequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ExpectedBasecallTable_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTable_, bool) error
+	XsdGoPkgHasElem_PrevStepINDEXsequencePIPESECTIONsequencePipelineTypeschema_PrevStepIndex_XsdtString_                                                                                                                                                                                 func(*XsdGoPkgHasElem_PrevStepINDEXsequencePIPESECTIONsequencePipelineTypeschema_PrevStepIndex_XsdtString_, bool) error
+	XsdGoPkgHasElems_EntrezLINKchoiceLinkTypeschema_EntrezLink_TxsdLinkTypeChoiceEntrezLink_                                                                                                                                                                                             func(*XsdGoPkgHasElems_EntrezLINKchoiceLinkTypeschema_EntrezLink_TxsdLinkTypeChoiceEntrezLink_, bool) error
+	XsdGoPkgHasElem_IDallXRefTypeschema_Id_XsdtString_                                                                                                                                                                                                                                   func(*XsdGoPkgHasElem_IDallXRefTypeschema_Id_XsdtString_, bool) error
+	XsdGoPkgHasElem_URLallURLLINKchoiceLinkTypeschema_Url_XsdtAnyURI_                                                                                                                                                                                                                    func(*XsdGoPkgHasElem_URLallURLLINKchoiceLinkTypeschema_Url_XsdtAnyURI_, bool) error
+	TxsdLinkTypeChoiceUrlLink                                                                                                                                                                                                                                                            func(*TxsdLinkTypeChoiceUrlLink, bool) error
+	TxsdStudyTypeSequenceStudyLinks                                                                                                                                                                                                                                                      func(*TxsdStudyTypeSequenceStudyLinks, bool) error
+	XsdGoPkgHasElems_StudyDESCRIPTIONallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_StudyDescription_XsdtString_                                                                                                                                                    func(*XsdGoPkgHasElems_StudyDESCRIPTIONallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_StudyDescription_XsdtString_, bool) error
+	XsdGoPkgHasElems_CAPILLARYchoicePlatformTypeschema_Capillary_TxsdPlatformTypeChoiceCapillary_                                                                                                                                                                                        func(*XsdGoPkgHasElems_CAPILLARYchoicePlatformTypeschema_Capillary_TxsdPlatformTypeChoiceCapillary_, bool) error
+	XsdGoPkgHasElem_AbiSOLIDchoicePlatformTypeschema_AbiSolid_TxsdPlatformTypeChoiceAbiSolid_                                                                                                                                                                                            func(*XsdGoPkgHasElem_AbiSOLIDchoicePlatformTypeschema_AbiSolid_TxsdPlatformTypeChoiceAbiSolid_, bool) error
+	XsdGoPkgHasElems_ReadSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadSpec_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpec_                                                                                                                                   func(*XsdGoPkgHasElems_ReadSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadSpec_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpec_, bool) error
+	XsdGoPkgHasElem_StudyABSTRACTallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_StudyAbstract_XsdtString_                                                                                                                                                           func(*XsdGoPkgHasElem_StudyABSTRACTallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_StudyAbstract_XsdtString_, bool) error
+	TStudyType                                                                                                                                                                                                                                                                           func(*TStudyType, bool) error
+	TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceRelativeOrder                                                                                                                                                                                                func(*TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceRelativeOrder, bool) error
+	TxsdPipelineTypeSequencePipeSection                                                                                                                                                                                                                                                  func(*TxsdPipelineTypeSequencePipeSection, bool) error
+	XsdGoPkgHasElems_PacbioSMRTchoicePlatformTypeschema_PacbioSmrt_TxsdPlatformTypeChoicePacbioSmrt_                                                                                                                                                                                     func(*XsdGoPkgHasElems_PacbioSMRTchoicePlatformTypeschema_PacbioSmrt_TxsdPlatformTypeChoicePacbioSmrt_, bool) error
+	XsdGoPkgHasElem_ReadINDEXsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadIndex_XsdtNonNegativeInteger_                                                                                                                                                      func(*XsdGoPkgHasElem_ReadINDEXsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadIndex_XsdtNonNegativeInteger_, bool) error
+	XsdGoPkgHasElem_SecondaryIDsequenceIdentifierTypeschema_SecondaryId_TNameAndLabelType_                                                                                                                                                                                               func(*XsdGoPkgHasElem_SecondaryIDsequenceIdentifierTypeschema_SecondaryId_TNameAndLabelType_, bool) error
+	XsdGoPkgHasElems_QUERYchoicesequenceENTREZLINKchoiceLinkTypeschema_Query_XsdtString_                                                                                                                                                                                                 func(*XsdGoPkgHasElems_QUERYchoicesequenceENTREZLINKchoiceLinkTypeschema_Query_XsdtString_, bool) error
+	XsdGoPkgHasElems_CenterProjectNAMEallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_CenterProjectName_XsdtString_                                                                                                                                                  func(*XsdGoPkgHasElems_CenterProjectNAMEallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_CenterProjectName_XsdtString_, bool) error
+	TxsdSpotDescriptorTypeChoiceSpotDecodeSpec                                                                                                                                                                                                                                           func(*TxsdSpotDescriptorTypeChoiceSpotDecodeSpec, bool) error
+	XsdGoPkgHasElem_DBallXRefTypeschema_Db_XsdtString_                                                                                                                                                                                                                                   func(*XsdGoPkgHasElem_DBallXRefTypeschema_Db_XsdtString_, bool) error
+	XsdGoPkgHasElem_StudyTITLEallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_StudyTitle_XsdtString_                                                                                                                                                                 func(*XsdGoPkgHasElem_StudyTITLEallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_StudyTitle_XsdtString_, bool) error
+	XsdGoPkgHasElem_CenterProjectNAMEallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_CenterProjectName_XsdtString_                                                                                                                                                   func(*XsdGoPkgHasElem_CenterProjectNAMEallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_CenterProjectName_XsdtString_, bool) error
+	XsdGoPkgHasElem_SampleDemuxDIRECTIVEallSequencingDirectivesTypeschema_SampleDemuxDirective_TxsdSequencingDirectivesTypeAllSampleDemuxDirective_                                                                                                                                      func(*XsdGoPkgHasElem_SampleDemuxDIRECTIVEallSequencingDirectivesTypeschema_SampleDemuxDirective_TxsdSequencingDirectivesTypeAllSampleDemuxDirective_, bool) error
+	XsdGoPkgHasElems_PIPELINEsequenceProcessingTypeschema_Pipeline_TPipelineType_                                                                                                                                                                                                        func(*XsdGoPkgHasElems_PIPELINEsequenceProcessingTypeschema_Pipeline_TPipelineType_, bool) error
+	XsdGoPkgHasElem_Ls454ChoicePlatformTypeschema_Ls454_TxsdPlatformTypeChoiceLs454_                                                                                                                                                                                                     func(*XsdGoPkgHasElem_Ls454ChoicePlatformTypeschema_Ls454_TxsdPlatformTypeChoiceLs454_, bool) error
+	TxsdStudyTypeSequenceDescriptorAllRelatedStudiesSequenceRelatedStudy                                                                                                                                                                                                                 func(*TxsdStudyTypeSequenceDescriptorAllRelatedStudiesSequenceRelatedStudy, bool) error
+	XsdGoPkgHasElem_InstrumentMODELsequenceIONTORRENTchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceIonTorrentSequenceInstrumentModel_                                                                                                                                   func(*XsdGoPkgHasElem_InstrumentMODELsequenceIONTORRENTchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceIonTorrentSequenceInstrumentModel_, bool) error
+	XsdGoPkgHasElem_HELICOSchoicePlatformTypeschema_Helicos_TxsdPlatformTypeChoiceHelicos_                                                                                                                                                                                               func(*XsdGoPkgHasElem_HELICOSchoicePlatformTypeschema_Helicos_TxsdPlatformTypeChoiceHelicos_, bool) error
+	XsdGoPkgHasElem_CompleteGENOMICSchoicePlatformTypeschema_CompleteGenomics_TxsdPlatformTypeChoiceCompleteGenomics_                                                                                                                                                                    func(*XsdGoPkgHasElem_CompleteGENOMICSchoicePlatformTypeschema_CompleteGenomics_TxsdPlatformTypeChoiceCompleteGenomics_, bool) error
+	XsdGoPkgHasElems_RelativeORDERchoicesequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_RelativeOrder_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceRelativeOrder_                                                                        func(*XsdGoPkgHasElems_RelativeORDERchoicesequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_RelativeOrder_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceRelativeOrder_, bool) error
+	XsdGoPkgHasElems_ILLUMINAchoicePlatformTypeschema_Illumina_TxsdPlatformTypeChoiceIllumina_                                                                                                                                                                                           func(*XsdGoPkgHasElems_ILLUMINAchoicePlatformTypeschema_Illumina_TxsdPlatformTypeChoiceIllumina_, bool) error
+	TStudySetType                                                                                                                                                                                                                                                                        func(*TStudySetType, bool) error
+	XsdGoPkgHasElem_ExpectedBasecallTABLEchoicesequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ExpectedBasecallTable_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTable_                                                 func(*XsdGoPkgHasElem_ExpectedBasecallTABLEchoicesequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ExpectedBasecallTable_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTable_, bool) error
+	TxsdPlatformTypeChoiceCompleteGenomics                                                                                                                                                                                                                                               func(*TxsdPlatformTypeChoiceCompleteGenomics, bool) error
+	XsdGoPkgHasElems_InstrumentMODELsequenceCOMPLETEGENOMICSchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceCompleteGenomicsSequenceInstrumentModel_                                                                                                                      func(*XsdGoPkgHasElems_InstrumentMODELsequenceCOMPLETEGENOMICSchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceCompleteGenomicsSequenceInstrumentModel_, bool) error
+	XsdGoPkgHasElems_VALUEallAttributeTypeschema_Value_XsdtString_                                                                                                                                                                                                                       func(*XsdGoPkgHasElems_VALUEallAttributeTypeschema_Value_XsdtString_, bool) error
+	XsdGoPkgHasElems_InstrumentMODELallHELICOSchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceHelicosAllInstrumentModel_                                                                                                                                                  func(*XsdGoPkgHasElems_InstrumentMODELallHELICOSchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceHelicosAllInstrumentModel_, bool) error
+	XsdGoPkgHasElem_DESCRIPTORsequenceStudyTypeschema_Descriptor_TxsdStudyTypeSequenceDescriptor_                                                                                                                                                                                        func(*XsdGoPkgHasElem_DESCRIPTORsequenceStudyTypeschema_Descriptor_TxsdStudyTypeSequenceDescriptor_, bool) error
+	TxsdLinkTypeChoiceEntrezLink                                                                                                                                                                                                                                                         func(*TxsdLinkTypeChoiceEntrezLink, bool) error
+	TxsdPlatformTypeChoicePacbioSmrt                                                                                                                                                                                                                                                     func(*TxsdPlatformTypeChoicePacbioSmrt, bool) error
+	XsdGoPkgHasElem_BaseCOORDchoicesequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_BaseCoord_XsdtInteger_                                                                                                                                                           func(*XsdGoPkgHasElem_BaseCOORDchoicesequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_BaseCoord_XsdtInteger_, bool) error
+	TxsdPlatformTypeChoiceLs454                                                                                                                                                                                                                                                          func(*TxsdPlatformTypeChoiceLs454, bool) error
+	XsdGoPkgHasElems_ReadLABELsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadLabel_XsdtString_                                                                                                                                                                 func(*XsdGoPkgHasElems_ReadLABELsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadLabel_XsdtString_, bool) error
+	TIdentifierType                                                                                                                                                                                                                                                                      func(*TIdentifierType, bool) error
+	XsdGoPkgHasElem_RelatedLINKsequenceTxsdStudyTypeSequenceDescriptorAllRelatedStudiesSequenceRelatedStudyRELATEDSTUDYsequenceTxsdStudyTypeSequenceDescriptorAllRelatedStudiesRELATEDSTUDIESallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_RelatedLink_TXRefType_  func(*XsdGoPkgHasElem_RelatedLINKsequenceTxsdStudyTypeSequenceDescriptorAllRelatedStudiesSequenceRelatedStudyRELATEDSTUDYsequenceTxsdStudyTypeSequenceDescriptorAllRelatedStudiesRELATEDSTUDIESallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_RelatedLink_TXRefType_, bool) error
+	XsdGoPkgHasCdata                                                                                                                                                                                                                                                                     func(*XsdGoPkgHasCdata, bool) error
+	XsdGoPkgHasElems_RelatedSTUDYsequenceTxsdStudyTypeSequenceDescriptorAllRelatedStudiesRELATEDSTUDIESallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_RelatedStudy_TxsdStudyTypeSequenceDescriptorAllRelatedStudiesSequenceRelatedStudy_                            func(*XsdGoPkgHasElems_RelatedSTUDYsequenceTxsdStudyTypeSequenceDescriptorAllRelatedStudiesRELATEDSTUDIESallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_RelatedStudy_TxsdStudyTypeSequenceDescriptorAllRelatedStudiesSequenceRelatedStudy_, bool) error
+	XsdGoPkgHasElem_UNITSallAttributeTypeschema_Units_XsdtString_                                                                                                                                                                                                                        func(*XsdGoPkgHasElem_UNITSallAttributeTypeschema_Units_XsdtString_, bool) error
+	XsdGoPkgHasElem_StudyATTRIBUTESsequenceStudyTypeschema_StudyAttributes_TxsdStudyTypeSequenceStudyAttributes_                                                                                                                                                                         func(*XsdGoPkgHasElem_StudyATTRIBUTESsequenceStudyTypeschema_StudyAttributes_TxsdStudyTypeSequenceStudyAttributes_, bool) error
+	XsdGoPkgHasElems_TAGallAttributeTypeschema_Tag_XsdtString_                                                                                                                                                                                                                           func(*XsdGoPkgHasElems_TAGallAttributeTypeschema_Tag_XsdtString_, bool) error
+	XsdGoPkgHasElem_CAPILLARYchoicePlatformTypeschema_Capillary_TxsdPlatformTypeChoiceCapillary_                                                                                                                                                                                         func(*XsdGoPkgHasElem_CAPILLARYchoicePlatformTypeschema_Capillary_TxsdPlatformTypeChoiceCapillary_, bool) error
+	XsdGoPkgHasElem_IonTORRENTchoicePlatformTypeschema_IonTorrent_TxsdPlatformTypeChoiceIonTorrent_                                                                                                                                                                                      func(*XsdGoPkgHasElem_IonTORRENTchoicePlatformTypeschema_IonTorrent_TxsdPlatformTypeChoiceIonTorrent_, bool) error
+	TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTableSequenceBasecall                                                                                                                                                                        func(*TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTableSequenceBasecall, bool) error
+	XsdGoPkgHasElem_PipeSECTIONsequencePipelineTypeschema_PipeSection_TxsdPipelineTypeSequencePipeSection_                                                                                                                                                                               func(*XsdGoPkgHasElem_PipeSECTIONsequencePipelineTypeschema_PipeSection_TxsdPipelineTypeSequencePipeSection_, bool) error
+	XsdGoPkgHasElem_LABELallXRefTypeschema_Label_XsdtString_                                                                                                                                                                                                                             func(*XsdGoPkgHasElem_LABELallXRefTypeschema_Label_XsdtString_, bool) error
+	XsdGoPkgHasElem_StudyTYPEallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_StudyType_TxsdStudyTypeSequenceDescriptorAllStudyType_                                                                                                                                  func(*XsdGoPkgHasElem_StudyTYPEallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_StudyType_TxsdStudyTypeSequenceDescriptorAllStudyType_, bool) error
+	XsdGoPkgHasElem_AlignmentMarksDuplicateReadsallAlignmentDirectivesTypeschema_AlignmentMarksDuplicateReads_XsdtBoolean_                                                                                                                                                               func(*XsdGoPkgHasElem_AlignmentMarksDuplicateReadsallAlignmentDirectivesTypeschema_AlignmentMarksDuplicateReads_XsdtBoolean_, bool) error
+	XsdGoPkgHasElems_IDENTIFIERSsequenceStudyTypeschema_Identifiers_TIdentifierType_                                                                                                                                                                                                     func(*XsdGoPkgHasElems_IDENTIFIERSsequenceStudyTypeschema_Identifiers_TIdentifierType_, bool) error
+	XsdGoPkgHasElems_XrefLINKchoiceLinkTypeschema_XrefLink_TXRefType_                                                                                                                                                                                                                    func(*XsdGoPkgHasElems_XrefLINKchoiceLinkTypeschema_XrefLink_TXRefType_, bool) error
+	XsdGoPkgHasElems_StudySet                                                                                                                                                                                                                                                            func(*XsdGoPkgHasElems_StudySet, bool) error
+	XsdGoPkgHasElem_StepINDEXsequencePIPESECTIONsequencePipelineTypeschema_StepIndex_XsdtString_                                                                                                                                                                                         func(*XsdGoPkgHasElem_StepINDEXsequencePIPESECTIONsequencePipelineTypeschema_StepIndex_XsdtString_, bool) error
+	XsdGoPkgHasElem_StudyATTRIBUTEsequenceSTUDYATTRIBUTESsequenceStudyTypeschema_StudyAttribute_TAttributeType_                                                                                                                                                                          func(*XsdGoPkgHasElem_StudyATTRIBUTEsequenceSTUDYATTRIBUTESsequenceStudyTypeschema_StudyAttribute_TAttributeType_, bool) error
+	XsdGoPkgHasElem_InstrumentMODELsequencePACBIOSMRTchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoicePacbioSmrtSequenceInstrumentModel_                                                                                                                                   func(*XsdGoPkgHasElem_InstrumentMODELsequencePACBIOSMRTchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoicePacbioSmrtSequenceInstrumentModel_, bool) error
+	XsdGoPkgHasElem_AlignmentIncludesFailedReadsallAlignmentDirectivesTypeschema_AlignmentIncludesFailedReads_XsdtBoolean_                                                                                                                                                               func(*XsdGoPkgHasElem_AlignmentIncludesFailedReadsallAlignmentDirectivesTypeschema_AlignmentIncludesFailedReads_XsdtBoolean_, bool) error
+	XsdGoPkgHasElem_ILLUMINAchoicePlatformTypeschema_Illumina_TxsdPlatformTypeChoiceIllumina_                                                                                                                                                                                            func(*XsdGoPkgHasElem_ILLUMINAchoicePlatformTypeschema_Illumina_TxsdPlatformTypeChoiceIllumina_, bool) error
+	XsdGoPkgHasElems_OxfordNANOPOREchoicePlatformTypeschema_OxfordNanopore_TxsdPlatformTypeChoiceOxfordNanopore_                                                                                                                                                                         func(*XsdGoPkgHasElems_OxfordNANOPOREchoicePlatformTypeschema_OxfordNanopore_TxsdPlatformTypeChoiceOxfordNanopore_, bool) error
+	XsdGoPkgHasElems_BaseCOORDchoicesequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_BaseCoord_XsdtInteger_                                                                                                                                                          func(*XsdGoPkgHasElems_BaseCOORDchoicesequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_BaseCoord_XsdtInteger_, bool) error
+	TxsdStudyTypeSequenceStudyAttributes                                                                                                                                                                                                                                                 func(*TxsdStudyTypeSequenceStudyAttributes, bool) error
+	XsdGoPkgHasElems_SpotLENGTHsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_SpotLength_XsdtNonNegativeInteger_                                                                                                                                                                   func(*XsdGoPkgHasElems_SpotLENGTHsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_SpotLength_XsdtNonNegativeInteger_, bool) error
+	XsdGoPkgHasElems_NOTESsequencePIPESECTIONsequencePipelineTypeschema_Notes_XsdtString_                                                                                                                                                                                                func(*XsdGoPkgHasElems_NOTESsequencePIPESECTIONsequencePipelineTypeschema_Notes_XsdtString_, bool) error
+	TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpec                                                                                                                                                                                                                           func(*TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpec, bool) error
+	XsdGoPkgHasElem_ReadSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadSpec_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpec_                                                                                                                                    func(*XsdGoPkgHasElem_ReadSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadSpec_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpec_, bool) error
+	XsdGoPkgHasElem_InstrumentMODELsequenceOXFORDNANOPOREchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceOxfordNanoporeSequenceInstrumentModel_                                                                                                                           func(*XsdGoPkgHasElem_InstrumentMODELsequenceOXFORDNANOPOREchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceOxfordNanoporeSequenceInstrumentModel_, bool) error
+	XsdGoPkgHasElems_CompleteGENOMICSchoicePlatformTypeschema_CompleteGenomics_TxsdPlatformTypeChoiceCompleteGenomics_                                                                                                                                                                   func(*XsdGoPkgHasElems_CompleteGENOMICSchoicePlatformTypeschema_CompleteGenomics_TxsdPlatformTypeChoiceCompleteGenomics_, bool) error
+	TAttributeType                                                                                                                                                                                                                                                                       func(*TAttributeType, bool) error
+	XsdGoPkgHasElem_ReadLABELsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadLabel_XsdtString_                                                                                                                                                                  func(*XsdGoPkgHasElem_ReadLABELsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadLabel_XsdtString_, bool) error
+	TAlignmentDirectivesType                                                                                                                                                                                                                                                             func(*TAlignmentDirectivesType, bool) error
+	XsdGoPkgHasElem_InstrumentMODELsequenceILLUMINAchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceIlluminaSequenceInstrumentModel_                                                                                                                                       func(*XsdGoPkgHasElem_InstrumentMODELsequenceILLUMINAchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceIlluminaSequenceInstrumentModel_, bool) error
+	XsdGoPkgHasElems_UNITSallAttributeTypeschema_Units_XsdtString_                                                                                                                                                                                                                       func(*XsdGoPkgHasElems_UNITSallAttributeTypeschema_Units_XsdtString_, bool) error
+	XsdGoPkgHasElems_AlignmentIncludesUnalignedReadsallAlignmentDirectivesTypeschema_AlignmentIncludesUnalignedReads_XsdtBoolean_                                                                                                                                                        func(*XsdGoPkgHasElems_AlignmentIncludesUnalignedReadsallAlignmentDirectivesTypeschema_AlignmentIncludesUnalignedReads_XsdtBoolean_, bool) error
+	XsdGoPkgHasElems_StudyATTRIBUTESsequenceStudyTypeschema_StudyAttributes_TxsdStudyTypeSequenceStudyAttributes_                                                                                                                                                                        func(*XsdGoPkgHasElems_StudyATTRIBUTESsequenceStudyTypeschema_StudyAttributes_TxsdStudyTypeSequenceStudyAttributes_, bool) error
+	XsdGoPkgHasElems_Ls454ChoicePlatformTypeschema_Ls454_TxsdPlatformTypeChoiceLs454_                                                                                                                                                                                                    func(*XsdGoPkgHasElems_Ls454ChoicePlatformTypeschema_Ls454_TxsdPlatformTypeChoiceLs454_, bool) error
+	XsdGoPkgHasElem_OxfordNANOPOREchoicePlatformTypeschema_OxfordNanopore_TxsdPlatformTypeChoiceOxfordNanopore_                                                                                                                                                                          func(*XsdGoPkgHasElem_OxfordNANOPOREchoicePlatformTypeschema_OxfordNanopore_TxsdPlatformTypeChoiceOxfordNanopore_, bool) error
+	XsdGoPkgHasElems_RelatedSTUDIESallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_RelatedStudies_TxsdStudyTypeSequenceDescriptorAllRelatedStudies_                                                                                                                  func(*XsdGoPkgHasElems_RelatedSTUDIESallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_RelatedStudies_TxsdStudyTypeSequenceDescriptorAllRelatedStudies_, bool) error
+	XsdGoPkgHasElem_InstrumentMODELsequenceABISOLIDchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceAbiSolidSequenceInstrumentModel_                                                                                                                                       func(*XsdGoPkgHasElem_InstrumentMODELsequenceABISOLIDchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceAbiSolidSequenceInstrumentModel_, bool) error
+	XsdGoPkgHasElem_VERSIONsequencePIPESECTIONsequencePipelineTypeschema_Version_XsdtString_                                                                                                                                                                                             func(*XsdGoPkgHasElem_VERSIONsequencePIPESECTIONsequencePipelineTypeschema_Version_XsdtString_, bool) error
+	XsdGoPkgHasElems_InstrumentMODELsequencePACBIOSMRTchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoicePacbioSmrtSequenceInstrumentModel_                                                                                                                                  func(*XsdGoPkgHasElems_InstrumentMODELsequencePACBIOSMRTchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoicePacbioSmrtSequenceInstrumentModel_, bool) error
+	XsdGoPkgHasElems_CenterNAMEallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_CenterName_XsdtString_                                                                                                                                                                func(*XsdGoPkgHasElems_CenterNAMEallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_CenterName_XsdtString_, bool) error
+	TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTable                                                                                                                                                                                        func(*TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTable, bool) error
+	XsdGoPkgHasElem_PacbioSMRTchoicePlatformTypeschema_PacbioSmrt_TxsdPlatformTypeChoicePacbioSmrt_                                                                                                                                                                                      func(*XsdGoPkgHasElem_PacbioSMRTchoicePlatformTypeschema_PacbioSmrt_TxsdPlatformTypeChoicePacbioSmrt_, bool) error
+	XsdGoPkgHasElem_SpotLENGTHsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_SpotLength_XsdtNonNegativeInteger_                                                                                                                                                                    func(*XsdGoPkgHasElem_SpotLENGTHsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_SpotLength_XsdtNonNegativeInteger_, bool) error
+	XsdGoPkgHasElems_SubmitterIDsequenceIdentifierTypeschema_SubmitterId_TQualifiedNameType_                                                                                                                                                                                             func(*XsdGoPkgHasElems_SubmitterIDsequenceIdentifierTypeschema_SubmitterId_TQualifiedNameType_, bool) error
+	XsdGoPkgHasElem_TAGallAttributeTypeschema_Tag_XsdtString_                                                                                                                                                                                                                            func(*XsdGoPkgHasElem_TAGallAttributeTypeschema_Tag_XsdtString_, bool) error
+	XsdGoPkgHasElems_PipeSECTIONsequencePipelineTypeschema_PipeSection_TxsdPipelineTypeSequencePipeSection_                                                                                                                                                                              func(*XsdGoPkgHasElems_PipeSECTIONsequencePipelineTypeschema_PipeSection_TxsdPipelineTypeSequencePipeSection_, bool) error
+	XsdGoPkgHasElem_InstrumentMODELallHELICOSchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceHelicosAllInstrumentModel_                                                                                                                                                   func(*XsdGoPkgHasElem_InstrumentMODELallHELICOSchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceHelicosAllInstrumentModel_, bool) error
+	XsdGoPkgHasElems_IonTORRENTchoicePlatformTypeschema_IonTorrent_TxsdPlatformTypeChoiceIonTorrent_                                                                                                                                                                                     func(*XsdGoPkgHasElems_IonTORRENTchoicePlatformTypeschema_IonTorrent_TxsdPlatformTypeChoiceIonTorrent_, bool) error
+	XsdGoPkgHasElems_StudyTITLEallDESCRIPTORsequenceStudyTypeschema_StudyTitle_XsdtString_                                                                                                                                                                                               func(*XsdGoPkgHasElems_StudyTITLEallDESCRIPTORsequenceStudyTypeschema_StudyTitle_XsdtString_, bool) error
+	XsdGoPkgHasElem_SpotDecodeSPECchoiceSpotDescriptorTypeschema_SpotDecodeSpec_TxsdSpotDescriptorTypeChoiceSpotDecodeSpec_                                                                                                                                                              func(*XsdGoPkgHasElem_SpotDecodeSPECchoiceSpotDescriptorTypeschema_SpotDecodeSpec_TxsdSpotDescriptorTypeChoiceSpotDecodeSpec_, bool) error
+	XsdGoPkgHasElem_UUIDsequenceIdentifierTypeschema_Uuid_TNameAndLabelType_                                                                                                                                                                                                             func(*XsdGoPkgHasElem_UUIDsequenceIdentifierTypeschema_Uuid_TNameAndLabelType_, bool) error
+	XsdGoPkgHasElems_AlignmentMarksDuplicateReadsallAlignmentDirectivesTypeschema_AlignmentMarksDuplicateReads_XsdtBoolean_                                                                                                                                                              func(*XsdGoPkgHasElems_AlignmentMarksDuplicateReadsallAlignmentDirectivesTypeschema_AlignmentMarksDuplicateReads_XsdtBoolean_, bool) error
+	XsdGoPkgHasElems_InstrumentMODELsequenceCAPILLARYchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceCapillarySequenceInstrumentModel_                                                                                                                                    func(*XsdGoPkgHasElems_InstrumentMODELsequenceCAPILLARYchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceCapillarySequenceInstrumentModel_, bool) error
+	XsdGoPkgHasElems_UUIDsequenceIdentifierTypeschema_Uuid_TNameAndLabelType_                                                                                                                                                                                                            func(*XsdGoPkgHasElems_UUIDsequenceIdentifierTypeschema_Uuid_TNameAndLabelType_, bool) error
+	XsdGoPkgHasElem_IDchoicesequenceENTREZLINKchoiceLinkTypeschema_Id_XsdtNonNegativeInteger_                                                                                                                                                                                            func(*XsdGoPkgHasElem_IDchoicesequenceENTREZLINKchoiceLinkTypeschema_Id_XsdtNonNegativeInteger_, bool) error
+	TxsdPlatformTypeChoiceIonTorrent                                                                                                                                                                                                                                                     func(*TxsdPlatformTypeChoiceIonTorrent, bool) error
+	XsdGoPkgHasElems_LABELallURLLINKchoiceLinkTypeschema_Label_XsdtString_                                                                                                                                                                                                               func(*XsdGoPkgHasElems_LABELallURLLINKchoiceLinkTypeschema_Label_XsdtString_, bool) error
+	XsdGoPkgHasElem_ReadCLASSsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadClass_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadClass_                                                                                                 func(*XsdGoPkgHasElem_ReadCLASSsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadClass_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadClass_, bool) error
+	XsdGoPkgHasElem_RelatedSTUDYsequenceTxsdStudyTypeSequenceDescriptorAllRelatedStudiesRELATEDSTUDIESallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_RelatedStudy_TxsdStudyTypeSequenceDescriptorAllRelatedStudiesSequenceRelatedStudy_                             func(*XsdGoPkgHasElem_RelatedSTUDYsequenceTxsdStudyTypeSequenceDescriptorAllRelatedStudiesRELATEDSTUDIESallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_RelatedStudy_TxsdStudyTypeSequenceDescriptorAllRelatedStudiesSequenceRelatedStudy_, bool) error
+	XsdGoPkgHasElems_IDallXRefTypeschema_Id_XsdtString_                                                                                                                                                                                                                                  func(*XsdGoPkgHasElems_IDallXRefTypeschema_Id_XsdtString_, bool) error
+	XsdGoPkgHasElems_AbiSOLIDchoicePlatformTypeschema_AbiSolid_TxsdPlatformTypeChoiceAbiSolid_                                                                                                                                                                                           func(*XsdGoPkgHasElems_AbiSOLIDchoicePlatformTypeschema_AbiSolid_TxsdPlatformTypeChoiceAbiSolid_, bool) error
+	XsdGoPkgHasElems_ExternalIDsequenceIdentifierTypeschema_ExternalId_TQualifiedNameType_                                                                                                                                                                                               func(*XsdGoPkgHasElems_ExternalIDsequenceIdentifierTypeschema_ExternalId_TQualifiedNameType_, bool) error
+	XsdGoPkgHasElems_StudyLINKsequenceTxsdStudyTypeSequenceStudyLinksSTUDYLINKSsequenceStudyTypeschema_StudyLink_TLinkType_                                                                                                                                                              func(*XsdGoPkgHasElems_StudyLINKsequenceTxsdStudyTypeSequenceStudyLinksSTUDYLINKSsequenceStudyTypeschema_StudyLink_TLinkType_, bool) error
+	XsdGoPkgHasElem_SubmitterIDsequenceIdentifierTypeschema_SubmitterId_TQualifiedNameType_                                                                                                                                                                                              func(*XsdGoPkgHasElem_SubmitterIDsequenceIdentifierTypeschema_SubmitterId_TQualifiedNameType_, bool) error
+	XsdGoPkgHasElem_PIPELINEsequenceProcessingTypeschema_Pipeline_TPipelineType_                                                                                                                                                                                                         func(*XsdGoPkgHasElem_PIPELINEsequenceProcessingTypeschema_Pipeline_TPipelineType_, bool) error
+	XsdGoPkgHasElems_BASECALLsequenceEXPECTEDBasecallTABLEchoicesequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_Basecall_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTableSequenceBasecall_                             func(*XsdGoPkgHasElems_BASECALLsequenceEXPECTEDBasecallTABLEchoicesequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_Basecall_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTableSequenceBasecall_, bool) error
+	XsdGoPkgHasElems_InstrumentMODELsequenceIONTORRENTchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceIonTorrentSequenceInstrumentModel_                                                                                                                                  func(*XsdGoPkgHasElems_InstrumentMODELsequenceIONTORRENTchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceIonTorrentSequenceInstrumentModel_, bool) error
+	XsdGoPkgHasElems_UrlLINKchoiceLinkTypeschema_UrlLink_TxsdLinkTypeChoiceUrlLink_                                                                                                                                                                                                      func(*XsdGoPkgHasElems_UrlLINKchoiceLinkTypeschema_UrlLink_TxsdLinkTypeChoiceUrlLink_, bool) error
+	XsdGoPkgHasElems_InstrumentMODELsequenceOXFORDNANOPOREchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceOxfordNanoporeSequenceInstrumentModel_                                                                                                                          func(*XsdGoPkgHasElems_InstrumentMODELsequenceOXFORDNANOPOREchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceOxfordNanoporeSequenceInstrumentModel_, bool) error
+	XsdGoPkgHasElems_InstrumentMODELsequenceABISOLIDchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceAbiSolidSequenceInstrumentModel_                                                                                                                                      func(*XsdGoPkgHasElems_InstrumentMODELsequenceABISOLIDchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceAbiSolidSequenceInstrumentModel_, bool) error
+	TNameAndLabelType                                                                                                                                                                                                                                                                    func(*TNameAndLabelType, bool) error
+	XsdGoPkgHasElems_PROGRAMsequencePIPESECTIONsequencePipelineTypeschema_Program_XsdtString_                                                                                                                                                                                            func(*XsdGoPkgHasElems_PROGRAMsequencePIPESECTIONsequencePipelineTypeschema_Program_XsdtString_, bool) error
+	XsdGoPkgHasElems_SpotDecodeSPECchoiceSpotDescriptorTypeschema_SpotDecodeSpec_TxsdSpotDescriptorTypeChoiceSpotDecodeSpec_                                                                                                                                                             func(*XsdGoPkgHasElems_SpotDecodeSPECchoiceSpotDescriptorTypeschema_SpotDecodeSpec_TxsdSpotDescriptorTypeChoiceSpotDecodeSpec_, bool) error
+	TSpotDescriptorType                                                                                                                                                                                                                                                                  func(*TSpotDescriptorType, bool) error
+	XsdGoPkgHasElem_IDENTIFIERSsequenceStudyTypeschema_Identifiers_TIdentifierType_                                                                                                                                                                                                      func(*XsdGoPkgHasElem_IDENTIFIERSsequenceStudyTypeschema_Identifiers_TIdentifierType_, bool) error
+	XsdGoPkgHasElems_PrimaryIDsequenceIdentifierTypeschema_PrimaryId_TNameAndLabelType_                                                                                                                                                                                                  func(*XsdGoPkgHasElems_PrimaryIDsequenceIdentifierTypeschema_PrimaryId_TNameAndLabelType_, bool) error
+	XsdGoPkgHasElems_URLallURLLINKchoiceLinkTypeschema_Url_XsdtAnyURI_                                                                                                                                                                                                                   func(*XsdGoPkgHasElems_URLallURLLINKchoiceLinkTypeschema_Url_XsdtAnyURI_, bool) error
+	XsdGoPkgHasElems_InstrumentMODELsequenceILLUMINAchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceIlluminaSequenceInstrumentModel_                                                                                                                                      func(*XsdGoPkgHasElems_InstrumentMODELsequenceILLUMINAchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceIlluminaSequenceInstrumentModel_, bool) error
+	XsdGoPkgHasElems_HELICOSchoicePlatformTypeschema_Helicos_TxsdPlatformTypeChoiceHelicos_                                                                                                                                                                                              func(*XsdGoPkgHasElems_HELICOSchoicePlatformTypeschema_Helicos_TxsdPlatformTypeChoiceHelicos_, bool) error
+	XsdGoPkgHasElems_SecondaryIDsequenceIdentifierTypeschema_SecondaryId_TNameAndLabelType_                                                                                                                                                                                              func(*XsdGoPkgHasElems_SecondaryIDsequenceIdentifierTypeschema_SecondaryId_TNameAndLabelType_, bool) error
+	TxsdStudyTypeSequenceDescriptorAllRelatedStudies                                                                                                                                                                                                                                     func(*TxsdStudyTypeSequenceDescriptorAllRelatedStudies, bool) error
+	TSequencingDirectivesType                                                                                                                                                                                                                                                            func(*TSequencingDirectivesType, bool) error
+	XsdGoPkgHasElem_BASECALLsequenceEXPECTEDBasecallTABLEchoicesequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_Basecall_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTableSequenceBasecall_                              func(*XsdGoPkgHasElem_BASECALLsequenceEXPECTEDBasecallTABLEchoicesequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_Basecall_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceExpectedBasecallTableSequenceBasecall_, bool) error
+	XsdGoPkgHasElem_InstrumentMODELsequenceCOMPLETEGENOMICSchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceCompleteGenomicsSequenceInstrumentModel_                                                                                                                       func(*XsdGoPkgHasElem_InstrumentMODELsequenceCOMPLETEGENOMICSchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceCompleteGenomicsSequenceInstrumentModel_, bool) error
+	XsdGoPkgHasElems_StudyABSTRACTallDESCRIPTORsequenceStudyTypeschema_StudyAbstract_XsdtString_                                                                                                                                                                                         func(*XsdGoPkgHasElems_StudyABSTRACTallDESCRIPTORsequenceStudyTypeschema_StudyAbstract_XsdtString_, bool) error
+	XsdGoPkgHasElem_IsPRIMARYsequenceTxsdStudyTypeSequenceDescriptorAllRelatedStudiesSequenceRelatedStudyRELATEDSTUDYsequenceTxsdStudyTypeSequenceDescriptorAllRelatedStudiesRELATEDSTUDIESallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_IsPrimary_XsdtBoolean_    func(*XsdGoPkgHasElem_IsPRIMARYsequenceTxsdStudyTypeSequenceDescriptorAllRelatedStudiesSequenceRelatedStudyRELATEDSTUDYsequenceTxsdStudyTypeSequenceDescriptorAllRelatedStudiesRELATEDSTUDIESallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_IsPrimary_XsdtBoolean_, bool) error
+	XsdGoPkgHasElem_Study                                                                                                                                                                                                                                                                func(*XsdGoPkgHasElem_Study, bool) error
+	XsdGoPkgHasElem_NOTESsequencePIPESECTIONsequencePipelineTypeschema_Notes_XsdtString_                                                                                                                                                                                                 func(*XsdGoPkgHasElem_NOTESsequencePIPESECTIONsequencePipelineTypeschema_Notes_XsdtString_, bool) error
+	XsdGoPkgHasElem_StudyLINKsequenceSTUDYLINKSsequenceStudyTypeschema_StudyLink_TLinkType_                                                                                                                                                                                              func(*XsdGoPkgHasElem_StudyLINKsequenceSTUDYLINKSsequenceStudyTypeschema_StudyLink_TLinkType_, bool) error
+	XsdGoPkgHasElems_StudyLINKSsequenceStudyTypeschema_StudyLinks_TxsdStudyTypeSequenceStudyLinks_                                                                                                                                                                                       func(*XsdGoPkgHasElems_StudyLINKSsequenceStudyTypeschema_StudyLinks_TxsdStudyTypeSequenceStudyLinks_, bool) error
+	XsdGoPkgHasElem_ExternalIDsequenceIdentifierTypeschema_ExternalId_TQualifiedNameType_                                                                                                                                                                                                func(*XsdGoPkgHasElem_ExternalIDsequenceIdentifierTypeschema_ExternalId_TQualifiedNameType_, bool) error
+	TXRefType                                                                                                                                                                                                                                                                            func(*TXRefType, bool) error
+	XsdGoPkgHasElem_EntrezLINKchoiceLinkTypeschema_EntrezLink_TxsdLinkTypeChoiceEntrezLink_                                                                                                                                                                                              func(*XsdGoPkgHasElem_EntrezLINKchoiceLinkTypeschema_EntrezLink_TxsdLinkTypeChoiceEntrezLink_, bool) error
+	XsdGoPkgHasElem_StudyLINKSsequenceStudyTypeschema_StudyLinks_TxsdStudyTypeSequenceStudyLinks_                                                                                                                                                                                        func(*XsdGoPkgHasElem_StudyLINKSsequenceStudyTypeschema_StudyLinks_TxsdStudyTypeSequenceStudyLinks_, bool) error
+	TxsdPlatformTypeChoiceCapillary                                                                                                                                                                                                                                                      func(*TxsdPlatformTypeChoiceCapillary, bool) error
+	XsdGoPkgHasElem_InstrumentMODELallLS454ChoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceLs454AllInstrumentModel_                                                                                                                                                       func(*XsdGoPkgHasElem_InstrumentMODELallLS454ChoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceLs454AllInstrumentModel_, bool) error
+	TxsdPlatformTypeChoiceOxfordNanopore                                                                                                                                                                                                                                                 func(*TxsdPlatformTypeChoiceOxfordNanopore, bool) error
+	XsdGoPkgHasElem_RelatedSTUDIESallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_RelatedStudies_TxsdStudyTypeSequenceDescriptorAllRelatedStudies_                                                                                                                   func(*XsdGoPkgHasElem_RelatedSTUDIESallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_RelatedStudies_TxsdStudyTypeSequenceDescriptorAllRelatedStudies_, bool) error
+	XsdGoPkgHasElem_StudyDESCRIPTIONallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_StudyDescription_XsdtString_                                                                                                                                                     func(*XsdGoPkgHasElem_StudyDESCRIPTIONallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_StudyDescription_XsdtString_, bool) error
+	TxsdStudyTypeSequenceDescriptor                                                                                                                                                                                                                                                      func(*TxsdStudyTypeSequenceDescriptor, bool) error
+	XsdGoPkgHasElems_PrevStepINDEXsequencePIPESECTIONsequencePipelineTypeschema_PrevStepIndex_XsdtString_                                                                                                                                                                                func(*XsdGoPkgHasElems_PrevStepINDEXsequencePIPESECTIONsequencePipelineTypeschema_PrevStepIndex_XsdtString_, bool) error
+	XsdGoPkgHasElems_DIRECTIVESsequenceProcessingTypeschema_Directives_TSequencingDirectivesType_                                                                                                                                                                                        func(*XsdGoPkgHasElems_DIRECTIVESsequenceProcessingTypeschema_Directives_TSequencingDirectivesType_, bool) error
+	XsdGoPkgHasElems_DESCRIPTORsequenceStudyTypeschema_Descriptor_TxsdStudyTypeSequenceDescriptor_                                                                                                                                                                                       func(*XsdGoPkgHasElems_DESCRIPTORsequenceStudyTypeschema_Descriptor_TxsdStudyTypeSequenceDescriptor_, bool) error
+	TxsdPlatformTypeChoiceIllumina                                                                                                                                                                                                                                                       func(*TxsdPlatformTypeChoiceIllumina, bool) error
+	XsdGoPkgHasElem_DIRECTIVESsequenceProcessingTypeschema_Directives_TSequencingDirectivesType_                                                                                                                                                                                         func(*XsdGoPkgHasElem_DIRECTIVESsequenceProcessingTypeschema_Directives_TSequencingDirectivesType_, bool) error
+	XsdGoPkgHasElems_StudyTYPEallDESCRIPTORsequenceStudyTypeschema_StudyType_TxsdStudyTypeSequenceDescriptorAllStudyType_                                                                                                                                                                func(*XsdGoPkgHasElems_StudyTYPEallDESCRIPTORsequenceStudyTypeschema_StudyType_TxsdStudyTypeSequenceDescriptorAllStudyType_, bool) error
+	TQualifiedNameType                                                                                                                                                                                                                                                                   func(*TQualifiedNameType, bool) error
+	XsdGoPkgHasElem_QUERYchoicesequenceENTREZLINKchoiceLinkTypeschema_Query_XsdtString_                                                                                                                                                                                                  func(*XsdGoPkgHasElem_QUERYchoicesequenceENTREZLINKchoiceLinkTypeschema_Query_XsdtString_, bool) error
+	TLinkType                                                                                                                                                                                                                                                                            func(*TLinkType, bool) error
+	XsdGoPkgHasElem_RelativeORDERchoicesequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_RelativeOrder_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceRelativeOrder_                                                                         func(*XsdGoPkgHasElem_RelativeORDERchoicesequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_RelativeOrder_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceChoiceRelativeOrder_, bool) error
+	XsdGoPkgHasElems_ReadINDEXsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadIndex_XsdtNonNegativeInteger_                                                                                                                                                     func(*XsdGoPkgHasElems_ReadINDEXsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadIndex_XsdtNonNegativeInteger_, bool) error
+	XsdGoPkgHasElems_SampleDemuxDIRECTIVEallSequencingDirectivesTypeschema_SampleDemuxDirective_TxsdSequencingDirectivesTypeAllSampleDemuxDirective_                                                                                                                                     func(*XsdGoPkgHasElems_SampleDemuxDIRECTIVEallSequencingDirectivesTypeschema_SampleDemuxDirective_TxsdSequencingDirectivesTypeAllSampleDemuxDirective_, bool) error
+	XsdGoPkgHasElems_RelatedLINKsequenceTxsdStudyTypeSequenceDescriptorAllRelatedStudiesSequenceRelatedStudyRELATEDSTUDYsequenceTxsdStudyTypeSequenceDescriptorAllRelatedStudiesRELATEDSTUDIESallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_RelatedLink_TXRefType_ func(*XsdGoPkgHasElems_RelatedLINKsequenceTxsdStudyTypeSequenceDescriptorAllRelatedStudiesSequenceRelatedStudyRELATEDSTUDYsequenceTxsdStudyTypeSequenceDescriptorAllRelatedStudiesRELATEDSTUDIESallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_RelatedLink_TXRefType_, bool) error
+	XsdGoPkgHasElems_IsPRIMARYsequenceTxsdStudyTypeSequenceDescriptorAllRelatedStudiesSequenceRelatedStudyRELATEDSTUDYsequenceTxsdStudyTypeSequenceDescriptorAllRelatedStudiesRELATEDSTUDIESallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_IsPrimary_XsdtBoolean_   func(*XsdGoPkgHasElems_IsPRIMARYsequenceTxsdStudyTypeSequenceDescriptorAllRelatedStudiesSequenceRelatedStudyRELATEDSTUDYsequenceTxsdStudyTypeSequenceDescriptorAllRelatedStudiesRELATEDSTUDIESallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_IsPrimary_XsdtBoolean_, bool) error
+	TxsdPlatformTypeChoiceHelicos                                                                                                                                                                                                                                                        func(*TxsdPlatformTypeChoiceHelicos, bool) error
+	TxsdPlatformTypeChoiceAbiSolid                                                                                                                                                                                                                                                       func(*TxsdPlatformTypeChoiceAbiSolid, bool) error
+	TPlatformType                                                                                                                                                                                                                                                                        func(*TPlatformType, bool) error
+	XsdGoPkgHasElems_AlignmentIncludesFailedReadsallAlignmentDirectivesTypeschema_AlignmentIncludesFailedReads_XsdtBoolean_                                                                                                                                                              func(*XsdGoPkgHasElems_AlignmentIncludesFailedReadsallAlignmentDirectivesTypeschema_AlignmentIncludesFailedReads_XsdtBoolean_, bool) error
+	XsdGoPkgHasElems_ReadCLASSsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadClass_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadClass_                                                                                                func(*XsdGoPkgHasElems_ReadCLASSsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadClass_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadClass_, bool) error
+	XsdGoPkgHasElems_InstrumentMODELallLS454ChoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceLs454AllInstrumentModel_                                                                                                                                                      func(*XsdGoPkgHasElems_InstrumentMODELallLS454ChoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceLs454AllInstrumentModel_, bool) error
+	TxsdStudyTypeSequenceDescriptorAllStudyType                                                                                                                                                                                                                                          func(*TxsdStudyTypeSequenceDescriptorAllStudyType, bool) error
+	XsdGoPkgHasElem_UrlLINKchoiceLinkTypeschema_UrlLink_TxsdLinkTypeChoiceUrlLink_                                                                                                                                                                                                       func(*XsdGoPkgHasElem_UrlLINKchoiceLinkTypeschema_UrlLink_TxsdLinkTypeChoiceUrlLink_, bool) error
+	XsdGoPkgHasElems_StudyATTRIBUTEsequenceTxsdStudyTypeSequenceStudyAttributesSTUDYATTRIBUTESsequenceStudyTypeschema_StudyAttribute_TAttributeType_                                                                                                                                     func(*XsdGoPkgHasElems_StudyATTRIBUTEsequenceTxsdStudyTypeSequenceStudyAttributesSTUDYATTRIBUTESsequenceStudyTypeschema_StudyAttribute_TAttributeType_, bool) error
+	TPipelineType                                                                                                                                                                                                                                                                        func(*TPipelineType, bool) error
+	XsdGoPkgHasElem_InstrumentMODELsequenceCAPILLARYchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceCapillarySequenceInstrumentModel_                                                                                                                                     func(*XsdGoPkgHasElem_InstrumentMODELsequenceCAPILLARYchoicePlatformTypeschema_InstrumentModel_TxsdPlatformTypeChoiceCapillarySequenceInstrumentModel_, bool) error
+	XsdGoPkgHasElems_IDchoicesequenceENTREZLINKchoiceLinkTypeschema_Id_XsdtNonNegativeInteger_                                                                                                                                                                                           func(*XsdGoPkgHasElems_IDchoicesequenceENTREZLINKchoiceLinkTypeschema_Id_XsdtNonNegativeInteger_, bool) error
+	XsdGoPkgHasElem_XrefLINKchoiceLinkTypeschema_XrefLink_TXRefType_                                                                                                                                                                                                                     func(*XsdGoPkgHasElem_XrefLINKchoiceLinkTypeschema_XrefLink_TXRefType_, bool) error
+	XsdGoPkgHasElem_VALUEallAttributeTypeschema_Value_XsdtString_                                                                                                                                                                                                                        func(*XsdGoPkgHasElem_VALUEallAttributeTypeschema_Value_XsdtString_, bool) error
+	XsdGoPkgHasElem_PROGRAMsequencePIPESECTIONsequencePipelineTypeschema_Program_XsdtString_                                                                                                                                                                                             func(*XsdGoPkgHasElem_PROGRAMsequencePIPESECTIONsequencePipelineTypeschema_Program_XsdtString_, bool) error
+	XsdGoPkgHasElem_ReadTYPEsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadType_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadType_Forward                                                                                             func(*XsdGoPkgHasElem_ReadTYPEsequenceREADSPECsequenceSPOTDecodeSPECchoiceSpotDescriptorTypeschema_ReadType_TxsdSpotDescriptorTypeChoiceSpotDecodeSpecSequenceReadSpecSequenceReadType_Forward, bool) error
+	XsdGoPkgHasElem_AlignmentIncludesUnalignedReadsallAlignmentDirectivesTypeschema_AlignmentIncludesUnalignedReads_XsdtBoolean_                                                                                                                                                         func(*XsdGoPkgHasElem_AlignmentIncludesUnalignedReadsallAlignmentDirectivesTypeschema_AlignmentIncludesUnalignedReads_XsdtBoolean_, bool) error
+	TProcessingType                                                                                                                                                                                                                                                                      func(*TProcessingType, bool) error
+	XsdGoPkgHasElem_PrimaryIDsequenceIdentifierTypeschema_PrimaryId_TNameAndLabelType_                                                                                                                                                                                                   func(*XsdGoPkgHasElem_PrimaryIDsequenceIdentifierTypeschema_PrimaryId_TNameAndLabelType_, bool) error
+	XsdGoPkgHasElem_CenterNAMEallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_CenterName_XsdtString_                                                                                                                                                                 func(*XsdGoPkgHasElem_CenterNAMEallTxsdStudyTypeSequenceDescriptorDESCRIPTORsequenceStudyTypeschema_CenterName_XsdtString_, bool) error
+	XsdGoPkgHasElems_STUDYsequenceStudySetTypeschema_Study_TStudyType_                                                                                                                                                                                                                   func(*XsdGoPkgHasElems_STUDYsequenceStudySetTypeschema_Study_TStudyType_, bool) error
+	XsdGoPkgHasElems_DBallXRefTypeschema_Db_XsdtString_                                                                                                                                                                                                                                  func(*XsdGoPkgHasElems_DBallXRefTypeschema_Db_XsdtString_, bool) error
+	XsdGoPkgHasElems_VERSIONsequencePIPESECTIONsequencePipelineTypeschema_Version_XsdtString_                                                                                                                                                                                            func(*XsdGoPkgHasElems_VERSIONsequencePIPESECTIONsequencePipelineTypeschema_Version_XsdtString_, bool) error
+	XsdGoPkgHasElems_StepINDEXsequencePIPESECTIONsequencePipelineTypeschema_StepIndex_XsdtString_                                                                                                                                                                                        func(*XsdGoPkgHasElems_StepINDEXsequencePIPESECTIONsequencePipelineTypeschema_StepIndex_XsdtString_, bool) error
 }
