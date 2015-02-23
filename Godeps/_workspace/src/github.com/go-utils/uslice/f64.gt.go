@@ -1,316 +1,158 @@
 package uslice
-package uslice
-
 
 //#begin-gt -gen.gt N:F64 T:float64
-//#begin-gt -gen.gt N:F64 T:float64
-
 
 //	Appends `v` to `*ref` only if `*ref` does not already contain `v`.
-//	Appends `v` to `*ref` only if `*ref` does not already contain `v`.
-type XsdtString struct{ string }
-
-
-	for _, sv := range *ref {
+func F64AppendUnique(ref *[]float64, v float64) {
 	for _, sv := range *ref {
 		if sv == v {
-		if sv == v {
-			return
 			return
 		}
-		}
-type XsdtString struct{ string }	}
-	*ref = append(*ref, v)
+	}
 	*ref = append(*ref, v)
 }
-}
-
 
 //	Appends each value in `vals` to `*ref` only `*ref` does not already contain it.
-//	Appends each value in `vals` to `*ref` only `*ref` does not already contain it.
-func F64AppendUniques(ref *[]float64, vals ...float64) {
 func F64AppendUniques(ref *[]float64, vals ...float64) {
 	for _, v := range vals {
-	for _, v := range vals {
-		F64AppendUnique(ref, v)
 		F64AppendUnique(ref, v)
 	}
-	}
 }
-}
-
 
 //	Returns the position of `val` in `slice`.
-//	Returns the position of `val` in `slice`.
-func F64At(slice []float64, val float64) int {
 func F64At(slice []float64, val float64) int {
 	for i, v := range slice {
-	for i, v := range slice {
-		if v == val {
 		if v == val {
 			return i
-			return i
 		}
-		}
-	}
 	}
 	return -1
-	return -1
 }
-}
-
 
 //	Converts `src` to `dst`.
-//	Converts `src` to `dst`.
-//
 //
 //	If `sparse` is `true`, then only successfully converted `float64` values are placed
-//	If `sparse` is `true`, then only successfully converted `float64` values are placed
-//	in `dst`, so there may not be a 1-to-1 correspondence of `dst` to `src` in length or indices.
 //	in `dst`, so there may not be a 1-to-1 correspondence of `dst` to `src` in length or indices.
 //
-//
-//	If `sparse` is `false`, `dst` has the same length as `src` and non-convertable values remain zeroed.
 //	If `sparse` is `false`, `dst` has the same length as `src` and non-convertable values remain zeroed.
 func F64Convert(src []interface{}, sparse bool) (dst []float64) {
-func F64Convert(src []interface{}, sparse bool) (dst []float64) {
-	if sparse {
 	if sparse {
 		var (
-		var (
-			val float64
 			val float64
 			ok  bool
-			ok  bool
-		)
 		)
 		for _, v := range src {
-		for _, v := range src {
-			if val, ok = v.(float64); ok {
 			if val, ok = v.(float64); ok {
 				dst = append(dst, val)
-				dst = append(dst, val)
 			}
-			}
-		}
 		}
 	} else {
-	} else {
-		dst = make([]float64, len(src))
 		dst = make([]float64, len(src))
 		for i, v := range src {
-		for i, v := range src {
-			dst[i], _ = v.(float64)
 			dst[i], _ = v.(float64)
 		}
-		}
-	}
 	}
 	return
-	return
 }
-}
-
 
 //	Sets each `float64` in `sl` to the result of passing it to each `apply` func.
-//	Sets each `float64` in `sl` to the result of passing it to each `apply` func.
-//	Although `sl` is modified in-place, it is also returned for convenience.
 //	Although `sl` is modified in-place, it is also returned for convenience.
 func F64Each(sl []float64, apply ...func(float64) float64) []float64 {
-func F64Each(sl []float64, apply ...func(float64) float64) []float64 {
-	for _, fn := range apply {
 	for _, fn := range apply {
 		for i, _ := range sl {
-		for i, _ := range sl {
-			sl[i] = fn(sl[i])
 			sl[i] = fn(sl[i])
 		}
-		}
-	}
 	}
 	return sl
-	return sl
 }
-}
-
 
 //	Calls `F64SetCap` only if the current `cap(*ref)` is less than the specified `capacity`.
-//	Calls `F64SetCap` only if the current `cap(*ref)` is less than the specified `capacity`.
-func F64EnsureCap(ref *[]float64, capacity int) {
 func F64EnsureCap(ref *[]float64, capacity int) {
 	if cap(*ref) < capacity {
-	if cap(*ref) < capacity {
-		F64SetCap(ref, capacity)
 		F64SetCap(ref, capacity)
 	}
-	}
 }
-}
-
 
 //	Calls `F64SetLen` only if the current `len(*ref)` is less than the specified `length`.
-//	Calls `F64SetLen` only if the current `len(*ref)` is less than the specified `length`.
-func F64EnsureLen(ref *[]float64, length int) {
 func F64EnsureLen(ref *[]float64, length int) {
 	if len(*ref) < length {
-	if len(*ref) < length {
-		F64SetLen(ref, length)
 		F64SetLen(ref, length)
 	}
-	}
 }
-}
-
 
 //	Returns whether `one` and `two` only contain identical values, regardless of ordering.
-//	Returns whether `one` and `two` only contain identical values, regardless of ordering.
-func F64Equivalent(one, two []float64) bool {
 func F64Equivalent(one, two []float64) bool {
 	if len(one) != len(two) {
-	if len(one) != len(two) {
-		return false
 		return false
 	}
-	}
-	for _, v := range one {
 	for _, v := range one {
 		if F64At(two, v) < 0 {
-		if F64At(two, v) < 0 {
-			return false
 			return false
 		}
-		}
-	}
 	}
 	return true
-	return true
 }
-}
-
 
 //	Returns whether `val` is in `slice`.
-//	Returns whether `val` is in `slice`.
-func F64Has(slice []float64, val float64) bool {
 func F64Has(slice []float64, val float64) bool {
 	return F64At(slice, val) >= 0
-	return F64At(slice, val) >= 0
 }
-}
-
 
 //	Returns whether at least one of the specified `vals` is contained in `slice`.
-//	Returns whether at least one of the specified `vals` is contained in `slice`.
-func F64HasAny(slice []float64, vals ...float64) bool {
 func F64HasAny(slice []float64, vals ...float64) bool {
 	for _, v1 := range vals {
-	for _, v1 := range vals {
-		for _, v2 := range slice {
 		for _, v2 := range slice {
 			if v1 == v2 {
-			if v1 == v2 {
-				return true
 				return true
 			}
-			}
 		}
-		}
-	}
 	}
 	return false
-	return false
 }
-}
-
 
 //	Removes the first occurrence of `v` encountered in `*ref`, or all occurrences if `all` is `true`.
-//	Removes the first occurrence of `v` encountered in `*ref`, or all occurrences if `all` is `true`.
-func F64Remove(ref *[]float64, v float64, all bool) {
 func F64Remove(ref *[]float64, v float64, all bool) {
 	for i := 0; i < len(*ref); i++ {
-	for i := 0; i < len(*ref); i++ {
-		if (*ref)[i] == v {
 		if (*ref)[i] == v {
 			before, after := (*ref)[:i], (*ref)[i+1:]
-			before, after := (*ref)[:i], (*ref)[i+1:]
-			*ref = append(before, after...)
 			*ref = append(before, after...)
 			if !all {
-			if !all {
-				break
 				break
 			}
-			}
-		}
 		}
 	}
-	}
 }
-}
-
 
 //	Sets `*ref` to a copy of `*ref` with the specified `capacity`.
-//	Sets `*ref` to a copy of `*ref` with the specified `capacity`.
-func F64SetCap(ref *[]float64, capacity int) {
 func F64SetCap(ref *[]float64, capacity int) {
 	nu := make([]float64, len(*ref), capacity)
-	nu := make([]float64, len(*ref), capacity)
-	copy(nu, *ref)
 	copy(nu, *ref)
 	*ref = nu
-	*ref = nu
 }
-}
-
 
 //	Sets `*ref` to a copy of `*ref` with the specified `length`.
-//	Sets `*ref` to a copy of `*ref` with the specified `length`.
-func F64SetLen(ref *[]float64, length int) {
 func F64SetLen(ref *[]float64, length int) {
 	nu := make([]float64, length)
-	nu := make([]float64, length)
-	copy(nu, *ref)
 	copy(nu, *ref)
 	*ref = nu
-	*ref = nu
 }
-}
-
 
 //	Removes all specified `withoutVals` from `slice`.
-//	Removes all specified `withoutVals` from `slice`.
-func F64Without(slice []float64, keepOrder bool, withoutVals ...float64) []float64 {
 func F64Without(slice []float64, keepOrder bool, withoutVals ...float64) []float64 {
 	if len(withoutVals) > 0 {
-	if len(withoutVals) > 0 {
-		var pos int
 		var pos int
 		for _, w := range withoutVals {
-		for _, w := range withoutVals {
-			for pos = F64At(slice, w); pos >= 0; pos = F64At(slice, w) {
 			for pos = F64At(slice, w); pos >= 0; pos = F64At(slice, w) {
 				if keepOrder {
-				if keepOrder {
-					slice = append(slice[:pos], slice[pos+1:]...)
 					slice = append(slice[:pos], slice[pos+1:]...)
 				} else {
-				} else {
-					slice[pos] = slice[len(slice)-1]
 					slice[pos] = slice[len(slice)-1]
 					slice = slice[:len(slice)-1]
-					slice = slice[:len(slice)-1]
-				}
 				}
 			}
-			}
-		}
 		}
 	}
-	}
-	return slice
 	return slice
 }
-}
 
-
-//#end-gt
 //#end-gt
