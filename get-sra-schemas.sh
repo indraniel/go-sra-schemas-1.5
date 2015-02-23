@@ -31,5 +31,5 @@ xsd-makepkg -basepath=github.com/indraniel/go-sra-schemas-1.5 -gofmt=true -local
 # Not sure if this is a bug or not...
 
 for gofile in $(find . -name "*.go" -print); do
-    perl -p -i -e 'if ($. == 11) { print "type XsdtString struct{ string }" } else { print $_ }' $gofile
+    perl -n -i -e 'if ($. == 11) { print "type XsdtString struct{ string }\n\n" } else { print $_ }' $gofile
 done
