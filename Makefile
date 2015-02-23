@@ -1,4 +1,4 @@
-.PHONY: check-env prepare download
+.PHONY: check-env prepare download clean
 SOURCES=$(*.xsd)
 
 GODEP := $(GOPATH)/bin/godep
@@ -27,3 +27,7 @@ endif
 ifndef GOPATH
     $(error environment variable GOPATH is undefined)
 endif
+
+clean:
+	rm *.xsd
+	rm -rf SRA.*
