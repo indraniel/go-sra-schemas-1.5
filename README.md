@@ -85,6 +85,15 @@ func main() {
 	fmt.Printf("%v\n", sr)
 }
 ```
+The above example used a custom struct called `SraRun`. It specifies two things:
+
+1.  the XML name of the root element in your XML file, as is typical when working with `encoding/xml.Unmarshal()`.
+2.  type from the auto-generated package to embed right inside your custom struct.
+
+The second part is the only tricky part. XML Schema Definition has no real
+concept of "root element", partly because they're designed to support use-cases
+where you embed a full document defined in one XSD deep inside a full document
+defined in another XSD. See [go-xsd][1] for more details.
 
 Notice that the the re-rendered XML maybe ordered differently than the
 original XML.  This is because the mapping between XML elements and data
