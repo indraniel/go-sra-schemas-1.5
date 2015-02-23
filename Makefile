@@ -1,13 +1,16 @@
-.PHONY: check-env prepare download clean
-SOURCES=$(*.xsd)
+.PHONY: check-env prepare download clean tidy
 
+SOURCES=$(*.xsd)
 GODEP := $(GOPATH)/bin/godep
+
+XSD_DIR := xsd
+TOOLS_DIR := tools
 
 all: gofiles
 
 gofiles: export PATH := $(GOPATH)/bin:$(PATH)
 gofiles: $(SOURCES) check-env
-	bash -x get-sra-schemas.sh
+	bash -x $(TOOLS_DIR)/get-sra-schemas.sh
 
 test:
 	@go test ./keys ./block ./transaction ./db ./git
@@ -29,5 +32,9 @@ ifndef GOPATH
 endif
 
 clean:
-	rm *.xsd
+	rm *.xsd 2>/dev/null
 	rm -rf SRA.*
+
+tidy:
+	test -d $(XSD_DIR) || mkdir -p $(XSD_DIR)
+	mv *.xsd $(XSD_DIR)
