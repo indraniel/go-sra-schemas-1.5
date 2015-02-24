@@ -10,7 +10,7 @@ get** all the packages or simply fetch a selected subset of them.  In your go
 project just type:
 
     # for all the packages
-    go get github.com/indraniel/go-sra-schemas-1.5
+    go get -d github.com/indraniel/go-sra-schemas-1.5/...
     
     # for a single package
     go get github.com/indraniel/go-sra-schemas-1.5/SRA.run.xsd_go
